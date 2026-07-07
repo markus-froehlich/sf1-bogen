@@ -1,0 +1,67 @@
+.spells-tab section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.spell-slots-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.spell-slot-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  min-width: 2.2em;
+}
+.spell-slot-grade { font-size: 0.6rem; color: var(--text-muted); }
+.spell-slot-count { font-size: 0.95rem; font-weight: 700; color: var(--accent); }
+
+.spell-grade-tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.spell-grade-tab {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 4px 9px;
+  cursor: pointer;
+}
+.spell-grade-tab.active { background: color-mix(in srgb, var(--accent) 20%, var(--surface3)); border-color: var(--accent); color: var(--accent); }
+
+.spell-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.spell-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 9px;
+  text-align: left;
+  cursor: pointer;
+}
+.spell-item.known { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface3)); }
+.spell-item-name { font-size: 0.8rem; font-weight: 700; color: var(--text); }
+.spell-item.known .spell-item-name { color: var(--accent); }
+.spell-item-desc { font-size: 0.7rem; color: var(--text-muted); line-height: 1.3; }

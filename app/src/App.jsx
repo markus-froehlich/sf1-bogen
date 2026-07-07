@@ -5,11 +5,12 @@ import { useGistSync } from './store/useGistSync.js'
 import { CharacterDrawer } from './components/CharacterDrawer.jsx'
 import { GistSyncPanel } from './components/GistSyncPanel.jsx'
 import { HomebrewPanel } from './components/HomebrewPanel.jsx'
+import { CharacterTab } from './components/CharacterTab.jsx'
+import { CombatTab } from './components/CombatTab.jsx'
+import { GearTab } from './components/GearTab.jsx'
+import { SpellsTab } from './components/SpellsTab.jsx'
 import './App.css'
 
-// ── Platzhalter-Tabs ──────────────────────────────────────────────────────
-// Jeder Tab wird in Phase 1 durch eine echte Starfinder-Ansicht ersetzt.
-// Siehe STATUS.md für den Fahrplan.
 const TABS = [
   { id: 'char',    icon: '👤', label: 'Charakter' },
   { id: 'combat',  icon: '⚔',  label: 'Kampf' },
@@ -19,6 +20,8 @@ const TABS = [
   { id: 'notes',   icon: '📜', label: 'Notizen' },
 ]
 
+// Raumschiffe sind explizit zurückgestellt (siehe AGENTS.md/STATUS.md) - kein
+// Datenkapitel dazu extrahiert, daher bleibt dieser Tab bewusst ein Platzhalter.
 function PlaceholderTab({ label }) {
   return (
     <div className="placeholder-tab">
@@ -37,7 +40,8 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const {
-    char, index, activeId, setMeta,
+    char, index, activeId, setMeta, update, setAttr, setClass,
+    setInventory, setConditions, setNotes,
     newChar, switchChar, deleteChar, importChar,
   } = useCharacters('player')
   const { hb, saveHBItem, deleteHB } = useHomebrew()
@@ -94,18 +98,26 @@ export default function App() {
       </header>
 
       <main className="main-scroll">
-        {tab === 'char'   && <PlaceholderTab label="Charakter (Völker, Klassen, Attribute, Ausdauer/TP/Reserve)" />}
-        {tab === 'combat' && <PlaceholderTab label="Kampf (EAC/KAC, Angriffe, Zustände)" />}
-        {tab === 'gear'   && <PlaceholderTab label="Ausrüstung (Waffen, Rüstung, Gegenstandsstufen)" />}
-        {tab === 'spells' && <PlaceholderTab label="Zauber (Aspirant/Technomagier)" />}
+        {tab === 'char'   && <CharacterTab char={char} setMeta={setMeta} setClass={setClass} setAttr={setAttr} update={update} lang={lang} />}
+        {tab === 'combat' && <CombatTab char={char} setConditions={setConditions} lang={lang} />}
+        {tab === 'gear'   && <GearTab char={char} update={update} setInventory={setInventory} lang={lang} />}
+        {tab === 'spells' && <SpellsTab char={char} update={update} lang={lang} />}
         {tab === 'ship'   && <PlaceholderTab label="Raumschiff (spätere Phase, siehe STATUS.md)" />}
-        {tab === 'notes'  && <PlaceholderTab label="Notizen" />}
+        {tab === 'notes'  && (
+          <textarea
+            className="notes-textarea"
+            placeholder="Notizen …"
+            value={char.notes ?? ''}
+            onChange={e => setNotes(e.target.value)}
+          />
+        )}
       </main>
 
       <nav className="bottom-nav">
         {TABS.map(t => (
-          <button key={t.id} className={tab === t.id ? 'active' : ''} onClick={() => setTab(t.id)} title={t.label}>
-            {t.icon}
+          <button key={t.id} className={`nav-btn ${tab === t.id ? 'active' : ''}`} onClick={() => setTab(t.id)} title={t.label}>
+            <span className="nav-icon">{t.icon}</span>
+            <span className="nav-label">{t.label}</span>
           </button>
         ))}
       </nav>

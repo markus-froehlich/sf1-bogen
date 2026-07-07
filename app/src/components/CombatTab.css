@@ -1,0 +1,67 @@
+.combat-tab section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.sf-stat-row.two { grid-template-columns: repeat(2, 1fr); }
+.sf-stat-box.big { padding: 14px 4px; }
+.sf-stat-box.big .sf-stat-value { font-size: 1.8rem; }
+
+.combat-weapon-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 6px;
+}
+.cwc-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--text);
+}
+.cwc-row strong { color: var(--accent); }
+
+.cond-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.cond-chip {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.cond-chip.active {
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface3));
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.cond-active-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.cond-effect-row {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface3);
+  border-left: 2px solid var(--accent);
+  border-radius: 5px;
+  padding: 5px 8px;
+}
+.cond-effect-name { font-size: 0.78rem; font-weight: 700; color: var(--accent); }
+.cond-effect-text { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }

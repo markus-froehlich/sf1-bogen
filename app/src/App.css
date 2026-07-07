@@ -540,6 +540,35 @@
 .carry-coin-on  { opacity: 1; border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
 .carry-coin-off { opacity: 0.35; border-style: dashed; }
 
+/* ── Placeholder tab (Raumschiff) ── */
+.placeholder-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 200px;
+  text-align: center;
+  color: var(--text-muted);
+}
+.placeholder-hint { font-size: 0.75rem; }
+
+/* ── Notes tab ── */
+.notes-textarea {
+  width: 100%;
+  min-height: 60vh;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 12px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  resize: vertical;
+}
+.notes-textarea:focus { outline: none; border-color: var(--accent); }
+
 /* ── Coming soon ── */
 .coming-soon {
   display: flex;

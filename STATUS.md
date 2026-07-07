@@ -3,10 +3,13 @@
 _Stand: 2026-07-07_
 
 ## Wo wir stehen
-**Projekt gerade erst angelegt.** Noch keine einzige Zeile Starfinder-Inhalt
-(keine Daten, keine Rechenlogik) — nur das Grundgerüst steht, 1:1 aus
-`pf1-bogen` kopiert und bereinigt. Die eigentliche Arbeit (PDF-Extraktion,
-Daten-Port, Engine bauen) hat noch nicht begonnen.
+**Erster durchgehender Charakterbogen-Durchlauf steht.** Volk wählen → Klasse
+wählen → Attribute eintragen → TP/AP/RP, EAC/KAC, Fertigkeiten, Angriffsbonus
+und Zauberliste werden korrekt live berechnet. Alle 7 Kern-Datenkapitel des
+Regelwerks (Völker, Fertigkeiten, Klassen, Ausrüstung/Kampf, Talente, Zauber)
+sind extrahiert und in der App verdrahtet. Nur Raumschiffe (Kapitel 9, bewusst
+zurückgestellt) und einige bewusst zurückgestellte Detail-Unterlisten fehlen
+noch — siehe „Bekannte Lücken" unten.
 
 ## Entscheidungen (siehe AGENTS.md für Details)
 1. **Eigener Rechenkern**, nicht in `pf1-bogen` integriert — Starfinders
@@ -16,230 +19,136 @@ Daten-Port, Engine bauen) hat noch nicht begonnen.
 3. **Raumschiffe explizit zurückgestellt** — eigene, spätere Phase, kein Teil
    vom "Charakterbogen fertig"-Ziel.
 4. **PDF-Extraktion statt Excel-Extraktion** — keine Referenz-Zahlen wie bei
-   Pathfinder, Verifikation läuft über Buch-eigene Rechenbeispiele.
+   Pathfinder; Verifikation lief über Buch-eigene Rechenbeispiele (Kapitel 2)
+   und Stichproben-Gegenchecks der Sub-Agenten-Ergebnisse gegen die Rohtexte.
+5. **Große Kapitel per parallelen Sub-Agenten extrahiert**: pro Kapitel/
+   Unterabschnitt erst `pdftotext -layout` in eine Rohtext-Datei
+   (`extraction/kapitel<N>_<name>_raw.txt`, gitignored), dann je ein Agent
+   pro Datei strukturiert daraus JSON — strikt nur aus dem gelieferten
+   Rohtext, mit Anweisung Unsicherheiten explizit zu flaggen statt zu raten.
+   Ergebnisse danach stichprobenhaft von Hand gegen die Rohtexte geprüft.
+6. **Umfangreiche Unterwahl-Listen bewusst nicht vollständig erfasst**
+   (Agententricks, Kampfstile, Sternenoffenbarungen, Magische Hacks,
+   Rüstungsverbesserungen, volle Zauberbeschreibungen, Fahrzeuge, etc.) —
+   das wäre ein Vielfaches des bisherigen Aufwands gewesen. Jede Lücke ist
+   im jeweiligen `_meta`/`notes`-Feld der betroffenen JSON-Datei UND unten
+   in „Bekannte Lücken" dokumentiert, damit nichts still verschwindet.
 
-## Zuletzt erledigt
-- Repo angelegt (`git init`), `.gitignore` (PDF + extraction/ + node_modules
-  ausgeschlossen).
-- App-Chassis aus `pf1-bogen/app` kopiert, bereinigt:
-  - `data/`, `engine/` komplett gelöscht (Pathfinder-spezifisch).
-  - Eng gekoppelte Tab-Komponenten gelöscht (BuffTracker, ClassFeaturesPanel,
-    ClassSection, CombatTab, DomainsPanel, FeatsTab, NotesTab, PrintView,
-    RaceSelector, SkillsTab, SpellsTab, WeaponsTab).
-  - Behalten (spielsystem-neutral oder zumindest baubar):
-    `store/useCharacters.js`, `store/useGistSync.js`, `store/useHomebrew.js`,
-    `store/useCharacter.js`, `store/useSectionOrder.js`,
-    `components/CharacterDrawer.jsx`, `components/GistSyncPanel.jsx`,
-    `components/HomebrewPanel.jsx`, `components/AttributeBlock.jsx`,
-    `components/BioSection.jsx`, `components/ConditionsPanel.jsx`,
-    `components/InventoryTab.jsx`, `components/ResourcesPanel.jsx`,
-    `components/XpTracker.jsx` — **aber**: Inhalt dieser "sauberen" Dateien
-    ist teils trotzdem Pathfinder-geprägt (siehe AGENTS.md-Warnung), vor
-    Nutzung durchsehen.
-  - Alle `pf1_*`-localStorage-Keys → `sf1_*` umbenannt (useCharacters.js,
-    useGistSync.js, useCharacter.js, useHomebrew.js, GistSyncPanel.jsx) —
-    sonst würden sich beide Apps im selben Browser die Daten überschreiben.
-  - `vite.config.js`: Basis-Pfad `/pf1-bogen/` → `/sf1-bogen/`, Manifest-Name
-    „Starfinder Charakterbogen".
-  - `App.jsx` komplett neu geschrieben als **Platzhalter**: Topbar (Name,
-    Menü mit Export/Import/Homebrew/Gist-Backup), Bottom-Nav mit 6 Dummy-Tabs
-    (Charakter/Kampf/Ausrüstung/Zauber/Raumschiff/Notizen), jeder Tab zeigt
-    nur "noch nicht gebaut" an.
-  - `npm install` + `npm run build` erfolgreich getestet, Dev-Server kurz
-    angetestet (lädt korrekt, keine Fehler).
-- PWA-Icons noch die alten Pathfinder-Platzhalter (`public/icons/pwa-*.png`)
-  — müssen irgendwann durch Starfinder-eigene ersetzt werden, nicht dringend.
-- **PDF-Extraktionspipeline getestet (2026-07-07), funktioniert:**
-  `pdftotext -layout` reicht für das Völker-Kapitel aus, `pdfplumber` war
-  nicht nötig. Wichtig: **PDF-Seitenzahlen ≠ gedruckte Seitenzahlen** — Offset
-  ermittelt durch Suche nach Kapitelüberschriften im Volltext (siehe unten).
-  Kapitel 3 (Völker) liegt auf **PDF-Seiten 40-57** (gedruckt S. 38-55,
-  Offset +2). Befehl:
-  `pdftotext -layout -f 40 -l 57 "Starfinder_Grundregelwerk_(PDF).pdf" extraction/kapitel3_voelker_raw.txt`
-  Ergebnis liegt in `extraction/kapitel3_voelker_raw.txt` (gitignored, lokal).
-  Qualität: gut lesbar, alle 7 Völker vollständig (Androiden, Kasathas,
-  Laschuntas, Menschen, Schirren, Vesken, Ysokis) mit Attributsmodifikatoren,
-  TP-Bonus, Volksmerkmalen (Fließtext) und Kultur-/Namens-Abschnitten. Die
-  vertikale Kapitel-Navigationsleiste am Seitenrand (ÜBERSICHT/VÖLKER/
-  KLASSEN/...) mischt sich als Störtext in die zweite Spalte, ist aber leicht
-  als Rauschen erkennbar (kurze Einzelwörter zwischen Absätzen) und blockiert
-  die Weiterverarbeitung nicht. Attributsboni-Kopfzeile pro Volk (z.B.
-  "ANDROIDEN +2 GE +2 IN -2 CH 4 TP") wird über mehrere Zeilen verteilt,
-  bleibt aber eindeutig zuordenbar. **Empfehlung für weitere Kapitel:** erst
-  per `python3` das gesamte PDF einmal mit `pdftotext -layout` in eine Datei
-  wandeln (`\f`-getrennte Seiten), dann per Skript nach Kapitelüberschriften
-  suchen, um den Seiten-Offset zu bestimmen, statt zu raten.
+## Datenstand (`app/src/data/`)
+| Datei | Inhalt | Quelle (Buch) |
+|---|---|---|
+| `races.json` | 7 Völker, Attributsmods, TP, Merkmale, Vitalwerte | Kapitel 3, S. 38-55 |
+| `skills.json` | 20 Fertigkeiten, Schlüsselattribut, Klassenzuordnung | Kapitel 5, S. 130-149 |
+| `classes.json` | 7 Klassen, volle 20-Stufen-Tabellen, Merkmale | Kapitel 4, S. 56-129 |
+| `archetypes.json` | Archetypen-Mechanismus + 2 Beispiele | Kapitel 4, S. 126-129 |
+| `weapons.json` | ~350 Waffen über 13 Tabellen + Glossare | Kapitel 7, S. 168-195 |
+| `armor.json` | 42 leichte + 38 schwere + 5 Servorüstungen | Kapitel 7, S. 196-207 |
+| `conditions.json` | 35 Zustände mit voller Beschreibung | Kapitel 8, S. 273-277 |
+| `equipment_rules.json` | Credits, Gegenstandsstufen-Zugang, Tragkapazität | Kapitel 7, S. 166-167 |
+| `feats.json` | 97 Talente (Tabelle 6-1, Kurzfassung) | Kapitel 6, S. 150-164 |
+| `spells.json` | Zauberregeln + 131/130 Zauber (Aspirant/Technomagier) | Kapitel 10, S. 328-339 |
 
-## Nächste Schritte (in Reihenfolge)
-1. ~~**PDF-Extraktionspipeline aufbauen und testen (Völker, Kapitel 3)**~~ —
-   erledigt.
-2. ~~**Völker-Rohtext zu `app/src/data/races.json` strukturieren**~~ —
-   erledigt (Commit 62b5d81). Alle 7 Völker mit Attributsmodifikatoren, TP,
-   Größenkategorie/Kreaturenart, Volksmerkmalen (voller Fließtext) und
-   Vitalwerten (Tabelle 3-1).
-3. ~~**Fertigkeiten extrahieren und zu `app/src/data/skills.json`
-   strukturieren**~~ — erledigt. Kapitel 5 liegt auf PDF-Seiten 132-151
-   (gedruckt 130-149, Offset weiterhin +2). Alle 20 Fertigkeiten mit
-   Schlüsselattribut, Nur-geübt-Flag, Rüstungsmalus-Flag, Klassenfertigkeit
-   pro Klasse (aus Tabelle 5-1) und Kurzbeschreibung. **Vorsicht bei
-   pdftotext -layout in diesem Kapitel:** an mindestens einer Stelle
-   (Athletik-Überschrift) hat sich eine Zeile aus der rechten Spalte
-   (unzusammenhängender Text zu Akrobatik-Flugregeln) mit der linken
-   Spalten-Überschrift vermischt und einen falschen Attributs-Anhang
-   suggeriert (schien "GE" statt korrekt "ST" zu sein) — verifiziert und
-   korrigiert anhand der maßgeblichen Tabelle 5-1, nicht anhand der
-   Fließtext-Überschrift. Faustregel für weitere Kapitel: bei
-   zweispaltigem Layout **Tabellen als Wahrheitsquelle nehmen**, Fließtext
-   nur für Beschreibungstext, nicht für Kennzahlen wie Attribute/SG.
-   Volle Fertigkeits-Unterregeln (SG-Tabellen für Klettern/Schwimmen/etc.)
-   sind NICHT übernommen, nur die für den Charakterbogen nötigen
-   Kennzahlen + eine Kurzbeschreibung pro Fertigkeit.
-4. ~~**Attribut-/Fertigkeiten-Rechenkern**~~ — erledigt. Dafür zusätzlich
-   Kapitel 2 (Charaktererschaffung, S. 12-27: Attributswerte, Gesundheit und
-   Reservepunkte, Stufenaufstieg) extrahiert nach
-   `extraction/kapitel2_charaktererschaffung_raw.txt` (PDF-Seiten 15-28,
-   Offset weiterhin +2 zum gedruckten Buch). Drei neue Engine-Module:
-   - `app/src/engine/attributes.js`: Attributsmodifikator
-     (`floor((Wert-10)/2)`, gegen alle 26 Tabelleneinträge von Tabelle 2-1
-     verifiziert), Attributswerte-Kaufsystem-Konstanten, Attributsschnell-
-     auswahl-Zahlenreihen, Stufenaufstieg-Steigerung alle 5 Stufen (4
-     Attribute wählen, +1 falls Wert ≥17 sonst +2).
-   - `app/src/engine/skills.js`: Fertigkeitsränge/Stufe (IN-Mod + Klassenwert,
-     min. 1), Gesamtfertigkeitsbonus (Rang + Klassenfertigkeitsbonus +3 +
-     Attributsmod + sonstige Mods), Nur-geübt-Prüfung.
-   - `app/src/engine/resources.js`: die drei Starfinder-Punktevorräte TP
-     (Trefferpunkte), AP (Ausdauerpunkte) und RP (Reservepunkte) — TP =
-     Volksbonus (einmalig) + Klassenwert × Stufe; AP = max(0, Klassenwert +
-     KO-Mod) × Stufe (pro Stufe nie negativ); RP = max(1, max(1, ⌊Stufe/2⌋)
-     + Schlüsselattributsmod der Klasse).
-   Alle drei Module wurden gegen die im Buch selbst vorgerechneten Beispiele
-   verifiziert (Androidischer Technomagier Stufe 5 für Attributssteigerung,
-   Menschlicher Soldat für TP/AP, Aspirant für RP) — alle Tests bestanden,
-   kein manuelles Nachrechnen nötig gewesen, siehe Commit-Message für Details.
-   **Offen/bewusst nicht gebaut:** Charaktermotive (Kapitel 2, S. 28-37) sind
-   nicht extrahiert — nur die zugehörige Attributspunkt-Tabelle (2-2) wurde
-   mitgenommen, da sie für die races.json-Verifikation gebraucht wurde. Volle
-   Motiv-Beschreibungen (Fertigkeitsboni, Talente) fehlen noch, war kein Teil
-   der ursprünglichen Schrittliste — ggf. eigener Schritt später.
-5. ~~**Klassen (Kapitel 4, S. 56-129) zu `app/src/data/classes.json` +
-   `app/src/data/archetypes.json` strukturieren**~~ — erledigt. PDF-Seiten
-   58-131 (Klassen 61-126, Archetypen 127-131). Alle 7 Klassen (Agent,
-   Aspirant, Gesandter, Mechaniker, Solarier, Soldat, Technomagier) mit
-   vollständiger 20-Stufen-Tabelle (Grundangriffsbonus, alle drei
-   Rettungswurfboni, TP/AP pro Stufe, Klassenmerkmale-Namen pro Stufe) plus
-   Kurzbeschreibung jedes benannten Klassenmerkmals. Aspirant und
-   Technomagier zusätzlich mit Zauber-pro-Tag-Tabelle (Grad 0-6).
-   **Vorgehen:** 7 Klassen-Kapitel + Archetypen-Abschnitt per `pdftotext
-   -layout` einzeln extrahiert (`extraction/kapitel4_<klasse>_raw.txt`),
-   dann je ein Sub-Agent pro Klasse strukturiert daraus JSON, strikt nur aus
-   dem gelieferten Rohtext (kein Trainingswissen), mit Anweisung
-   unsichere Stellen explizit zu flaggen statt zu raten. Ergebnisse
-   anschließend stichprobenhaft gegen die Rohtexte gegengeprüft (Kopfblock-
-   Werte für TP/AP bei mehreren Klassen, BAB-Konsistenz: Solarier/Soldat
-   haben volle BAB-Progression = Stufe, die anderen 5 Klassen 3/4-BAB).
-   **Bewusst NICHT erfasst** (Scope-Entscheidung, siehe classes.json
-   `_meta.scope_note`): die umfangreichen Unterwahl-Listen pro Klasse
-   (Agententricks ~35-40, Mechanikertricks, Kampfstile mit je 5
-   Stiltechniken, Sternenoffenbarungen ~40+, Magische Hacks ~25-30,
-   Aspiranten-Verbindungen je mit eigener Zauberliste, Drohnenchassis/
-   -modifikationen/-talente) — jeweils nur als Kategorie mit Fundstelle im
-   `notes`-Feld der jeweiligen Klasse vermerkt, nicht als einzelne
-   Datensätze. Für einen späteren vollständigen Talentbaum bräuchte jede
-   dieser Listen einen eigenen Extraktionsdurchgang. Technomagier-Notiz:
-   Zuordnung der Magischen Hacks zu ihrer Mindeststufe war im
-   pdftotext-Layout nicht eindeutig (als `unsicher: true` geflaggt) —
-   bei Bedarf mit pdfplumber oder Seitenbild nachprüfen.
-6. ~~**Ausrüstung (Kapitel 7) + Kampfmechanik (Kapitel 8)**~~ — erledigt.
-   Größter Einzelschritt bisher (Waffenkapitel allein: 28 Buchseiten,
-   PDF-Seiten 169-196). Ergebnisse:
-   - `app/src/data/weapons.json`: ~350 Waffen über 13 Tabellen (einfache/
-     fortschrittliche Nahkampfwaffen je ein-/zweihändig, Handfeuerwaffen,
-     Langwaffen, Schwere Waffen, Scharfschützenwaffen, Granaten,
-     Spezialwaffen, Standard-/Sondermunition, Solarier-Waffenkristalle,
-     Verwundende-Waffen-Tabelle, Materialaufschläge, Fusionspreise) plus
-     Eigenschaften- und Fusionsglossar. Einzelne Unstimmigkeiten aus dem
-     Rohtext (z.B. zwei "Suchergewehr, Taktisches"-Einträge mit
-     unterschiedlichen Werten, ein vermuteter OCR-Fehler bei einem
-     Kritisch-Wert) sind mit `unsicher: true` geflaggt statt stillschweigend
-     geraten.
-   - `app/src/data/armor.json`: 42 Leichte + 38 Schwere Rüstungen + 5
-     Servorüstungs-Statblöcke mit vollständigen Spielwerten.
-   - `app/src/data/conditions.json`: alle 35 Starfinder-Zustände (Tabelle
-     8-2) mit voller Beschreibung — eigenständig von Pathfinders 22
-     Zuständen in `ConditionsPanel.jsx`, Basis für dessen späteren Umbau.
-   - `app/src/data/equipment_rules.json`: Crediteinheiten-Wirtschaft,
-     Gegenstandsstufen-Zugangsregel, Tragkapazität/Beladen-Formeln.
-   - `app/src/engine/combat.js`: EAC/KAC-Formel, Angriffswürfe (inkl.
-     Entfernungsmalus), kritischer Treffer, Massiver-Schaden-Regel — gegen
-     Testfälle verifiziert.
-   - `app/src/engine/equipment.js`: Gegenstandsstufen-Zugang nach
-     Charakterstufe, Verkaufspreis-Formel, Tragkapazität/Beladen-Status.
-   **Vorgehen:** wie bei Klassen — pdftotext-Extraktion pro Unterabschnitt,
-   dann parallele Sub-Agenten (Kampfgrundlagen, Zustände, Waffen, Rüstungen)
-   strikt aus dem jeweiligen Rohtext, Ergebnisse stichprobenhaft gegen die
-   Rohtexte geprüft (Kopfblock-Werte, Formeln gegen Buchbeispiele).
-   **Bewusst NICHT erfasst:** Rüstungsverbesserungen (Tabelle 7-17, ~30
-   Einträge), Kraftfelder (Tabelle 7-18), Technische/Magische/Hybride
-   Gegenstände, Fahrzeuge, „Andere Erwerbungen" (Kapitel 7 restliche
-   Abschnitte S. 213-236), sowie aus Kapitel 8: Kampfmodifikationen
-   (Deckung/Flankieren/Tarnung — im Kampfgrundlagen-Agenten als Nebenfund
-   dokumentiert, aber nicht strukturiert), Fortbewegung/Größenkategorien,
-   Sinneswahrnehmung, Besondere Fähigkeiten, Boni/Mali, Effekte bestimmen,
-   Taktische Fahrzeugregeln. Diese sind alle noch im Rohtext vorhanden
-   (`extraction/kapitel7_*`, `extraction/kapitel8_kampfgrundlagen_raw.txt`)
-   und bei Bedarf nachträglich extrahierbar — hier bewusst zurückgestellt,
-   um bei vertretbarem Aufwand die für einen funktionierenden Kampf-Tab
-   wichtigsten Teile (EAC/KAC, Zustände, Waffen/Rüstungen-Katalog) fertig zu
-   bekommen.
-7. ~~**Talente (Kapitel 6)**~~ — erledigt. `app/src/data/feats.json`: alle 97
-   Talente aus Tabelle 6-1 (Name, Voraussetzungen, Vorteil-Kurzfassung,
-   Kampftalent-Flag). Ausführliche Einzelbeschreibungen (Normal/Speziell)
-   im Fließtext bewusst nicht übernommen.
-   ~~**Zauber (Kapitel 10 — nur 2 Zauberklassen)**~~ — erledigt, mit
-   Einschränkung. `app/src/data/spells.json`: allgemeine Zauberregeln
-   (Zaubergrad vs. Zauberstufe, Zauberplätze, Konzentration) plus die
-   vollständigen Zauberlisten von Aspirant (131 Zauber) und Technomagier
-   (130 Zauber) über alle Grade 0-6, jeweils mit Kurzbeschreibung.
-   **Bewusst NICHT erfasst:** die ausführlichen Einzel-Zauberbeschreibungen
-   (Reichweite, Wirkungsdauer, Rettungswurf-SG, vollständiger Effekttext) —
-   das wären ~46 weitere Buchseiten (S. 340-386), unverhältnismäßig viel
-   Aufwand für den aktuellen Stand des Projekts. Nur Name + 1-Satz-
-   Kurzbeschreibung, wie in der Zauberliste selbst abgedruckt. Zauber-
-   pro-Tag-Tabellen stehen bereits in `classes.json` (aspirant/technomagier
-   `levels[].spells_per_day`), kein separates `engine/spellSlots.js` nötig.
-   **Kleine Unsicherheit:** bei der Technomagier-Liste war die
-   Spaltenzuordnung Grad 4 vs. 5 für 8 Zauber im pdftotext-Layout nicht
-   eindeutig (`_meta.technomancer_grad5_caveat` in spells.json) — diese 8
-   wurden nur unter Grad 4 gezählt, um keine Doppelzählung zu riskieren;
-   Technomagier-Zauberliste Grad 5 ist dadurch möglicherweise unvollständig
-   (nur 13 statt evtl. mehr Einträge). Bei Bedarf gegen S. 338-339 im Buch
-   oder `extraction/kapitel10_magie_zauberlisten_raw.txt` nachprüfen.
-8. Danach: `App.jsx` von Platzhalter auf echte Tabs umstellen.
-9. **Raumschiffe (Kapitel 9) — eigene, spätere Phase**, erst wenn 1-8 stehen
-   und die Gruppe tatsächlich Raumschiffkampf spielt.
+Engine-Module (`app/src/engine/`): `attributes.js` (Modifikator, Stufenaufstieg),
+`skills.js` (Fertigkeitsbonus), `resources.js` (TP/AP/RP), `combat.js`
+(EAC/KAC, Angriffswurf, Massiver Schaden), `equipment.js` (Gegenstandsstufen-
+Zugang, Tragkapazität), `characterStats.js` (aggregiert alles zu einem
+Kennwerte-Objekt pro Charakter — zentrale Stelle für alle Tabs).
 
-## Offene Fragen (für die nächste Session zu klären, nicht vorentschieden)
+Alle Engine-Formeln wurden gegen die im Buch selbst vorgerechneten Beispiele
+verifiziert (nicht nur aus dem Fließtext abgeleitet).
+
+## UI-Stand (`app/src/components/`)
+`App.jsx` hat jetzt echte Tabs statt Platzhalter:
+- **Charakter** (`CharacterTab.jsx`): Volk/Klasse/Stufe wählen, Attribute
+  (Wert bereits inkl. Volksmod, wie im Buch/pf1-bogen üblich), TP/AP/RP mit
+  aktuellem Wert + „voll auffüllen", GAB/Rettungswürfe, 20-Fertigkeiten-
+  Tabelle mit Rang-Eingabe und Live-Bonus, Volksmerkmale und Klassenmerkmale
+  bis zur aktuellen Stufe als Referenztext.
+- **Kampf** (`CombatTab.jsx`): EAC/KAC live (abhängig von angelegter Rüstung
+  + GE-Mod), Angriffsrechner (Waffe wählen → Angriffsbonus/Schaden aus
+  `weapons.json`), Zustände-Toggle-Liste (alle 35 aus `conditions.json`).
+- **Ausrüstung** (`GearTab.jsx`): Credits, Rüstung ausrüsten (setzt EAC/KAC),
+  Waffen/Rüstungen aus dem Katalog ins Inventar, einfache Inventarliste.
+- **Zauber** (`SpellsTab.jsx`): nur für Aspirant/Technomagier — Zauberplätze
+  pro Tag (aus `classes.json`), bekannte Zauber pro Grad antippen/abwählen
+  aus der vollen Zauberliste.
+- **Raumschiff**: bewusst weiterhin Platzhalter (siehe Entscheidung 3).
+- **Notizen**: einfaches Textfeld (ersetzt den alten Platzhalter).
+
+**Getestet:** Build (`npm run build`) grün, manuell im Dev-Server durchgeklickt
+(Vesk/Soldat Stufe 3 → TP 27/AP 21/RP 5/GAB+3/Angriffsbonus+7 — alle Werte von
+Hand gegen die Formeln nachgerechnet, stimmen), sowie mobiles Layout via
+iOS-Preview-Rig (`~/.claude/tools/ios-preview/shoot.js`) in Portrait UND
+Landscape geprüft — kein Overflow, Bottom-Nav bleibt sichtbar.
+
+**Store-Änderung:** `useCharacters.js` `DEFAULT_CHAR` um vier Starfinder-Felder
+ergänzt (`credits`, `equipped`, `resources_current`, `spells_known`) — additiv,
+nichts Bestehendes entfernt. Alte Pathfinder-Felder (`buffs`, `xp`, `domains`,
+`magic_slots` etc.) sind noch im Objekt, werden aber von keinem Starfinder-Tab
+mehr gelesen; Aufräumen wäre ein separater, risikoarmer Schritt.
+
+**`ConditionsPanel.jsx`, `InventoryTab.jsx`, `ResourcesPanel.jsx`** (aus
+pf1-bogen übernommen, Pathfinder-geprägt) werden von den neuen Tabs NICHT
+mehr verwendet — `CombatTab`/`GearTab` haben eigene, schlankere Starfinder-
+Versionen der gleichen Grundidee. Die alten Dateien liegen noch im Repo
+(toter Code), könnten in einem Aufräum-Schritt gelöscht werden.
+
+## Bekannte Lücken (bewusst zurückgestellt, nicht vergessen)
+- **Raumschiffe (Kapitel 9)** — eigene, spätere Phase, startet erst wenn die
+  Gruppe tatsächlich Raumschiffkampf spielt.
+- **Umfangreiche Klassen-Unterwahllisten** nicht einzeln erfasst: Agententricks
+  (~35-40), Mechanikertricks, Kampfstile (7×5 Stiltechniken), Sternenoffen-
+  barungen (~40+), Magische Hacks (~25-30), Aspiranten-Verbindungen (7, je
+  mit eigener Zauberliste), Drohnenchassis/-modifikationen/-talente. Nur als
+  Kategorie mit Fundstelle in `classes.json` `notes` vermerkt.
+- **Ausrüstung**: Rüstungsverbesserungen (Tabelle 7-17, ~30 Einträge),
+  Kraftfelder (Tabelle 7-18), Technische/Magische/Hybride Gegenstände,
+  Fahrzeuge, „Andere Erwerbungen" (Kapitel 7, S. 213-236) nicht extrahiert.
+- **Kampfmechanik**: Kampfmodifikationen (Deckung/Flankieren/Tarnung),
+  Fortbewegung/Größenkategorien, Sinneswahrnehmung, Besondere Fähigkeiten,
+  Boni/Mali, Effekte bestimmen, Taktische Fahrzeugregeln (Kapitel 8, restliche
+  Abschnitte) nicht strukturiert — Rohtext liegt in
+  `extraction/kapitel8_kampfgrundlagen_raw.txt` als Nebenfund vor.
+- **Zauber**: nur Zauberlisten (Name + 1-Satz-Kurzbeschreibung) erfasst, NICHT
+  die vollständigen Einzel-Zauberbeschreibungen (Reichweite, Wirkungsdauer,
+  Rettungswurf-SG, S. 340-386, ~46 Seiten). Technomagier-Zauberliste Grad 5
+  eventuell unvollständig (Spaltenzuordnungs-Unsicherheit, siehe
+  `spells.json` `_meta.technomancer_grad5_caveat`).
+- **Talente**: nur Tabellen-Kurzfassung (Name/Voraussetzungen/Vorteil), nicht
+  die ausführlichen Einzelbeschreibungen mit Normal-/Speziell-Abschnitten.
+- **Charaktermotive** (Kapitel 2, S. 28-37) nicht extrahiert — kein Teil der
+  ursprünglichen Schrittliste.
+- **UI-Politur**: kein Fertigkeitsränge-Limit-Hinweis bei Überschreiten, kein
+  Speichern mehrerer Waffen gleichzeitig im Kampf-Tab (nur Ad-hoc-Rechner),
+  keine Talent-Auswahl-UI (Talente werden bisher nirgends im Charakterbogen
+  ausgewählt/angezeigt — `feats.json` existiert, ist aber noch nicht in einen
+  Tab eingebaut). Toter Pathfinder-Code (`ConditionsPanel.jsx` u.a., s.o.)
+  noch nicht aufgeräumt. PWA-Icons noch die alten Pathfinder-Platzhalter.
+
+## Offene Fragen (für die nächste Session, nicht vorentschieden)
 - Gibt es eine deutsche Starfinder-SRD-Website analog zu `prd.5footstep.de`
   für Verweislinks? Noch nicht geprüft.
-- `pdftotext -layout` vs. `pdfplumber` — für das Völker-Kapitel (Fließtext +
-  einfache Attributstabelle) reichte `-layout` aus, `pdfplumber` war nicht
-  nötig. Bleibt aber offen für spaltenreichere Tabellen (Klassen-
-  Stufenprogression, Ausrüstungslisten) — dort ggf. noch nötig, erster Test
-  steht bei Kapitel 4 (Klassen) an.
 - Homebrew-Kategorien (aktuell aus Pathfinder übernommen: classes/races/
   weapons/armor/shields) — passen die 1:1 für Starfinder oder fehlt was
   (z.B. Augmentierungen/Cyberware als eigene Homebrew-Kategorie)?
 
 ## GitHub / Deploy
 - GitHub-Repo existiert bereits: `git@github.com-private:markus-froehlich/sf1-bogen.git`
-  (privater SSH-Alias, siehe AGENTS.md). Lokale Commits laufen, es wurde
-  aber in dieser Session noch **nicht gepusht** (kein Push ohne explizite
-  Nutzerfreigabe).
-- GitHub-Pages-Deploy via Actions (analog `pf1-bogen`) noch nicht
-  eingerichtet.
+  (privater SSH-Alias, siehe AGENTS.md). Alle Commits dieser Session sind
+  lokal, **noch nicht gepusht** (kein Push ohne explizite Nutzerfreigabe).
+- GitHub-Pages-Deploy via Actions (analog `pf1-bogen`) noch nicht eingerichtet.
+- `.claude/launch.json` (Projekt-Root) neu angelegt für den Preview-Dev-Server
+  (`npm --prefix app run dev`, Port 5173).
 
 ## Hinweise
 - PDF liegt lokal im Projektordner (`Starfinder_Grundregelwerk_(PDF).pdf`,
   ~210 MB), ist gitignored, bleibt nur auf diesem Rechner.
-- Verifikations-Ansatz ohne Referenzwerte (siehe AGENTS.md) — bei jeder
-  Formel die Seitenzahl im Regelwerk mit angeben, für spätere Nachprüfbarkeit.
+- Alle `extraction/kapitel*_raw.txt`-Dateien sind gitignored, bleiben aber auf
+  der Platte liegen — nützlich, falls eine der „Bekannten Lücken" oben später
+  nachträglich extrahiert werden soll, ohne das PDF erneut aufschneiden zu
+  müssen.
+- **Wichtige Faustregel aus dieser Session:** bei zweispaltigem PDF-Layout
+  sind Tabellen die verlässlichere Quelle für Kennzahlen (Attribute, SG,
+  Boni) als Fließtext-Überschriften — `pdftotext -layout` kann Text aus der
+  falschen Spalte an eine Überschrift der Nachbarspalte anhängen (gefunden
+  bei Fertigkeiten-Kapitel, Athletik-Überschrift).

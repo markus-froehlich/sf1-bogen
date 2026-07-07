@@ -1,0 +1,131 @@
+.char-tab section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.char-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ── Resources (TP/AP/RP) ── */
+.sf-resource-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.sf-resource-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+}
+.sf-resource-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+.sf-resource-values {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+.sf-resource-input {
+  width: 3em;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  text-align: right;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 3px 4px;
+}
+.sf-resource-max {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.sf-resource-fill {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  padding: 1px 8px;
+  cursor: pointer;
+}
+.sf-resource-fill:active { color: var(--accent); border-color: var(--accent); }
+
+/* ── Combat stat boxes ── */
+.sf-stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.sf-stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 2px;
+}
+.sf-stat-value { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+.sf-stat-label { font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── Skill table ── */
+.skill-table {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.skill-row {
+  display: grid;
+  grid-template-columns: 1fr 2.2em 3.5em 3em;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 5px;
+}
+.skill-row.is-class { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.skill-name { font-size: 0.78rem; color: var(--text); }
+.skill-key { font-size: 0.68rem; color: var(--text-muted); text-align: center; }
+.skill-ranks-input {
+  width: 100%;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 2px;
+}
+.skill-bonus { font-size: 0.85rem; font-weight: 700; color: var(--accent); text-align: right; }
+.skill-bonus.disabled { color: var(--text-muted); opacity: 0.5; }
+
+/* ── Feature lists (racial traits / class features) ── */
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.feature-item {
+  border-left: 2px solid var(--border);
+  padding-left: 8px;
+}
+.feature-name { font-size: 0.82rem; font-weight: 700; color: var(--text); }
+.feature-level { font-size: 0.68rem; font-weight: 400; color: var(--text-muted); }
+.feature-desc { font-size: 0.75rem; color: var(--text-muted); margin: 2px 0 0; line-height: 1.4; }
