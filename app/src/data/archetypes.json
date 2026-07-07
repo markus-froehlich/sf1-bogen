@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 4: Klassen, Abschnitt 'Archetypen', S. 126-129",
+    "pdf_pages": "127-131",
+    "note": "Nur der generische Mechanismus + die 2 im Grundregelwerk enthaltenen Beispielarchetypen. Kein separates System, wird direkt einer der 7 Klassen als Ersatz für reguläre Klassenmerkmale hinzugefügt."
+  },
+  "overview": "Ein Archetyp ist eine Reihe alternativer Klassenmerkmale, die normalerweise von der Klasse verliehene Klassenmerkmale auf bestimmten Stufen (2., 4., 6., 9., 12. und 18. Stufe) ersetzen oder modifizieren - nicht alle Archetypen nutzen alle diese Stufen. Man erhält einen Archetyp, wenn man eine neue Klassenstufe erlangt, die der ersten Stufe entspricht, für die der Archetyp alternative Klassenmerkmale anbietet; der Archetyp gilt dann als Teil dieser Klasse. Pro Klasse kann nur ein Archetyp gewählt werden, und jeder Archetyp kann insgesamt nur einmal (in einer Klasse) hinzugefügt werden. Manche Archetypen sind auf bestimmte Klassen beschränkt oder haben weitere Voraussetzungen.",
+  "class_impact_by_class": {
+    "agent": "2./4./6./12./18.: kein Agententrick; 9.: Tückischer Angriff -1W8 Schaden.",
+    "aspirant": "2.: -1 bekannter Zauber pro höchstem Grad; 4.: kein Ausrichtungszauber höchsten Grades; 6./18.: keine Ausrichtungsfähigkeit höchster Stufe; 9.: keine Heilende Berührung/Talent auf ungerader Stufe; 12.: Fokussierte Fertigkeit-Bonus -1/-2, verzögert bis 17. Stufe auf +4.",
+    "gesandter": "2./4./6./12./18.: keine Improvisation; 9.: keine zusätzliche Fertigkeitsexpertise.",
+    "mechaniker": "2./4./6./12./18.: kein Mechanikertrick; 9.: Überschreiben verzögert auf 10. Stufe, dafür kein Mechanikertrick der 10. Stufe.",
+    "solarier": "2./4./6./12./18.: keine Sternenoffenbarung; 9.: Zenitoffenbarung verzögert auf 10. Stufe, dafür keine normale 10.-Stufen-Sternenoffenbarung.",
+    "soldat": "2./4./6./12./18.: kein Bonuskampftalent; 9.: Sekundärkampfstil/-stiltechnik verzögert auf 10. Stufe, dafür kein Bonuskampftalent der 10. Stufe.",
+    "technomagier": "2.: Magischer Hack verzögert auf 5. Stufe; 4.: -1 bekannter Zauber pro höchstem Grad; 6.: Zauberkondensator verzögert auf 8. Stufe statt Magischem Hack, mit Verschiebungen bei 12./18.; 9.: Technikwissen-Verbesserung verzögert auf 11. Stufe, kein Magischer Hack der 11. Stufe; 12./18.: keine weitere Verbesserung des Zauberkondensators."
+  },
+  "archetypes": [
+    {
+      "id": "uebernatuerlich_begabter",
+      "name": { "de": "Übernatürlich Begabter" },
+      "levels_used": [2, 4, 6, 9, 12, 18],
+      "features": ["Übernatürliches Erwachen", "Übernatürliche Verteidigung", "Übernatürliche Sinne", "Schwächere Übernatürliche Gabe", "Übernatürliche Gabe", "Mächtige Übernatürliche Gabe"],
+      "note": "Volle Beschreibung im Rohtext (extraction/kapitel4_archetypen_raw.txt) vorhanden, hier nur die Feature-Namen erfasst, keine Einzelbeschreibungen - Scope-Entscheidung analog zu den Klassen-Unterlisten."
+    },
+    {
+      "id": "wegbereiter_sternenkundschafter",
+      "name": { "de": "Wegbereiter der Gesellschaft der Sternenkundschafter" },
+      "levels_used": [2, 4, 6],
+      "features": ["Auf alles vorbereitet", "Zu allem bereit", "Feldreparaturen"],
+      "note": "Volle Beschreibung im Rohtext vorhanden, hier nur die Feature-Namen erfasst."
+    }
+  ]
+}

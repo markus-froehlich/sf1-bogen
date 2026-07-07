@@ -121,8 +121,34 @@ Daten-Port, Engine bauen) hat noch nicht begonnen.
    mitgenommen, da sie für die races.json-Verifikation gebraucht wurde. Volle
    Motiv-Beschreibungen (Fertigkeitsboni, Talente) fehlen noch, war kein Teil
    der ursprünglichen Schrittliste — ggf. eigener Schritt später.
-5. Klassen (Kapitel 4, S. 56-129) — größter Brocken trotz nur 7 Klassen,
-   74 Seiten mit Stufenprogressionen + Klassenmerkmalen.
+5. ~~**Klassen (Kapitel 4, S. 56-129) zu `app/src/data/classes.json` +
+   `app/src/data/archetypes.json` strukturieren**~~ — erledigt. PDF-Seiten
+   58-131 (Klassen 61-126, Archetypen 127-131). Alle 7 Klassen (Agent,
+   Aspirant, Gesandter, Mechaniker, Solarier, Soldat, Technomagier) mit
+   vollständiger 20-Stufen-Tabelle (Grundangriffsbonus, alle drei
+   Rettungswurfboni, TP/AP pro Stufe, Klassenmerkmale-Namen pro Stufe) plus
+   Kurzbeschreibung jedes benannten Klassenmerkmals. Aspirant und
+   Technomagier zusätzlich mit Zauber-pro-Tag-Tabelle (Grad 0-6).
+   **Vorgehen:** 7 Klassen-Kapitel + Archetypen-Abschnitt per `pdftotext
+   -layout` einzeln extrahiert (`extraction/kapitel4_<klasse>_raw.txt`),
+   dann je ein Sub-Agent pro Klasse strukturiert daraus JSON, strikt nur aus
+   dem gelieferten Rohtext (kein Trainingswissen), mit Anweisung
+   unsichere Stellen explizit zu flaggen statt zu raten. Ergebnisse
+   anschließend stichprobenhaft gegen die Rohtexte gegengeprüft (Kopfblock-
+   Werte für TP/AP bei mehreren Klassen, BAB-Konsistenz: Solarier/Soldat
+   haben volle BAB-Progression = Stufe, die anderen 5 Klassen 3/4-BAB).
+   **Bewusst NICHT erfasst** (Scope-Entscheidung, siehe classes.json
+   `_meta.scope_note`): die umfangreichen Unterwahl-Listen pro Klasse
+   (Agententricks ~35-40, Mechanikertricks, Kampfstile mit je 5
+   Stiltechniken, Sternenoffenbarungen ~40+, Magische Hacks ~25-30,
+   Aspiranten-Verbindungen je mit eigener Zauberliste, Drohnenchassis/
+   -modifikationen/-talente) — jeweils nur als Kategorie mit Fundstelle im
+   `notes`-Feld der jeweiligen Klasse vermerkt, nicht als einzelne
+   Datensätze. Für einen späteren vollständigen Talentbaum bräuchte jede
+   dieser Listen einen eigenen Extraktionsdurchgang. Technomagier-Notiz:
+   Zuordnung der Magischen Hacks zu ihrer Mindeststufe war im
+   pdftotext-Layout nicht eindeutig (als `unsicher: true` geflaggt) —
+   bei Bedarf mit pdfplumber oder Seitenbild nachprüfen.
 6. Ausrüstung (Kapitel 7) + Kampfmechanik (Kapitel 8) — EAC/KAC,
    Ausdauer/TP/Reserve-System, Gegenstandsstufen.
 7. Talente (Kapitel 6), Zauber (Kapitel 10 — nur 2 Zauberklassen).
