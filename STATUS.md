@@ -94,13 +94,33 @@ Daten-Port, Engine bauen) hat noch nicht begonnen.
    Volle Fertigkeits-Unterregeln (SG-Tabellen für Klettern/Schwimmen/etc.)
    sind NICHT übernommen, nur die für den Charakterbogen nötigen
    Kennzahlen + eine Kurzbeschreibung pro Fertigkeit.
-4. **Attribut-/Fertigkeiten-Rechenkern** (`app/src/engine/attributes.js`,
-   `app/src/engine/skills.js`) — noch nicht begonnen. Formeln bereits aus
-   dem Fließtext bekannt: Fertigkeitsränge/Stufe = IN-Mod + Klassenwert
-   (min. 1), Gesamtbonus = Rang + (Klassenfertigkeit? +3 : 0) +
-   Attributsmod + sonstige Mods. Attributssteigerung alle 5 Stufen noch zu
-   extrahieren (S. 18/24, Kapitel 2 — nicht Teil dieser Kapitelliste,
-   eigener Blick nötig).
+4. ~~**Attribut-/Fertigkeiten-Rechenkern**~~ — erledigt. Dafür zusätzlich
+   Kapitel 2 (Charaktererschaffung, S. 12-27: Attributswerte, Gesundheit und
+   Reservepunkte, Stufenaufstieg) extrahiert nach
+   `extraction/kapitel2_charaktererschaffung_raw.txt` (PDF-Seiten 15-28,
+   Offset weiterhin +2 zum gedruckten Buch). Drei neue Engine-Module:
+   - `app/src/engine/attributes.js`: Attributsmodifikator
+     (`floor((Wert-10)/2)`, gegen alle 26 Tabelleneinträge von Tabelle 2-1
+     verifiziert), Attributswerte-Kaufsystem-Konstanten, Attributsschnell-
+     auswahl-Zahlenreihen, Stufenaufstieg-Steigerung alle 5 Stufen (4
+     Attribute wählen, +1 falls Wert ≥17 sonst +2).
+   - `app/src/engine/skills.js`: Fertigkeitsränge/Stufe (IN-Mod + Klassenwert,
+     min. 1), Gesamtfertigkeitsbonus (Rang + Klassenfertigkeitsbonus +3 +
+     Attributsmod + sonstige Mods), Nur-geübt-Prüfung.
+   - `app/src/engine/resources.js`: die drei Starfinder-Punktevorräte TP
+     (Trefferpunkte), AP (Ausdauerpunkte) und RP (Reservepunkte) — TP =
+     Volksbonus (einmalig) + Klassenwert × Stufe; AP = max(0, Klassenwert +
+     KO-Mod) × Stufe (pro Stufe nie negativ); RP = max(1, max(1, ⌊Stufe/2⌋)
+     + Schlüsselattributsmod der Klasse).
+   Alle drei Module wurden gegen die im Buch selbst vorgerechneten Beispiele
+   verifiziert (Androidischer Technomagier Stufe 5 für Attributssteigerung,
+   Menschlicher Soldat für TP/AP, Aspirant für RP) — alle Tests bestanden,
+   kein manuelles Nachrechnen nötig gewesen, siehe Commit-Message für Details.
+   **Offen/bewusst nicht gebaut:** Charaktermotive (Kapitel 2, S. 28-37) sind
+   nicht extrahiert — nur die zugehörige Attributspunkt-Tabelle (2-2) wurde
+   mitgenommen, da sie für die races.json-Verifikation gebraucht wurde. Volle
+   Motiv-Beschreibungen (Fertigkeitsboni, Talente) fehlen noch, war kein Teil
+   der ursprünglichen Schrittliste — ggf. eigener Schritt später.
 5. Klassen (Kapitel 4, S. 56-129) — größter Brocken trotz nur 7 Klassen,
    74 Seiten mit Stufenprogressionen + Klassenmerkmalen.
 6. Ausrüstung (Kapitel 7) + Kampfmechanik (Kapitel 8) — EAC/KAC,
