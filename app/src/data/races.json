@@ -1,0 +1,242 @@
+{
+  "_meta": {
+    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 3: Völker, S. 38-55",
+    "pdf_pages": "40-57",
+    "note": "PDF-Seitenzahlen liegen 2 über den gedruckten Seitenzahlen. Nur die 7 Grundvölker aus diesem Kapitel; weitere Völker (Elfen, Zwerge etc.) stehen ab S. 506 (Kapitel 13) und im Alien-Archiv, sind hier nicht enthalten.",
+    "count": 7,
+    "default_speed_m": 9,
+    "ability_score_note": "Bei der Charaktererschaffung werden Volks-Attributsmodifikatoren direkt auf den gewürfelten/verteilten Basiswert angerechnet (siehe S. 18), anders als beim Pathfinder-Bogen wo der Spieler den fertigen Wert eintrug."
+  },
+  "races": [
+    {
+      "id": "androide",
+      "name": { "de": "Androide" },
+      "page": 42,
+      "size": "Mittelgroß",
+      "creature_type": "Humanoide (Unterart: Androide)",
+      "speed_m": 9,
+      "hp_bonus": 4,
+      "ability_mods": { "GE": 2, "IN": 2, "CH": -2 },
+      "ability_mods_text": "GE+2, IN+2, CH-2",
+      "ability_mod_floating": null,
+      "vitals": { "height_m": "1,50-2,10", "weight_lb": "100-200", "adult_age": "0 Jahre", "life_expectancy": "siehe S. 43" },
+      "traits": [
+        {
+          "name": "Konstruiert",
+          "description": "Androiden zählen sowohl als Humanoide, als auch als Konstrukte hinsichtlich Effekten, die auf die Kreaturenart abzielen (im Zweifel greift der für sie schlechtere Effekt). Sie erhalten einen Volksbonus von +2 auf alle Rettungswürfe gegen Geistesbeeinflussende Effekte, Gift, Krankheit und Schlaf, außer diese Effekte betreffen speziell Konstrukte. Ferner müssen sie nicht atmen und erleiden nicht die normalen Umgebungseffekte, wenn sie einem Vakuum ausgesetzt sind."
+        },
+        {
+          "name": "Außergewöhnliche Sicht",
+          "description": "Androiden besitzen Dämmersicht und Dunkelsicht. Sie können bei Dämmerlicht sehen wie bei normalem Licht, ferner können sie ohne Lichtquelle 18 m sehen, sehen dann aber nur schwarz-weiß."
+        },
+        {
+          "name": "Gefühlsarm",
+          "description": "Androiden erleiden einen Malus von -2 auf Fertigkeitswürfe für Motiv erkennen, zugleich steigt der SG von Würfen für Motiv erkennen ihnen gegenüber um 2."
+        },
+        {
+          "name": "Verbesserungssteckplatz",
+          "description": "Androiden besitzen einen einzelnen Rüstungsverbesserungssteckplatz in ihren Körpern. Unabhängig davon, ob ein Androide körperliche Rüstung trägt, kann er in diesem Rüstungsverbesserungssteckplatz eine Rüstungsverbesserung installieren, die in einer Leichten Rüstung installiert werden kann."
+        }
+      ],
+      "subraces": []
+    },
+    {
+      "id": "kasatha",
+      "name": { "de": "Kasatha" },
+      "page": 44,
+      "size": "Mittelgroß",
+      "creature_type": "Humanoide (Unterart: Kasatha)",
+      "speed_m": 9,
+      "hp_bonus": 4,
+      "ability_mods": { "ST": 2, "WE": 2, "IN": -2 },
+      "ability_mods_text": "ST+2, WE+2, IN-2",
+      "ability_mod_floating": null,
+      "vitals": { "height_m": "1,80-2,10", "weight_lb": "120-200", "adult_age": "25 Jahre", "life_expectancy": "100 + 2W20 Jahre" },
+      "traits": [
+        {
+          "name": "Wüste durchqueren",
+          "description": "Kasathas können sich durch nichtmagisches Schwieriges Gelände in Bergen, Hügeln und Wüsten mit ihrer normalen Bewegungsrate fortbewegen."
+        },
+        {
+          "name": "Vierarmig",
+          "description": "Kasathas haben vier Arme, welche ihnen erlauben, bis zu vier Hände voll an Waffen und Ausrüstung zu halten. Die Vielzahl an Armen erhöht die Anzahl an Gegenständen, welche sie bereithalten können, aber nicht die Anzahl an Angriffen, die ihnen im Kampf möglich ist."
+        },
+        {
+          "name": "Historiker",
+          "description": "Aufgrund ihrer tiefgreifenden historischen Ausbildung und ihres weitreichenden Hintergrundwissens erhalten Kasathas einen Volksbonus von +2 auf Fertigkeitswürfe für Kultur."
+        },
+        {
+          "name": "Angeborene Anmut",
+          "description": "Kasathas erhalten einen Volksbonus von +2 auf Fertigkeitswürfe für Akrobatik und Athletik."
+        }
+      ],
+      "subraces": []
+    },
+    {
+      "id": "laschunta",
+      "name": { "de": "Laschunta" },
+      "page": 46,
+      "size": "Mittelgroß",
+      "creature_type": "Humanoide (Unterart: Laschunta)",
+      "speed_m": 9,
+      "hp_bonus": 4,
+      "ability_mods": { "CH": 2 },
+      "ability_mods_text": "CH+2 (alle Laschuntas), zusätzlich abhängig von Unterart (siehe subraces)",
+      "ability_mod_floating": null,
+      "vitals": { "height_m": "1,50-2,10", "weight_lb": "140-180", "adult_age": "20 Jahre", "life_expectancy": "80 + 2W20 Jahre" },
+      "traits": [
+        {
+          "name": "Dimorph",
+          "description": "Alle Laschuntas erhalten bei der Charaktererschaffung +2 Charisma. Korascha-Laschuntas sind muskulös (+2 Stärke), aber oft unhöflich, vorlaut und unachtsam (-2 Weisheit). Damaya-Laschuntas sind meistens schlau und sprechen mit Bedacht (+2 Intelligenz), sind aber etwas zerbrechlich (-2 Konstitution)."
+        },
+        {
+          "name": "Laschuntamagie",
+          "description": "Laschuntas erhalten folgende zauberähnliche Fähigkeiten: Beliebig oft Benommenheit und Psychokinetische Hand; 1/Tag Gedanken wahrnehmen. Die effektive Zauberstufe dieser Effekte entspricht der Charakterstufe des Laschuntas."
+        },
+        {
+          "name": "Begrenzte Telepathie",
+          "description": "Laschuntas können mental mit Kreaturen innerhalb von 9 m Entfernung kommunizieren, welche dieselbe Sprache beherrschen."
+        },
+        {
+          "name": "Kenntnisreich",
+          "description": "Laschuntas erhalten einen Volksbonus von +2 auf zwei beliebige Fertigkeiten ihrer Wahl."
+        }
+      ],
+      "subraces": [
+        {
+          "id": "korascha",
+          "name": { "de": "Korascha" },
+          "ability_mods": { "ST": 2, "WE": -2 },
+          "ability_mods_text": "ST+2, WE-2 (zusätzlich zum CH+2 aller Laschuntas)"
+        },
+        {
+          "id": "damaya",
+          "name": { "de": "Damaya" },
+          "ability_mods": { "IN": 2, "KO": -2 },
+          "ability_mods_text": "IN+2, KO-2 (zusätzlich zum CH+2 aller Laschuntas)"
+        }
+      ]
+    },
+    {
+      "id": "mensch",
+      "name": { "de": "Mensch" },
+      "page": 48,
+      "size": "Mittelgroß",
+      "creature_type": "Humanoide (Unterart: Mensch)",
+      "speed_m": 9,
+      "hp_bonus": 4,
+      "ability_mods": {},
+      "ability_mods_text": "+2 auf 1 Attribut nach Wahl",
+      "ability_mod_floating": 2,
+      "vitals": { "height_m": "1,50-2,10", "weight_lb": "100-300", "adult_age": "18 Jahre", "life_expectancy": "80 + 2W20 Jahre" },
+      "traits": [
+        {
+          "name": "Bonustalent",
+          "description": "Menschen wählen mit der 1. Stufe ein zusätzliches Talent."
+        },
+        {
+          "name": "Geschult",
+          "description": "Menschen erhalten mit der 1. Stufe und jeder weiteren Stufe einen zusätzlichen Fertigkeitsrang."
+        }
+      ],
+      "subraces": []
+    },
+    {
+      "id": "schirr",
+      "name": { "de": "Schirr", "plural_de": "Schirren" },
+      "page": 50,
+      "size": "Mittelgroß",
+      "creature_type": "Humanoide (Unterart: Schirren)",
+      "speed_m": 9,
+      "hp_bonus": 6,
+      "ability_mods": { "KO": 2, "WE": 2, "CH": -2 },
+      "ability_mods_text": "KO+2, WE+2, CH-2",
+      "ability_mod_floating": null,
+      "vitals": { "height_m": "1,50-1,80", "weight_lb": "100-150", "adult_age": "5 Jahre", "life_expectancy": "50 + 1W20 Jahre" },
+      "traits": [
+        {
+          "name": "Blindgespür",
+          "description": "Die empfindlichen Antennen der Schirren verleihen ihnen Blindgespür (Vibrationen) 9 m. Ein Schirr ignoriert Boni auf Heimlichkeit durch visuelle Tarnung/Unsichtbarkeit u.ä. bei einem konkurrierenden Wahrnehmungswurf, gelingt dieser besitzt ein nicht sichtbarer Gegner aber immer noch Vollständige Tarnung (50% Fehlschlagchance) gegenüber dem Schirr."
+        },
+        {
+          "name": "Gemeinschaftssinn",
+          "description": "Solange sich ein Verbündeter innerhalb von 3 m Entfernung befindet, kann ein Schirr ein Mal am Tag einen Angriffs- oder Fertigkeitswurf zwei Mal ablegen und das höhere Ergebnis behalten."
+        },
+        {
+          "name": "Kulturelle Faszination",
+          "description": "Schirren erhalten einen Volksbonus von +2 auf Fertigkeitswürfe für Diplomatie und Kultur."
+        },
+        {
+          "name": "Begrenzte Telepathie",
+          "description": "Schirren können mental mit Kreaturen innerhalb von 9 m Entfernung kommunizieren, welche dieselbe Sprache beherrschen."
+        }
+      ],
+      "subraces": []
+    },
+    {
+      "id": "vesk",
+      "name": { "de": "Vesk", "plural_de": "Vesken" },
+      "page": 52,
+      "size": "Mittelgroß",
+      "creature_type": "Humanoide (Unterart: Vesk)",
+      "speed_m": 9,
+      "hp_bonus": 6,
+      "ability_mods": { "ST": 2, "KO": 2, "IN": -2 },
+      "ability_mods_text": "ST+2, KO+2, IN-2",
+      "ability_mod_floating": null,
+      "vitals": { "height_m": "1,80-2,40", "weight_lb": "200-300", "adult_age": "16 Jahre", "life_expectancy": "70 + 1W20 Jahre" },
+      "traits": [
+        {
+          "name": "Rüstungsexperte",
+          "description": "Wenn ein Vesk eine Rüstung trägt, erhält er einen Volksbonus von +1 auf seine RK. Wenn ein Vesk eine Schwere Rüstung trägt, ist sein Rüstungsmalus um 1 niedriger als normal."
+        },
+        {
+          "name": "Furchtlos",
+          "description": "Vesken erhalten einen Volksbonus von +2 auf Rettungswürfe gegen Furchteffekte."
+        },
+        {
+          "name": "Dämmersicht",
+          "description": "Vesken können bei Dämmerlicht wie in normalem Licht sehen."
+        },
+        {
+          "name": "Natürliche Waffen",
+          "description": "Vesken gelten stets als bewaffnet. Sie können mit Waffenlosen Schlägen 1W3 Punkte Tödlichen Schaden verursachen, der Angriff gilt nicht als Archaisch. Mit der 3. Stufe erhält ein Vesk eine einzigartige Waffenspezialisierung mit seinen Natürlichen Waffen; dies erlaubt ihm, 1½× seine Charakterstufe auf Schadenswürfe für seine Natürlichen Waffen zu addieren anstatt nur die Charakterstufe."
+        }
+      ],
+      "subraces": []
+    },
+    {
+      "id": "ysoki",
+      "name": { "de": "Ysoki" },
+      "page": 54,
+      "size": "Klein",
+      "size_note": "Ysokis haben die Größenkategorie Klein, aber Angriffsfläche, Reichweite und Bewegungsrate wie Mittelgroße Kreaturen (S. 41).",
+      "creature_type": "Humanoide (Unterart: Ysoki)",
+      "speed_m": 9,
+      "hp_bonus": 2,
+      "ability_mods": { "GE": 2, "IN": 2, "ST": -2 },
+      "ability_mods_text": "GE+2, IN+2, ST-2",
+      "ability_mod_floating": null,
+      "vitals": { "height_m": "0,90-1,20", "weight_lb": "60-100", "adult_age": "10 Jahre", "life_expectancy": "60 + 1W20 Jahre" },
+      "traits": [
+        {
+          "name": "Backentaschen",
+          "description": "Ein Ysoki kann in seinen Backentaschen Gegenstände mit einem Gewicht von bis zu Last 1 und 0,03 m³ (30 Liter) Volumen unterbringen. Er kann den Inhalt als Bewegungsaktion in seinem Feld auf den Boden ausspucken; dies provoziert keine Gelegenheitsangriffe."
+        },
+        {
+          "name": "Dunkelsicht",
+          "description": "Ysokis können im Dunkeln bis zu 18 m weit sehen."
+        },
+        {
+          "name": "Tatkraft",
+          "description": "Ein Ysoki kann sich als Schnelle Aktion aus dem Zustand Liegend erheben. Ferner erhält ein Ysoki im Zustand Haltlos nicht die üblichen Mali auf Angriffswürfe oder den Zustand Auf dem Falschen Fuß. Turnt ein Ysoki per Akrobatik-Fertigkeitswurf durch die Angriffsfläche eines mindestens eine Größenkategorie größeren Gegners, erhält er einen Volksbonus von +5 auf diesen Wurf."
+        },
+        {
+          "name": "Schrottsammler",
+          "description": "Ysokis erhalten einen Volksbonus von +2 auf Fertigkeitswürfe für Heimlichkeit, Technik und Überlebenskunst."
+        }
+      ],
+      "subraces": []
+    }
+  ]
+}

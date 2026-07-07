@@ -49,32 +49,57 @@ Daten-Port, Engine bauen) hat noch nicht begonnen.
     angetestet (lädt korrekt, keine Fehler).
 - PWA-Icons noch die alten Pathfinder-Platzhalter (`public/icons/pwa-*.png`)
   — müssen irgendwann durch Starfinder-eigene ersetzt werden, nicht dringend.
+- **PDF-Extraktionspipeline getestet (2026-07-07), funktioniert:**
+  `pdftotext -layout` reicht für das Völker-Kapitel aus, `pdfplumber` war
+  nicht nötig. Wichtig: **PDF-Seitenzahlen ≠ gedruckte Seitenzahlen** — Offset
+  ermittelt durch Suche nach Kapitelüberschriften im Volltext (siehe unten).
+  Kapitel 3 (Völker) liegt auf **PDF-Seiten 40-57** (gedruckt S. 38-55,
+  Offset +2). Befehl:
+  `pdftotext -layout -f 40 -l 57 "Starfinder_Grundregelwerk_(PDF).pdf" extraction/kapitel3_voelker_raw.txt`
+  Ergebnis liegt in `extraction/kapitel3_voelker_raw.txt` (gitignored, lokal).
+  Qualität: gut lesbar, alle 7 Völker vollständig (Androiden, Kasathas,
+  Laschuntas, Menschen, Schirren, Vesken, Ysokis) mit Attributsmodifikatoren,
+  TP-Bonus, Volksmerkmalen (Fließtext) und Kultur-/Namens-Abschnitten. Die
+  vertikale Kapitel-Navigationsleiste am Seitenrand (ÜBERSICHT/VÖLKER/
+  KLASSEN/...) mischt sich als Störtext in die zweite Spalte, ist aber leicht
+  als Rauschen erkennbar (kurze Einzelwörter zwischen Absätzen) und blockiert
+  die Weiterverarbeitung nicht. Attributsboni-Kopfzeile pro Volk (z.B.
+  "ANDROIDEN +2 GE +2 IN -2 CH 4 TP") wird über mehrere Zeilen verteilt,
+  bleibt aber eindeutig zuordenbar. **Empfehlung für weitere Kapitel:** erst
+  per `python3` das gesamte PDF einmal mit `pdftotext -layout` in eine Datei
+  wandeln (`\f`-getrennte Seiten), dann per Skript nach Kapitelüberschriften
+  suchen, um den Seiten-Offset zu bestimmen, statt zu raten.
 
 ## Nächste Schritte (in Reihenfolge)
-1. **PDF-Extraktionspipeline aufbauen** — `pdftotext -layout` testen,
-   ggf. `pdfplumber` für Tabellen. Start mit dem kleinsten Kapitel:
-   **Völker (Kapitel 3, S. 38-55, 7 Einträge)** als Pipeline-Test, analog zu
-   `races.json` bei Pathfinder (dort war das auch das erste, musterbildende
-   Dataset).
-2. Fertigkeiten (Kapitel 5, S. 130-149) — auch klein, gutes zweites Dataset.
-3. Attribut-/Fertigkeiten-Rechenkern (`engine/attributes.js`,
+1. ~~**PDF-Extraktionspipeline aufbauen und testen (Völker, Kapitel 3)**~~ —
+   erledigt, siehe oben. Rohtext liegt vor, noch **nicht** strukturiert.
+2. **Völker-Rohtext zu `data/races.json` strukturieren** — aus
+   `extraction/kapitel3_voelker_raw.txt` die 7 Völker in eine strukturierte
+   JSON überführen (Attributsmodifikatoren, TP, Größenkategorie/Kreaturenart,
+   Volksmerkmale, Sprachen), analog zur `races.json`-Struktur bei Pathfinder.
+   Noch nicht begonnen.
+3. Fertigkeiten (Kapitel 5, S. 130-149) — auch klein, gutes zweites Dataset.
+4. Attribut-/Fertigkeiten-Rechenkern (`engine/attributes.js`,
    `engine/skills.js`) — vermutlich einfacher als Pathfinders Version, da
    Starfinder weniger Sonderfälle hat (bisher keine Volks-Attributsboni-
    Eigenheit wie bei Pathfinder bekannt, muss aber noch geprüft werden).
-4. Klassen (Kapitel 4, S. 56-129) — größter Brocken trotz nur 7 Klassen,
+5. Klassen (Kapitel 4, S. 56-129) — größter Brocken trotz nur 7 Klassen,
    74 Seiten mit Stufenprogressionen + Klassenmerkmalen.
-5. Ausrüstung (Kapitel 7) + Kampfmechanik (Kapitel 8) — EAC/KAC,
+6. Ausrüstung (Kapitel 7) + Kampfmechanik (Kapitel 8) — EAC/KAC,
    Ausdauer/TP/Reserve-System, Gegenstandsstufen.
-6. Talente (Kapitel 6), Zauber (Kapitel 10 — nur 2 Zauberklassen).
-7. Danach: `App.jsx` von Platzhalter auf echte Tabs umstellen.
-8. **Raumschiffe (Kapitel 9) — eigene, spätere Phase**, erst wenn 1-7 stehen
+7. Talente (Kapitel 6), Zauber (Kapitel 10 — nur 2 Zauberklassen).
+8. Danach: `App.jsx` von Platzhalter auf echte Tabs umstellen.
+9. **Raumschiffe (Kapitel 9) — eigene, spätere Phase**, erst wenn 1-8 stehen
    und die Gruppe tatsächlich Raumschiffkampf spielt.
 
 ## Offene Fragen (für die nächste Session zu klären, nicht vorentschieden)
 - Gibt es eine deutsche Starfinder-SRD-Website analog zu `prd.5footstep.de`
   für Verweislinks? Noch nicht geprüft.
-- `pdftotext -layout` vs. `pdfplumber` für Tabellenextraktion — noch kein
-  Vergleichstest gemacht, erster Extraktionslauf wird das zeigen.
+- `pdftotext -layout` vs. `pdfplumber` — für das Völker-Kapitel (Fließtext +
+  einfache Attributstabelle) reichte `-layout` aus, `pdfplumber` war nicht
+  nötig. Bleibt aber offen für spaltenreichere Tabellen (Klassen-
+  Stufenprogression, Ausrüstungslisten) — dort ggf. noch nötig, erster Test
+  steht bei Kapitel 4 (Klassen) an.
 - Homebrew-Kategorien (aktuell aus Pathfinder übernommen: classes/races/
   weapons/armor/shields) — passen die 1:1 für Starfinder oder fehlt was
   (z.B. Augmentierungen/Cyberware als eigene Homebrew-Kategorie)?
