@@ -1,0 +1,18 @@
+# Regelwerk-PDF (Copyright, groß, nur lokale Referenz)
+*.pdf
+
+# Extraktion (regenerierbar)
+extraction/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+app/node_modules/
+app/dist/
+
+# OS
+.DS_Store
