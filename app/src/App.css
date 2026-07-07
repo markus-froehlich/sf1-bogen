@@ -37,6 +37,13 @@
   gap: 8px;
 }
 
+.topbar-row2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .char-name-input {
   width: 100%;
   min-width: 0;
