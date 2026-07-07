@@ -191,7 +191,29 @@ Daten-Port, Engine bauen) hat noch nicht begonnen.
    um bei vertretbarem Aufwand die für einen funktionierenden Kampf-Tab
    wichtigsten Teile (EAC/KAC, Zustände, Waffen/Rüstungen-Katalog) fertig zu
    bekommen.
-7. Talente (Kapitel 6), Zauber (Kapitel 10 — nur 2 Zauberklassen).
+7. ~~**Talente (Kapitel 6)**~~ — erledigt. `app/src/data/feats.json`: alle 97
+   Talente aus Tabelle 6-1 (Name, Voraussetzungen, Vorteil-Kurzfassung,
+   Kampftalent-Flag). Ausführliche Einzelbeschreibungen (Normal/Speziell)
+   im Fließtext bewusst nicht übernommen.
+   ~~**Zauber (Kapitel 10 — nur 2 Zauberklassen)**~~ — erledigt, mit
+   Einschränkung. `app/src/data/spells.json`: allgemeine Zauberregeln
+   (Zaubergrad vs. Zauberstufe, Zauberplätze, Konzentration) plus die
+   vollständigen Zauberlisten von Aspirant (131 Zauber) und Technomagier
+   (130 Zauber) über alle Grade 0-6, jeweils mit Kurzbeschreibung.
+   **Bewusst NICHT erfasst:** die ausführlichen Einzel-Zauberbeschreibungen
+   (Reichweite, Wirkungsdauer, Rettungswurf-SG, vollständiger Effekttext) —
+   das wären ~46 weitere Buchseiten (S. 340-386), unverhältnismäßig viel
+   Aufwand für den aktuellen Stand des Projekts. Nur Name + 1-Satz-
+   Kurzbeschreibung, wie in der Zauberliste selbst abgedruckt. Zauber-
+   pro-Tag-Tabellen stehen bereits in `classes.json` (aspirant/technomagier
+   `levels[].spells_per_day`), kein separates `engine/spellSlots.js` nötig.
+   **Kleine Unsicherheit:** bei der Technomagier-Liste war die
+   Spaltenzuordnung Grad 4 vs. 5 für 8 Zauber im pdftotext-Layout nicht
+   eindeutig (`_meta.technomancer_grad5_caveat` in spells.json) — diese 8
+   wurden nur unter Grad 4 gezählt, um keine Doppelzählung zu riskieren;
+   Technomagier-Zauberliste Grad 5 ist dadurch möglicherweise unvollständig
+   (nur 13 statt evtl. mehr Einträge). Bei Bedarf gegen S. 338-339 im Buch
+   oder `extraction/kapitel10_magie_zauberlisten_raw.txt` nachprüfen.
 8. Danach: `App.jsx` von Platzhalter auf echte Tabs umstellen.
 9. **Raumschiffe (Kapitel 9) — eigene, spätere Phase**, erst wenn 1-8 stehen
    und die Gruppe tatsächlich Raumschiffkampf spielt.
