@@ -1,0 +1,317 @@
+{
+  "_meta": {
+    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 4: Klassen — Unterwahllisten, die in classes.json bewusst ausgelassen wurden (siehe dortiges _meta.scope_note)",
+    "note": "Per Sub-Agenten aus den bereits vorhandenen Rohtext-Dateien (extraction/kapitel4_<klasse>_raw.txt) strukturiert, strikt aus dem Rohtext, keine Ergänzungen aus Trainingswissen. Einzelne Einträge sind mit 'unsicher': true markiert, wo die Zuordnung (z.B. Mindeststufe, Gravitonen/Photonen-Kategorie) im zweispaltigen PDF-Layout nicht eindeutig war - siehe jeweiligen Kommentar. Noch nicht enthalten: aspirant (Verbindungsfähigkeiten je Verbindung) - wird nachgereicht."
+  },
+  "agent": {
+    "specializations": [
+      {"name": "Detektiv", "skills": ["Kultur", "Motiv erkennen"], "level11_power": "Deduktiver Sachverstand: Mit der 11. Stufe kannst du ein Mal am Tag 1 Reservepunkt aufwenden und 10 Minuten nutzen, um über ein Rätsel oder ein Problem nachzudenken, um eine Einsicht in die Lösung zu gewinnen, als hättest du Weissagung gewirkt (auch wenn das Ergebnis sich oft als kryptischer Hinweis präsentiert)."},
+      {"name": "Dieb", "skills": ["Fingerfertigkeit", "Wahrnehmung"], "level11_power": "Notfallplan: Mit der 11. Stufe kannst du 2 Reservepunkte aufwenden und einen Notfallplan bestimmen, den du für einen unerwarteten Zwischenfall während einer Infiltration oder eines Beutezugs ausgearbeitet hast. Fertigkeitswurf (SL bestimmt Fertigkeit/SG) - Erfolg: Gegenstand/Information/Mitarbeiter verfügbar; Misslingen: Plan scheitert."},
+      {"name": "Entdecker", "skills": ["Kultur", "Überlebenskunst"], "level11_power": "Ins Ungewisse: Mit der 11. Stufe erhältst du einen Bonus von +4 auf Fertigkeitswürfe für Kultur und Überlebenskunst. Außerhalb der Paktwelten/deines Heimatsystems: Bonus von +2 auf Initiativewürfe."},
+      {"name": "Geist", "skills": ["Akrobatik", "Heimlichkeit"], "level11_power": "Phasenverschiebung: Mit der 11. Stufe kannst du als Volle Aktion 1 Reservepunkt aufwenden, um dich durch bis zu 1,50 m feste Materie hindurchzubewegen (nicht durch Energieeffekte). Nur 1x pro 8h-Rast."},
+      {"name": "Hacker", "skills": ["Computer", "Technik"], "level11_power": "Kontrolleübernehmendes Hacken: Mit der 11. Stufe übernimmst du die Kontrolle über ein Computersystem/Mechanismus, sofern du den SG zum Ausschalten um 5+ übertriffst; pro weitere 5 Punkte eine Aufgabe mehr."},
+      {"name": "Spion", "skills": ["Bluffen", "Verkleiden"], "level11_power": "Überwachung narren: Mit der 11. Stufe kannst du überwachenden Effekten falsche, zu deiner Tarnidentität passende Informationen liefern statt sie zu vereiteln."},
+      {"name": "Teufelskerl", "skills": ["Akrobatik", "Athletik"], "level11_power": "Gelände ausnutzen: Mit der 11. Stufe gelingt dir automatisch jeder Bluffen-Wurf für einen Tückischen Angriff gegen einen Gegner, sofern ihr beide balanciert/fliegt/klettert/schwimmt."}
+    ],
+    "tricks": [
+      {"name": "Wundversorgung", "tag": "AF", "min_level": 2, "description": "1 Minute + 1 Reservepunkt: Trefferpunkte in Höhe deiner dreifachen Agentenstufe zurückerlangen."},
+      {"name": "Tausendsassa", "tag": "AF", "min_level": 2, "description": "Alle Fertigkeiten ungeübt einsetzbar. Bei Fertigkeit ohne Ränge: Agententraining-Bonus verdoppelt."},
+      {"name": "Schnelles Verkleiden", "tag": "AF", "min_level": 2, "description": "1x/Tag Standard-Aktion: Aussehen wie Selbstverkleidung ändern, 1 Minute/Agentenstufe. Weiteres Mal mit Stufe 6 und 10."},
+      {"name": "Nachtsicht", "tag": "AF", "min_level": 2, "description": "Dämmersicht und Dunkelsicht 18 m."},
+      {"name": "Listiger Pilot", "tag": "AF", "min_level": 2, "description": "Fahrzeugmalus auf Angriffswürfe beim Steuern halbiert. Verfolgungsjagd: +2 auf Ausweichen/Tricksen am Steuer."},
+      {"name": "Listige Bewegung", "tag": "AF", "min_level": 2, "description": "Bei Tückischem Angriff mit Zielwahl vor Bewegung: keine Gelegenheitsangriffe von diesem Ziel. Bei Bewegung als Standard-Aktion: eine Kreatur wählen, die keinen Gelegenheitsangriff auslöst."},
+      {"name": "Kreaturenkunde", "tag": "AF", "min_level": 2, "description": "Agententraining-Bonus beim Identifizieren von Kreaturen verdoppelt. +2 auf Tückischer-Angriff-Wurf bei identifizierter Kreatur."},
+      {"name": "Kampfkniff", "tag": "AF", "min_level": 2, "description": "Ein Bonuskampftalent (Voraussetzungen müssen erfüllt sein)."},
+      {"name": "Holografische Spiegelbilder", "tag": "AF", "min_level": 2, "description": "1x/Tag Standard-Aktion: 1W4 holografische/psionische Duplikate für 1 Minute/Agentenstufe (wie Spiegelbilder). Weiteres Mal mit Stufe 6 und 10."},
+      {"name": "Breitbandimpfung", "tag": "AF", "min_level": 2, "description": "Agententraining-Bonus auf Zähigkeitswürfe gegen Gifte und Krankheiten."},
+      {"name": "Behindernder Trick", "tag": "AF", "min_level": 6, "description": "Schwächender Trick kann zusätzlich Bewegungsraten halbieren und Vorsichtigen Schritt verhindern."},
+      {"name": "Blutende Wunde", "tag": "AF", "min_level": 6, "description": "Schwächender Trick fügt Blutungsschaden in Höhe der Agentenstufe zu."},
+      {"name": "Kerngesund", "tag": "AF", "min_level": 6, "description": "Erfolgreicher Zähigkeitswurf gegen mehrstufigen Heileffekt (Gift/Krankheit) beendet diesen sofort komplett."},
+      {"name": "Listiger Schütze", "tag": "AF", "min_level": 6, "description": "Fernkampfangriffe mit Handfeuerwaffen provozieren keine Gelegenheitsangriffe."},
+      {"name": "Schneller Hacker", "tag": "AF", "min_level": 6, "description": "Mechanische/Computer-Geräte in halber Zeit ausschalten."},
+      {"name": "Selbstsicherheit", "tag": "AF", "min_level": 6, "description": "Als Reaktion 1 Reservepunkt: Fertigkeitswurf für Spezialisierungsfertigkeit wiederholen."},
+      {"name": "Störender Trick", "tag": "AF", "min_level": 6, "description": "Schwächender Trick hindert Ziel bis Ende des nächsten Zuges an Reaktionen."},
+      {"name": "Trittsicher", "tag": "AF", "min_level": 6, "description": "Volle Bewegungsrate über Schwieriges Gelände, kein Malus auf Akrobatik/Heimlichkeit dabei."},
+      {"name": "Tückischer Scharfschütze", "tag": "AF", "min_level": 6, "description": "Tückische Angriffe mit Scharfschützenwaffen (ohne Tückischen Schaden, aber Auf-dem-Falschen-Fuß + Schwächender Trick möglich)."},
+      {"name": "Verbesserte Schnelle Bewegung", "tag": "AF", "min_level": 6, "description": "Verdoppelt Schnelle Bewegung, max. +6 m. Voraussetzung: Schnelle Bewegung."},
+      {"name": "Verstärkte Sinneswahrnehmung", "tag": "AF", "min_level": 6, "description": "Blindgespür 18 m. Voraussetzung: Dämmersicht+Dunkelsicht oder Nachtsicht."},
+      {"name": "Wankendmachender Trick", "tag": "AF", "min_level": 6, "description": "Schwächender Trick kann Zustand Wankend verleihen (Zähigkeitswurf, danach 24h Immunität)."},
+      {"name": "Willensstärke", "tag": "AF", "min_level": 6, "description": "Nach misslungenem Willenswurf gegen geistesbeeinflussenden Effekt (Dauer ≥1 Runde): 1 Runde später erneuter Rettungswurf."},
+      {"name": "Betäubender Trick", "tag": "AF", "min_level": 10, "description": "Schwächender Trick kann Zustand Betäubt verleihen. Voraussetzung: Wankendmachender Trick."},
+      {"name": "Deaktivierender Trick", "tag": "ÜF", "min_level": 10, "description": "Schwächender Trick kann magischen/technischen Gegenstand oder Konstrukt deaktivieren/unterdrücken."},
+      {"name": "Gespür für Wahrheit", "tag": "AF", "min_level": 10, "description": "Volle Aktion + 1 Reservepunkt: 1 Runde Wahrer Blick, Reichweite 18 m."},
+      {"name": "Holografische Ablenkung", "tag": "AF", "min_level": 10, "description": "1 Reservepunkt: holografisches Duplikat bewegt sich autonom weg. Voraussetzung: Holografische Spiegelbilder."},
+      {"name": "Meister der Verkleidung", "tag": "AF", "min_level": 10, "description": "Verkleidung als spezifisches Individuum, erschwert Entdeckung. Voraussetzung: Schnelles Verkleiden."},
+      {"name": "Schwer fassbarer Hacker", "tag": "AF", "min_level": 10, "description": "50% Chance, beim Auslösen einer Gegenmaßnahme unbemerkt zu bleiben."},
+      {"name": "Stets wachsam", "tag": "AF", "min_level": 10, "description": "Keine Wahrnehmungsmali im Schlaf, kann während Überraschungsrunde handeln."},
+      {"name": "Tarnfeld", "tag": "AF", "min_level": 10, "description": "Bewegungsaktion aktiviert Tarnfeld (max. 10 Runden): Verstecken auch ohne Deckung/direkt beobachtet möglich."},
+      {"name": "Verbessertes Entrinnen", "tag": "AF", "min_level": 10, "description": "Bei misslungenem Reflexwurf gegen Teileffekt: nur Teileffekt statt vollem Effekt. Voraussetzung: Entrinnen."},
+      {"name": "Verbesserte Listige Bewegung", "tag": "AF", "min_level": 10, "description": "Tückischer Angriff/Standard-Aktion-Bewegung provoziert keine Gelegenheitsangriffe (außer bei Zaubern/Fernkampf). Voraussetzung: Listige Bewegung."},
+      {"name": "Vielseitige Fortbewegung", "tag": "AF", "min_level": 10, "description": "Bewegungsraten für Klettern/Schwimmen = Bewegungsrate am Boden."},
+      {"name": "Effizientes Tarnfeld", "tag": "AF", "min_level": 14, "description": "Tarnfeld bis 100 Runden, schnelleres Aufladen. Voraussetzung: Tarnfeld."},
+      {"name": "K.O.-Trick", "tag": "AF", "min_level": 14, "description": "Schwächender Trick kann Zustand Bewusstlos (1 Minute) verleihen. Voraussetzung: Wankendmachender + Betäubender Trick."},
+      {"name": "Mehrfachangriffmeisterschaft", "tag": "AF", "min_level": 14, "description": "Bei Drei-/Vierfachangriff auf ein Ziel mit 2+ Treffern: zusätzlicher Schwächender Trick."},
+      {"name": "Unglaubliche Sinneswahrnehmung", "tag": "AF", "min_level": 14, "description": "Blindgespür wird zu Blindsicht 18 m, Dunkelsicht +9 m. Voraussetzung: Verstärkte Sinneswahrnehmung."}
+    ],
+    "notes": "20.-Stufe-Tricks im Rohtext nicht auffindbar (Abschnitt endet mit Beispielcharakteren statt weiteren Tricks) - vermutlich Extraktionslücke, im Original S. 65 nachschlagen. 'Deduktiver Sachverstand' ist die Spezialisierungskraft von Detektiv, kein eigenständiger Trick."
+  },
+  "mechaniker": {
+    "tricks": [
+      {"name": "Ablenkendes Hacken", "min_level": 2, "description": "Computer innerhalb 9 m eines Gegners hacken, um ihn abzulenken - funktioniert wie Finte, nutzt aber Computer statt Bluffen."},
+      {"name": "Drohnenreparatur", "min_level": 2, "description": "10 Minuten Reparatur stellen 25% statt 10% der maximalen TP der Drohne wieder her. Voraussetzung: Drohne."},
+      {"name": "Energieschild", "min_level": 2, "description": "Standard-Aktion: Energieschild mit IN-Mod + Mechanikerstufe temporären TP, 1 Minute/Stufe. Reaktivierung nach 10-Minuten-Rast."},
+      {"name": "Gegenmaßnahme neutralisieren", "min_level": 2, "description": "Bei misslungenem Hacking-Versuch: erneuter Wurf gegen denselben SG, um eine ausgelöste Gegenmaßnahme zu verhindern."},
+      {"name": "Geistesbeeinflussung auslagern", "min_level": 2, "description": "1x/Tag als Reaktion: geistesbeeinflussenden Effekt in Exokortex verschieben statt selbst betroffen zu sein. Voraussetzung: Exokortex."},
+      {"name": "Nachtsichtprozessor", "min_level": 2, "description": "Dämmersicht und Dunkelsicht 18 m. Voraussetzung: Visueller Datenprozessor."},
+      {"name": "Schnelles Zusammenflicken", "min_level": 2, "description": "Raumschiffsystem zusammenflicken benötigt 1 Aktion weniger."},
+      {"name": "Schnelles Reparieren", "min_level": 2, "description": "Gegenstand reparieren in halber Zeit (Minimum 1 Volle Aktion)."},
+      {"name": "Tragbare Energieversorgung", "min_level": 2, "description": "Computer/Raumschiffsystem bis 1 Minute mit Energie versorgen; System danach 24h immun."},
+      {"name": "Überladung", "min_level": 2, "description": "Standard-Aktion: Energiewaffe überladen, +1W6 Schaden bei Treffer, verbraucht 3x Munition."},
+      {"name": "Übertaktung", "min_level": 2, "description": "+2 auf Initiativewürfe, bzw. +2 Reflex für Exokortex/Drohne."},
+      {"name": "Visueller Datenprozessor", "min_level": 2, "description": "Umgehen-Bonus gilt auch auf Wahrnehmungswürfe."},
+      {"name": "Waffe sprengen", "min_level": 2, "description": "Volle Aktion (oder Bewegungsaktion + 1 Reservepunkt): energetische Waffe in eine Granate verwandeln."},
+      {"name": "Drohnenanzug", "min_level": 8, "description": "Volle Aktion: Drohne zu tragbarem Anzug/Rucksack umkonfigurieren, verleiht chassisabhängige Boni."},
+      {"name": "Energiewiderstand", "min_level": 8, "description": "Resistenz 5 gegen eine gewählte Energieart, auch bei inaktivem Energieschild. Voraussetzung: Energieschild."},
+      {"name": "Enttarnungsprozessor", "min_level": 8, "description": "Unsichtbares sehen. Voraussetzung: Visueller Datenprozessor."},
+      {"name": "Erhöhte Übertaktung", "min_level": 8, "description": "+1 RK für Drohne/Exokortex, Reflexwurf-Wiederholung mit 1 Reservepunkt. Voraussetzung: Übertaktung."},
+      {"name": "Geisterhafter Hacker", "min_level": 8, "description": "Bei Hacking-Fehlschlag um 4 oder weniger: keine Gegenmaßnahmen/Aufzeichnungen."},
+      {"name": "Holoprojektor", "min_level": 8, "description": "Beliebig oft Holografisches Abbild (Grad 2, Reichweite 36 m, mit Sprache)."},
+      {"name": "Ingenieursblick", "min_level": 8, "description": "Freier Fertigkeitswurf, um Fallen/Defekte in Computern/Maschinen in 3 m Nähe zu bemerken."},
+      {"name": "Spähbot", "min_level": 8, "description": "10 Minuten + 1 Reservepunkt: kleiner Spähroboter mit Kamera, ERK/KRK 10+Mechanikerstufe, 1 TP/Stufe."},
+      {"name": "Verbesserte Überladung", "min_level": 8, "description": "Überladung-Schaden steigt auf 2W6. Voraussetzung: Überladung."},
+      {"name": "Verstärkter Energieschild", "min_level": 8, "description": "Energieschild-TP verdoppelt (IN-Mod + 2x Mechanikerstufe). Voraussetzung: Energieschild."},
+      {"name": "Enttarnungsfeld", "min_level": 14, "description": "Bewegungsaktion: Hologramm über unsichtbare Kreatur legen (36 m), hebt Unsichtbarkeit effektiv auf. Voraussetzung: Enttarnungsprozessor + Visueller Datenprozessor."},
+      {"name": "Modifikationsbastler", "min_level": 14, "description": "24h Arbeit: alle Modifikationen von Drohne/Exokortex ohne Stufenaufstieg austauschen."},
+      {"name": "Saboteur", "min_level": 14, "description": "Technik zum Sabotieren: zwei Würfe, besseres Ergebnis; halbe Zeit mit passendem Werkzeug."},
+      {"name": "Überlegene Überladung", "min_level": 14, "description": "Überladung-Schaden auf 4W6 (mehrfach wählbar, max. 7W6). Voraussetzung: Überladung + Verbesserte Überladung."},
+      {"name": "Verbesserter Energiewiderstand", "min_level": 14, "description": "Weitere Energieart mit Resistenz 15. Voraussetzung: Energieschild + Energiewiderstand."},
+      {"name": "Verstärkte Übertaktung", "min_level": 14, "description": "Bewegungsaktion: 1 Minute Hast für Drohne oder sich selbst. Voraussetzung: Übertaktung + Erhöhte Übertaktung."},
+      {"name": "Zusätzliche Drohnenmodifikation", "min_level": 14, "description": "Eine zusätzliche Einfache Modifikation für Drohne/Exokortex (keine bereits vorhandene)."}
+    ],
+    "drone_chassis": [
+      {"name": "Kampfdrohne", "groesse": "Mittelgroß", "bewegungsrate": "9 m", "rk": "ERK 10, KRK 13", "guter_rettungswurf": "Zähigkeit", "schlechte_rettungswuerfe": ["Reflex", "Willen"], "attributswerte": {"ST": 14, "GE": 12, "IN": 6, "WE": 10, "CH": 6}, "attributserhoehungen": ["Stärke", "Geschicklichkeit"], "ausgangsmodifikationen": "Umgang mit Waffen, Verbundpanzerung, Waffenmontageplatz oder Nahkampfwaffenarm (max. 2 in Kombination)"},
+      {"name": "Schwebedrohne", "groesse": "Sehr klein", "bewegungsrate": "9 m, Fliegen 9 m (perfekt)", "rk": "ERK 11, KRK 11", "guter_rettungswurf": "Reflex", "schlechte_rettungswuerfe": ["Willen", "Zähigkeit"], "attributswerte": {"ST": 6, "GE": 16, "IN": 6, "WE": 8, "CH": 6}, "attributserhoehungen": ["Geschicklichkeit", "Weisheit"], "bonusfertigkeitseinheit": "Akrobatik", "ausgangsmodifikationen": "Flugsystem (×2), Waffenmontageplatz"},
+      {"name": "Tarnkappendrohne", "groesse": "Klein", "bewegungsrate": "12 m, Klettern 6 m", "rk": "ERK 10, KRK 12", "guter_rettungswurf": "Reflex", "schlechte_rettungswuerfe": ["Willen", "Zähigkeit"], "attributswerte": {"ST": 12, "GE": 14, "IN": 6, "WE": 10, "CH": 6}, "attributserhoehungen": ["Geschicklichkeit", "Weisheit"], "bonusfertigkeitseinheit": "Heimlichkeit", "ausgangsmodifikationen": "Kletterklauen, Reaktive Tarnung, Waffenmontageplatz"}
+    ],
+    "drone_talents_list": ["Aalglatter Schütze", "Aufspringen", "Ausfallschritt", "Aus vollem Lauf schießen", "Behände Bewegung", "Beweglichkeit", "Blind kämpfen", "Blitzschnelle Reflexe", "Doppelschlag", "Durchschlagender Angriff", "Eiserner Wille", "Eröffnungssalve", "Fernschuss", "Fertigkeitsfokus", "Fertigkeitssynergie", "Gegenschlag", "Große Zähigkeit", "Kampf mit mehreren Waffen", "Niederhalten", "Rundumschlag", "Tänzelnder Angriff", "Tödliche Zielgenauigkeit", "Verbesserter Kritischer Treffer", "Verbessertes Kampfmanöver", "Waffenfokus", "Waffenspezialisierung"],
+    "drone_talents_ab_stufe_10": ["Verbesserte Blitzschnelle Reflexe", "Verbesserte Große Zähigkeit", "Verbesserter Eiserner Wille", "Zusätzliche Reservepunkte"],
+    "drone_mods_simple": [
+      {"name": "Energieresistenz", "description": "Resistenz = Mechanikerstufe (max. 10) gegen eine gewählte Energieart. Mehrfach wählbar, nicht kumulativ, jedes Mal andere Energieart."},
+      {"name": "Fertigkeitssubroutinen", "description": "Weitere Fertigkeit wird Klassenfertigkeit der Drohne mit Rängen = Mechanikerstufe, IN der Drohne +2."},
+      {"name": "Frachtträger", "description": "Effektiver Stärkewert der Drohne für Tragkapazität +4 (nur für Fracht, nicht Waffen/Rüstung)."},
+      {"name": "Geheimfach", "description": "Fach für 1 Gegenstand mit Leichter Last, SG 15+Mechanikerstufe zum Finden."},
+      {"name": "Geschwindigkeit", "description": "Bewegungsrate am Boden +3 m."},
+      {"name": "Geschützte K.I.", "typ": "Ex", "description": "-4 Malus für Gegner beim Hacken, +4 Rettungswurf gegen Kontrollübernahme-Effekte."},
+      {"name": "Kamera", "description": "Kamera überträgt an Handwerkszeug, zeichnet bis zu 1h auf."},
+      {"name": "Kletterklauen", "description": "Bewegungsrate für Klettern = 1/2 Bewegungsrate am Boden. Nur Kampf-/Tarnkappendrohne."},
+      {"name": "Manipulatoren", "description": "Zwei robotische Arme, -4 Malus auf damit ausgeführte Angriffe."},
+      {"name": "Nahkampfwaffenarm", "description": "Robotischer Arm für Einhandnahkampfwaffe, nicht entwaffenbar. Mehrfach wählbar."},
+      {"name": "Reitsattel", "description": "Sitz zum Reiten, kein Überlebenskunst-Wurf zum Lenken im Kampf nötig."},
+      {"name": "Rüstungsverbesserungssteckplatz", "description": "Ein Steckplatz für Rüstungsverbesserung. Max. 4x wählbar."},
+      {"name": "Sprungdüsen", "description": "Bewegungsaktion: bis 9 m springen (oder +9 m Flugrate für 1 Runde bei Schwebedrohne). 1 Minute Abkühlzeit."},
+      {"name": "Umgang mit Waffen", "description": "Ein Waffenumgang-Bonustalent. Mehrfach wählbar, jeweils anderes Talent."},
+      {"name": "Verbesserte Panzerung", "description": "+2 auf RK. Ab Stufe 11 zusätzlich als Komplexe Modifikation wählbar."},
+      {"name": "Verbesserte Sinneswahrnehmung", "description": "Dämmersicht, Dunkelsicht 18 m, +2 Wahrnehmung."},
+      {"name": "Waffenmontageplatz", "description": "Halterung für einhändige Fernkampfwaffe, automatisches Nachladen. Mehrfach wählbar."},
+      {"name": "Wasserstrahlantrieb", "description": "Bewegungsrate Schwimmen = 1/2 Bewegungsrate am Boden. Nur Kampf-/Tarnkappendrohne."},
+      {"name": "Werkzeugarm", "description": "Robotischer Arm mit befestigtem technischem Gegenstand (Last ≤Leicht, Gegenstandsstufe ≤Mechanikerstufe)."},
+      {"name": "Zusätzliche Munition", "description": "Ein Waffenmontageplatz fasst 2 zusätzliche Munitionseinheiten. Voraussetzung: Waffenmontageplatz."}
+    ],
+    "drone_mods_complex": [
+      {"name": "Echolot", "min_level": 11, "description": "Blindgespür (Geräusche) 18 m."},
+      {"name": "Energieschild", "min_level": 11, "description": "Temporäre TP = Mechanikerstufe, aufladbar mit 1 Reservepunkt. Zweite Wahl verdoppelt TP."},
+      {"name": "Flugsystem", "min_level": 11, "description": "Flugrate = 1/2 Bodenrate, 10 Min/Tag. Zweite Wahl: volle Bodenrate, perfekte Manövrierfähigkeit, unbegrenzt."},
+      {"name": "Grabwerkzeug", "min_level": 11, "description": "Bewegungsrate Graben = 1/2 Bodenrate, spurlos."},
+      {"name": "Mächtige Energieresistenz", "min_level": 11, "description": "+5 auf bereits vorhandene Energieresistenz. Mehrfach wählbar, jeweils andere Energieart."},
+      {"name": "Medizinische Subroutine", "min_level": 11, "description": "Drohne leistet Erste Hilfe bei 0 TP des Mechanikers, 2 Reservepunkte für TP-Wiederherstellung. Voraussetzung: Fertigkeitssubroutinen (Medizin) + Manipulatoren."},
+      {"name": "Reaktive Tarnung", "min_level": 11, "description": "+10 Heimlichkeit bei 1 Runde Bewegungslosigkeit."},
+      {"name": "Schockwelle", "min_level": 11, "description": "Bei Reduktion unter 10 TP: 1W6 Elektrizitätsschaden/Stufe im Radius 3 m."},
+      {"name": "Unsichtbarkeitsfeld", "min_level": 11, "description": "1x/Tag 10 Minuten unsichtbar, 2 Reservepunkte für erneuten Einsatz. Voraussetzung: Reaktive Tarnung."},
+      {"name": "Verbundpanzerung", "min_level": 11, "description": "SR 1/—, steigt mit Stufe 7/13/16/19 um je 1.", "unsicher": true, "kommentar": "Auch als Kampfdrohnen-Ausgangsmodifikation gelistet; Stufenprogression beginnt unter der Mindeststufe 11 für Komplexe Modifikationen - Einordnung unverändert aus Buch übernommen."}
+    ],
+    "exocortex_features": [
+      {"name": "Zielverfolgung", "min_level": 1, "tag": "AF", "description": "Umgang mit Langwaffen und Schweren Rüstungen; Waffenspezialisierung Langwaffen ab Stufe 3. Bewegungsaktion: Ziel bestimmen, Angriffsbonus gegen dieses Ziel = Mechanikerstufe.", "unsicher": true, "kommentar": "Beschreibungsende im Rohtext mit Nachbarabsatz zu 'Umgehen' verschmolzen (Extraktionsartefakt), Kernmechanik aber klar."},
+      {"name": "Speichermodul", "min_level": 1, "tag": "AF", "description": "1x/Tag außerhalb Kampf: gescheiterten Wissensabruf-Wurf wiederholen. Bonustalent Fertigkeitsfokus (umbaubar bei Stufenaufstieg). Nicht nutzbar während aktiver Zielverfolgung."},
+      {"name": "Drahtloses Hacken", "min_level": 5, "tag": "AF", "description": "Statt Zielverfolgung: Zugriff auf Computersystem bis 6 m Entfernung als Standard-Aktion."},
+      {"name": "Exokortexmodifikationen", "min_level": 7, "tag": "AF", "description": "Zugang zu Drohnenmodifikationen als wäre man eine Drohne (Liste wächst mit Stufe 11/14/17)."},
+      {"name": "Zweifache Zielverfolgung", "min_level": 10, "tag": "AF", "description": "Zwei Ziele gleichzeitig verfolgen."},
+      {"name": "Multitasking", "min_level": 15, "tag": "AF", "description": "Drei Ziele verfolgen, Drahtloses Hacken Reichweite 12 m, Speichermodul auch im Kampf nutzbar."},
+      {"name": "Vierfache Zielverfolgung", "min_level": 20, "tag": "AF", "description": "Vier Ziele simultan verfolgen, Hacken zählt nicht dagegen."}
+    ],
+    "notes": "Drohnentalente sind im Quelltext nur eine Namensliste ohne Kurzbeschreibungen (Talente selbst stehen in Kapitel 6/feats.json - Namen wo möglich abgeglichen). Tabelle 4-3 (Drohnengrundspielwerte nach Stufe) ist bereits in classes.json mechaniker.drone_base_stats_table vorhanden, hier nicht dupliziert."
+  },
+  "soldat": {
+    "fighting_styles": [
+      {
+        "name": "Arkaner Soldat",
+        "intro": "Verbindet kämpferische Fähigkeiten mit magischen Kräften; erlaubt Zugang zu arkanen Optionen ohne magische Waffe.",
+        "techniques": [
+          {"name": "Rune des Mystischen Ritters", "level": 1, "tag": "ÜF", "description": "10 Minuten: Waffe magisch machen (umgeht SR, wirkt gegen Körperlose), nur eine Waffe gleichzeitig, effektive Gegenstandsstufe +5 für TP/Härte."},
+          {"name": "Geheimnis des Kampfmagus", "level": 5, "tag": "ÜF", "description": "Rune verleiht zusätzlich eine Waffenfusion (Ätherisch/Aufflammen/Eis/Gnädig/Schock)."},
+          {"name": "Kraft der Legende", "level": 9, "tag": "ÜF", "description": "Bewegungsaktion + 1 Reservepunkt: bestimmte nachteilige Zustände bei magischer Waffe beenden/reduzieren."},
+          {"name": "Geheimnis des Erzmagiers", "level": 13, "tag": "ÜF", "description": "Rune auf zwei Waffen gleichzeitig, mehr Fusionsoptionen (bis 10 Grade verteilt)."},
+          {"name": "Arkaner Angriff", "level": 17, "tag": "ÜF", "description": "Standard-Aktion + 1 Reservepunkt: Angriff ignoriert Deckung/Tarnung inkl. Vollständiger Tarnung."}
+        ]
+      },
+      {
+        "name": "Gardist",
+        "intro": "Fokus auf Defensive: Rüstungstragen, Schadensschutz, Widerstand gegen Widrigkeiten.",
+        "techniques": [
+          {"name": "Rüstungstraining", "level": 1, "tag": "AF", "description": "Rüstungsmalus -1 (min. 0), Maximaler GE-Bonus +1."},
+          {"name": "Schutz des Gardisten", "level": 5, "tag": "AF", "description": "Reaktion: halben Schaden eines Angriffs auf angrenzenden Verbündeten übernehmen. Umgang mit Servorüstungen."},
+          {"name": "Schnelle Erholung", "level": 9, "tag": "AF", "description": "Bewegungsaktion + 1 Reservepunkt: einen nachteiligen Zustand 10 Minuten unterdrücken."},
+          {"name": "Kinetische Resistenz", "level": 13, "tag": "AF", "description": "SR 3/—, steigt mit Stufe 17 auf 5/—."},
+          {"name": "Undurchdringliche Verteidigung", "level": 17, "tag": "AF", "description": "Standard-Aktion: SR 10/—, +4 RK für sich+Verbündeten, Schadensübernahme ohne eigenen Schaden."}
+        ]
+      },
+      {
+        "name": "Grenadier",
+        "intro": "Fokus auf Angriffe gegen mehrere Ziele, oft mit Granaten und schweren Waffen.",
+        "techniques": [
+          {"name": "Granatenexperte", "level": 1, "tag": "AF", "description": "Granaten-Grundreichweite +5×ST-Bonus. Kostenlose Granatenherstellung (10 Min, nur für dich nutzbar)."},
+          {"name": "Schwerer Beschuss", "level": 5, "tag": "AF", "description": "Volle Aktion: Fernkampfangriff mit zusätzlichem Schaden = ST-Bonus, kombinierbar mit Automatisch/Explosion/Unhandlich."},
+          {"name": "Einschränkender Angriff", "level": 9, "tag": "AF", "description": "1 Reservepunkt: Fernkampf-/Flächentreffer verleiht einschränkenden Zustand (Auf dem Falschen Fuß/Haltlos/Taub) oder halbiert Bewegungsrate."},
+          {"name": "Zielgenaue Explosionen", "level": 13, "tag": "AF", "description": "+1 SG bei eigenen Explosionswaffen, eigener Explosionsschaden -ST-Bonus."},
+          {"name": "Wuchtiger Angriff", "level": 17, "tag": "AF", "description": "Standard-Aktion: Fernkampfangriff stößt Ziele 1,50 m zurück, bei Krit/Nat.1 zusätzlich Liegend."}
+        ]
+      },
+      {
+        "name": "Guerilla",
+        "intro": "Taktische Bewegung in und aus dem Kampf, Mix aus Fern-/Nahkampf.",
+        "techniques": [
+          {"name": "Eröffnungssalve", "level": 1, "tag": "AF", "description": "Bonustalent Eröffnungssalve (sonst anderes Bonuskampftalent). Ab Stufe 9 auch im 2. Zug nutzbar."},
+          {"name": "Behänder Beschuss", "level": 5, "tag": "AF", "description": "Bei Vollem Angriff zusätzlich Vorsichtiger Schritt oder halbe Bewegungsrate."},
+          {"name": "Ducken und Handeln", "level": 9, "tag": "AF", "description": "1 Reservepunkt: Bewegung/Fernkampfangriff provoziert keine Gelegenheitsangriffe."},
+          {"name": "Schwer Fassbares Ziel", "level": 13, "tag": "AF", "description": "Bei Bewegung im eigenen Zug: +1 RK bis zum nächsten Zug."},
+          {"name": "Unterstützungsschuss", "level": 17, "tag": "AF", "description": "Volle Aktion: Angriff + Unterstützungsfeuer-Vorteile für getroffene Ziele."}
+        ]
+      },
+      {
+        "name": "Kampftitan",
+        "intro": "Nutzt die eigene Rüstung als Waffe, maximiert rüstungsbasierten Schaden.",
+        "techniques": [
+          {"name": "Hammerfaust", "level": 1, "tag": "AF", "description": "Waffenlose Angriffe in Schwerer/Servorüstung wie Kampfhandschuh behandelt, Schaden wie Nahkämpfer-Kniff."},
+          {"name": "Verbesserte Panzerung", "level": 5, "tag": "AF", "description": "Umgang mit Servorüstungen, ein zusätzlicher (verbilligter) Rüstungsverbesserungsplatz."},
+          {"name": "Durchbrechen", "level": 9, "tag": "AF", "description": "+4 auf Ansturm-Kampfmanöver in Schwerer/Servorüstung, danach Waffenloser-Angriff-Folgeschaden möglich."},
+          {"name": "Ein-Mann-Armee", "level": 13, "tag": "AF", "description": "+1W6 Schaden mit rüstungsintegrierten Waffen, +2 KRK gegen Kampfmanöver in Schwerer/Servorüstung."},
+          {"name": "Bewegliche Rüstung", "level": 17, "tag": "AF", "description": "Bewegung im Rahmen eines Vollen Angriffs in Schwerer/Servorüstung möglich."}
+        ]
+      },
+      {
+        "name": "Sturmwind",
+        "intro": "Tempo und Aggression, um mitten ins Getümmel zu gelangen.",
+        "techniques": [
+          {"name": "Schnelle Reaktionen", "level": 1, "tag": "EX", "description": "+4 Initiative, +3 m Bewegungsrate am Boden."},
+          {"name": "Sturmangriff", "level": 5, "tag": "AF", "description": "Standard-Aktion: Sturmangriff ohne Mali, Ansturm statt Nahkampfangriff möglich."},
+          {"name": "Zweite Luft", "level": 9, "tag": "AF", "description": "Bewegungsaktion + 1 Reservepunkt: Ausdauerpunkte = Soldatenstufe+2W6 zurück (steigt mit Stufe 10/15/20)."},
+          {"name": "Perfekte Gelegenheit", "level": 13, "tag": "AF", "description": "Getroffene Kreatur bei Gelegenheitsangriff kann bedrohte Felder nicht verlassen."},
+          {"name": "Gegen alle Widernisse", "level": 17, "tag": "AF", "description": "Nahkampfschadensbonus = 2× Anzahl bedeutsamer Gegner in 3 m."}
+        ]
+      },
+      {
+        "name": "Scharfschütze",
+        "intro": "Präzise Angriffe auf Distanz, ignoriert Deckung/Tarnung.",
+        "techniques": [
+          {"name": "Zielgenauigkeit des Scharfschützen", "level": 1, "tag": "AF", "description": "RK-Bonus durch Deckung -2 bei Fernkampfangriffen (nicht bei Vollständiger Deckung)."},
+          {"name": "Konzentrierter Beschuss", "level": 5, "tag": "AF", "description": "Voller Angriff gegen dasselbe Ziel: -3 statt -4 Malus; bei Kill/K.O. zweiter Angriff auf neues Ziel."},
+          {"name": "Hohe Konzentration", "level": 9, "tag": "AF", "description": "1 Reservepunkt: Deckungsbonus aufheben, Tarnung um einen Schritt reduzieren."},
+          {"name": "Konzentrierter Schaden", "level": 13, "tag": "AF", "description": "Konzentrierter Beschuss: +2W6 Schaden auf erstes Ziel."},
+          {"name": "Vorbereiteter Schuss", "level": 17, "tag": "AF", "description": "Standard-Aktion Ziel studieren: +2 auf nächsten Angriff, bei Treffer Wankend/Betäubt."}
+        ]
+      }
+    ],
+    "equipment_tricks": [
+      {"name": "Blitzbogen", "tag": "AF", "min_level": 7, "description": "Schock-Waffentreffer springt auf Sekundärziel über (3 m), Elektrizitätsschaden = Gegenstandsstufe."},
+      {"name": "Durchschlagende Schwere Waffen", "tag": "AF", "min_level": 11, "description": "Schwere-Waffen-Angriffe: SR des Ziels -5 (ab Stufe 15: -10)."},
+      {"name": "Heftige Explosionen", "tag": "AF", "min_level": 7, "description": "Explosionsradius (≥3m) +1,50 m."},
+      {"name": "Heftige Streuung", "tag": "AF", "min_level": 3, "unsicher": true, "description": "+2 Schaden mit Kegel-Waffen (nur gegen Ziele ≤3m), steigt pro 4 Stufen."},
+      {"name": "Kugelhagel", "tag": "AF", "min_level": 3, "unsicher": true, "description": "+1 Schaden mit Projektil-Waffen, steigt pro 4 Stufen."},
+      {"name": "Lasergenauigkeit", "tag": "AF", "min_level": 3, "unsicher": true, "description": "+1 Schaden mit Laser-Waffen."},
+      {"name": "Nahkämpfer", "tag": "AF", "min_level": 3, "unsicher": true, "description": "Zusätzlicher Schaden = 1/2 ST-Bonus mit Nahkampfwaffen."},
+      {"name": "Plasmabrenner", "tag": "AF", "min_level": 7, "description": "Nat.19-Treffer mit Plasma-Waffe: Ziel erhält Brennend."},
+      {"name": "Rüstungsvorteil", "tag": "AF", "min_level": 3, "unsicher": true, "description": "+1 KRK bei getragener Rüstung."},
+      {"name": "Schallresonanz", "tag": "AF", "min_level": 7, "description": "Schall-Waffentreffer (≤9m): Ziel Auf dem Falschen Fuß für 1 Runde."},
+      {"name": "Schnellfrosten", "tag": "AF", "min_level": 7, "description": "Kryo-Waffentreffer: Bewegungsrate -3 m für 1 Runde."},
+      {"name": "Verankerndes Arkanum", "tag": "ÜF", "min_level": 7, "description": "Volle Aktion + 1 Reservepunkt: magischer Waffenangriff kann Ziel für 1W4 Runden bewegungsunfähig machen (Willenswurf)."}
+    ],
+    "notes": "Ausrüstungskniffe ohne expliziten Stufenwert im Text (Heftige Streuung, Kugelhagel, Lasergenauigkeit, Nahkämpfer, Rüstungsvorteil) haben Standardwert min_level=3 (allgemeine Mindeststufe für Ausrüstungskniffe), als unsicher markiert."
+  },
+  "solarier": {
+    "graviton_revelations": [
+      {"name": "Schwarzes Loch", "min_level": 1, "description": "Volle Aktion bei Vollständig eingestimmt: zieht Kreaturen in 6 m Radius 3 m zu sich (Zähigkeitswurf negiert). Automatisch mit Stufe 1, zählt zugleich als Zenitoffenbarung."},
+      {"name": "Dunkle Materie", "min_level": 2, "description": "Bewegungsaktion: SR 1/— (steigt mit Stufe 6 und alle 3 Stufen), bei Einstimmung SR = 1/2 Solarierstufe."},
+      {"name": "Persönliche Schwerkraft manipulieren", "min_level": 2, "description": "Bonus (1/3 Solarierstufe, min +1) auf Athletik-Klettern/Schwimmen/Springen, Fallschaden halbieren als Reaktion. Ab Stufe 6 Spinnenklettern-artige Bewegung."},
+      {"name": "Schwerkraftanker", "min_level": 2, "description": "Bewegungsaktion: +4 RK gegen Kampfmanöver (Ansturm/Versetzen/Zu Fall bringen oder Entwaffnen)."},
+      {"name": "Schwerkrafttelekinese", "min_level": 2, "description": "Bewegt Gegenstände wie Psychokinetische Hand; bei Einstimmung auch Kreaturen ≤Mittelgroß festhalten/anheben.", "unsicher": true},
+      {"name": "Zerdrückende Schwerkraft", "min_level": 6, "description": "Standard-Aktion (9m): Zähigkeitswurf oder Zustand Wankend für 1 Minute, aufrechterhaltbar.", "unsicher": true},
+      {"name": "Reflexion", "min_level": 6, "description": "Nach Vollständiger Verteidigung/defensivem Kampf + 1 Reservepunkt: verfehlenden Fernkampfangriff auf neues Ziel umlenken."},
+      {"name": "Schwerkraftschub", "min_level": 6, "description": "Volle Aktion: Entwaffnen/Zu-Fall-bringen mit CH statt ST, +4 Bonus (9m Reichweite).", "unsicher": true},
+      {"name": "Schwerkraft trotzen", "min_level": 6, "description": "Bewegungsaktion: fliegende Fortbewegung bis Bewegungsrate, muss landen (ab Stufe 12 nicht mehr zwingend)."},
+      {"name": "Persönliches Verzerrungsfeld", "min_level": 10, "description": "Bewegungsaktion: +4 Heimlichkeit, bei Einstimmung auch unter Beobachtung versteckbar."},
+      {"name": "Seelenfeuer", "min_level": 10, "description": "Bewegungsaktion + 1 Reservepunkt: erneuter Rettungswurf gegen Leiden (Droge/Fluch/Gift/Krankheit), beendet es bei Erfolg komplett.", "unsicher": true},
+      {"name": "Schwerkraftschild", "min_level": 10, "description": "Bewegungsaktion: +1 RK, bei Einstimmung Deckungsscheibe (3 Feldränder)."},
+      {"name": "Schwerkraftkontrolle", "min_level": 16, "description": "Verdoppelt Reichweite eigener Gravitonenoffenbarungen, erlaubt Doppelziele, verstärkt mehrere andere Offenbarungen."}
+    ],
+    "photon_revelations": [
+      {"name": "Supernova", "min_level": 1, "description": "Standard-Aktion bei Vollständig eingestimmt: 1W6+1W6/Stufe Feuerschaden im Radius 3 m (Reflex halbiert). Automatisch mit Stufe 1, zählt als Zenitoffenbarung."},
+      {"name": "Aufblitzen", "min_level": 2, "description": "Bewegungsaktion: 1 Minute Licht (9m Radius). Standard-Aktion: Lichtblitz blendet Ziel (Reflexwurf).", "unsicher": true},
+      {"name": "Plasmahülle", "min_level": 2, "description": "Bewegungsaktion: Nahkampfangriffe verursachen Feuerschaden statt normaler Art, bei Einstimmung Zusatzschaden."},
+      {"name": "Sternensturmangriff", "min_level": 2, "description": "Standard-Aktion: Sturmangriff ohne Mali, bei Einstimmung Ansturm mit 2W6+ Feuerschaden."},
+      {"name": "Strahlung", "min_level": 6, "description": "Standard-Aktion: 1,50 m Aura, Zähigkeitswurf oder Kränkelnd (Gifteffekt)."},
+      {"name": "Flammenbahn", "min_level": 6, "description": "Bewegungsaktion: Bewegung mit Tarnung, hinterlässt 1 Runde brennende Feldspur (2W6+ Feuerschaden)."},
+      {"name": "Glanz des Lebens", "min_level": 6, "description": "Bewegungsaktion + 1 Reservepunkt: TP-Heilung = 2×Solarierstufe (bei Einstimmung 3×)."},
+      {"name": "Hypnotischer Glanz", "min_level": 6, "description": "Standard-Aktion: wie Person bezaubern (ab Stufe 9 Monster bezaubern), 1 Runde/Stufe."},
+      {"name": "Korona", "min_level": 6, "description": "Standard-Aktion: Kälteresistenz 10, angrenzende Nahkampf-Angreifer erleiden Feuerschaden (steigt mit Stufe 12/18)."},
+      {"name": "Sternengespür", "min_level": 6, "description": "1x/Tag Volle Aktion: wie Vorahnung (Solarierstufe als Zauberstufe), 1 Reservepunkt für erneuten Einsatz."},
+      {"name": "Photonenkontrolle", "min_level": 14, "description": "Radius eigener Photonenoffenbarungen +3m, Effektdauer außerhalb Photonenmodus verlängert, verstärkt mehrere Offenbarungen."},
+      {"name": "Sonnengeschoss", "min_level": 10, "description": "Standard-Aktion Fernkampfangriff (Reichweite Lang): 9W6 Feuerschaden gegen ERK.", "unsicher": true}
+    ],
+    "zenith_revelations": [
+      {"name": "Schwarzes Loch", "category": "graviton", "description": "Automatisch Stufe 1, siehe graviton_revelations."},
+      {"name": "Supernova", "category": "photon", "description": "Automatisch Stufe 1, siehe photon_revelations."},
+      {"name": "Sternenbeben", "category": "graviton", "min_level": 16, "description": "Bewegungsaktion ohne Gelegenheitsangriffe: 1W8+/Stufe Wuchtschaden + Liegend an angrenzende Kreaturen während der Bewegung."},
+      {"name": "Wurmlöcher", "category": "graviton", "description": "Standard-Aktion: zwei verbundene Wurmlöcher zum Reisen für bestimmte Kreaturen, Dauer 1 Runde/2 Stufen."},
+      {"name": "Zeitdilatation", "category": "graviton", "description": "Standard-Aktion: 9m-Kegel, Zähigkeitswurf oder Verlangsamen für Solarierstufe Runden."},
+      {"name": "Lichtstrahl", "category": "photon", "description": "Bewegungsaktion: Verwandlung in Lichtstrahl, Bewegung mit Lichtgeschwindigkeit zu Fernziel."},
+      {"name": "Miniatursonne", "category": "photon", "description": "Standard-Aktion: Stern-Simulakrum (3m Radius) verursacht 1W6/2 Stufen Feuerschaden."},
+      {"name": "Solarbeschleunigung", "category": "photon", "description": "Standard-Aktion: Voller Angriff + Hast für sich und bis zu 6 Verbündete (9m) für 1 Minute."}
+    ],
+    "notes": "Wählbar ab Stufe 2 und dann jede gerade Stufe (eine Gravitonen- oder Photonenoffenbarung, siehe classes.json solarier.levels); Zenitoffenbarungen ab Stufe 9/17 (erfordern Vollständige Einstimmung). Mehrere Einträge (Schwerkrafttelekinese, Zerdrückende Schwerkraft, Seelenfeuer, Schwerkraftschub, Aufblitzen, Sonnengeschoss) sind als 'unsicher' markiert, da ihre Gravitonen/Photonen-Zuordnung im zweispaltigen PDF-Layout nicht explizit textuell bestätigt war - Einordnung beruht auf Namensthematik/Spaltenposition. Stufe 14 hat laut Rohtext nur Photonenkontrolle, kein Gravitonen-Gegenstück gefunden (mögliche Extraktionslücke)."
+  },
+  "technomagier": {
+    "magic_hacks": [
+      {"name": "Technik stören", "tag": "ÜF", "min_level": 2, "description": "Als Reaktion auf Schaden durch einen Angriff mit einer technischen Waffe oder Quelle innerhalb mittlerer Reichweite, dessen Ziel du bist, kannst du einen ungenutzten Zauberplatz aufwenden, um den Angriff zu stören. Mit einem Zauberplatz der Grade 1-5 kannst du einem Angriff durch eine technische Waffe entgegenwirken, deren Gegenstandsstufe nicht höher ist als 3 × Grad des aufgewendeten Zauberplatzes (dieser Wert darf deine Zauberstufe nicht übersteigen). Zauberplätze des 6. Grades können jeder Waffe entgegenwirken, deren Gegenstandsstufe deine Zauberstufe nicht übersteigt. Lege einen Technikstörwurf mit 1W20 + deine Zauberstufe gegen SG 11 + Gegenstandsstufe der Waffe ab. Bei Erfolg verursacht der Angriff halben Schaden."},
+      {"name": "Zauberschaden erhöhen", "tag": "AF", "min_level": 2, "description": "Wenn du einen Zauber mit Zeitaufwand Augenblicklich wirkst, kannst du den Schaden des Zaubers um deine halbe Technomagierstufe erhöhen (bei Mehrfachtreffern nur für einen Strahl/ein Geschoss, nicht bei anhaltendem Schaden, nur AP/TP-Schaden)."},
+      {"name": "Aufgeladener Zauber", "tag": "AF", "min_level": 2, "description": "Als Bewegungsaktion 1x/Tag: Batterie/Energiezelle berühren, um einen bekannten Zauber ohne Zauberplatz zu wirken (20 Ladungen pro Zaubergrad, muss vor Beginn des nächsten Zuges gewirkt werden)."},
+      {"name": "Daten überfliegen", "tag": "ÜF", "min_level": 2, "description": "Standard-Aktion: allgemeinen Eindruck von Dateninhalten auf digitalen Speichermedien erlangen, ohne Berührung. Bei Scan einer Kreatur: Willenswurf negiert, danach 24h Immunität."},
+      {"name": "Roboter beeinflussen", "tag": "AF", "min_level": 2, "description": "Geistesbeeinflussende Zauber wirken auch auf Konstrukte/Roboter/Technik-Unterart-Kreaturen (die dabei +2 auf Willenswürfe erhalten)."},
+      {"name": "Selektives Zielen", "tag": "AF", "min_level": 2, "description": "Bei Augenblicklich-Zaubern ein 1,50m-Feld vom Wirkungsbereich ausnehmen (Verbündeter). Ab Stufe 5: 1 Reservepunkt für beliebig viele Felder."},
+      {"name": "Temporäre Technik generieren", "tag": "ZF", "min_level": 2, "description": "Volle Aktion + Zauberplatz: technischen Gegenstand erschaffen (Gegenstandsstufe ≤3×Grad, ≤10 Last, Mittelgroß, Durchschnittlich), besteht Minuten=Technomagierstufe. Keine Rüstungen/Waffen/magische/Ladungs-Gegenstände."},
+      {"name": "Technomagisches Waffenverständnis", "tag": "AF", "min_level": 2, "description": "Standard-Aktion + 1 Reservepunkt: für Minuten=Technomagierstufe Umgang mit gewählter Waffenart erlangen (Wirkungsdauer sinkt pro Nutzungsrunde um 1 Minute)."},
+      {"name": "Verstärkte Waffe", "tag": "ÜF", "min_level": 2, "description": "Bewegungsaktion + Zauberplatz: geführte Waffe erhält bis zum nächsten Zug +Grad auf Angriffswürfe und +1W6 Schaden pro Grad (gleiche Schadensart wie Waffe)."},
+      {"name": "Zauberwiderstand", "tag": "AF", "min_level": 2, "description": "+2 auf Rettungswürfe gegen Zauber und magische Effekte."},
+      {"name": "Magie unterdrücken", "tag": "ZF", "min_level": 5, "description": "Standard-Aktion + 1 Reservepunkt: andauernden Zauber/magischen Gegenstand (≤9m, Zaubergrad/Zauberstufe ≤ eigene) für 1W4 Runden unterdrücken (wie Magie bannen); bei Kreaturen-Zauber Willenswurf negiert."},
+      {"name": "Temporäre Waffe oder Rüstung generieren", "tag": "ÜF", "min_level": 5, "description": "Volle Aktion + Zauberplatz: technische Waffe/Rüstung erschaffen (Gegenstandsstufe ≤3×Grad, max. Zweihandwaffen-Größe, ≤10 Last, Durchschnittlich), besteht Minuten=Technomagierstufe, automatisch geübt (nicht spezialisiert). Keine magischen/Spezialmaterial-/Verbrauchsgegenstände."},
+      {"name": "Zauberfehler beseitigen", "tag": "AF", "min_level": 5, "description": "1 Reservepunkt: nach Schadenswurf eines Augenblicklich-Zaubers einen Würfel mit Ergebnis 1 neu würfeln (Stufe 11: zwei Würfel, Stufe 17: drei Würfel)."},
+      {"name": "Zaubergranate", "tag": "ZF", "min_level": 5, "description": "1 Reservepunkt: Berührungszauber in einer Granate speichern, wirkt auf Ziel im Explosionsradius wie erfolgreiche Berührung; Granate muss vor Ende des nächsten Zuges geworfen werden, gilt als geübt mit Granaten."},
+      {"name": "Zauberladung", "tag": "ÜF", "min_level": 5, "description": "Bewegungsaktion + Zauberplatz: Energiezelle berühren, +10 Ladungen pro Zaubergrad (bis Maximum); alternativ Technik-Wurf zum Ausschalten eines Geräts mit Bonus = 2×Zaubergrad."},
+      {"name": "Zauberreichweite verdoppeln", "tag": "AF", "min_level": 5, "description": "1 Reservepunkt: Reichweite (Nah/Mittel/Lang) eines Zaubers verdoppeln, Wirkungsbereichsgröße bleibt unverändert."},
+      {"name": "Zauberwirkungsdauer verdoppeln", "tag": "AF", "min_level": 5, "description": "1 Reservepunkt: Wirkungsdauer eines Zaubers verdoppeln (nicht bei Augenblicklich/Konzentration/Permanent/≤1 Runde, max. 24h)."},
+      {"name": "Kurzstreckenteleportation", "tag": "ZF", "min_level": 8, "description": "Bewegungsaktion + 1 Reservepunkt: bis 9 m teleportieren (Sichtlinie nötig), keine Gelegenheitsangriffe."},
+      {"name": "Magische Überwachung", "tag": "ÜF", "min_level": 8, "description": "10 Minuten + Computer-Wurf gegen Geräte-SG: Überwachung einrichten, Einfluss für Tage=Zauberstufe, liefert allgemeine Infos oder Alarm bei Stichwort."},
+      {"name": "Mentale Markierung", "tag": "ÜF", "min_level": 8, "description": "Gegner mit misslungenem Willenswurf gegen eigenen Zauber: 1 Runde -2 auf Rettungswürfe/RK; bei bestandenem Wurf -1 auf Rettungswürfe."},
+      {"name": "Schutz vor Technik", "tag": "ÜF", "min_level": 8, "description": "Bewegungsaktion + 1 Reservepunkt, dann Reaktion: gegnerischer Angriff mit technischer Waffe wird zweimal gewürfelt (schlechteres Ergebnis zählt), bzw. Entrinnen-Vorteil bei Reflexwurf-Waffen."},
+      {"name": "Zauberschuss", "tag": "ZF", "min_level": 8, "description": "Flächenzauber (Zeitaufwand ≤1 Standard-Aktion) durch Fernkampfwaffe wirken, nutzt Waffenreichweite statt Zauberreichweite, zentriert auf getroffenes Einzelziel; bei Fehlschlag verschwendet."},
+      {"name": "Zauberwirkungsbereich verdoppeln", "tag": "AF", "min_level": 8, "description": "2 Reservepunkte: Radius eines Ausdehnung/Ausstrahlung/Explosion-Zaubers verdoppeln."},
+      {"name": "Stets verfügbarer Zauber", "tag": "AF", "min_level": 11, "description": "Ein bekannter Grad-1-Zauber wird beliebig oft wie ein Grad-0-Zauber wirkbar, zählt aber weiter als Grad-1-Zauber bekannt."},
+      {"name": "Suchender Schuss", "tag": "ÜF", "min_level": 11, "description": "Standard-Aktion + 1 Reservepunkt: Fernkampfschuss erreicht bekanntes Ziel in Reichweite auch um Ecken, hebt Deckung/Tarnung auf."},
+      {"name": "Verbündeten vor Technik schützen", "tag": "ÜF", "min_level": 11, "description": "1 Reservepunkt: Technik stören auch für Verbündeten ≤4,50m einsetzen (nicht gegen Flächenangriffe). Voraussetzung: Technik stören."},
+      {"name": "Verstand neu starten", "tag": "ÜF", "min_level": 11, "description": "Bewegungsaktion + 1 Reservepunkt: bereitwillige Kreatur berühren, beendet geistesbeeinflussende Effekte/Zustände (wie Mächtiges Zustand entfernen), Ziel wird bis nächsten Zug Betäubt; danach 24h Abklingzeit."},
+      {"name": "Feuerregen", "tag": "ÜF", "min_level": 14, "description": "Volle Aktion 1x/Tag + 2 Reservepunkte: Fernkampfwaffe auf bis zu (halbe Technomagierstufe) Ziele abfeuern, je ein Angriff mit höchstem Angriffsbonus."},
+      {"name": "Phasenschuss", "tag": "ÜF", "min_level": 14, "description": "Standard-Aktion + 1 Reservepunkt: Fernkampfschuss durchdringt nichtmagische Barrieren (ignoriert Härte/TP), hebt Deckung/Tarnung auf; magische Barrieren stoppen ihn."},
+      {"name": "Zauberaufwand beschleunigen", "tag": "AF", "min_level": 14, "description": "Zauber (Zeitaufwand ≤1 Volle Aktion) als Bewegungsaktion wirken: 2 Reservepunkte für Grad 0, 4 für Grad 1 (ab Stufe 16: 6 für Grad 2)."},
+      {"name": "Zauberbibliothek", "tag": "AF", "min_level": 14, "description": "Ein zusätzlicher bekannter Zauber pro wirkbarem Zaubergrad, auch künftig bei neuem Höchstgrad."}
+    ],
+    "notes": "30 Magische Hacks erfasst (Stufen 2/5/8/11/14), gegen die 4 Beispiel-Archetypen im Buch (S. 124-125) kreuzverifiziert. LÜCKE: Hacks der Stufen 17 und 20 fehlen komplett - die Rohtext-Quelldatei endet nach S. 123/125 vor diesen Abschnitten (laut Tabelle 4-10 müssten sie existieren). Für Vollständigkeit müsste die PDF-Extraktion um Folgeseiten nach S. 125 ergänzt werden."
+  }
+}
