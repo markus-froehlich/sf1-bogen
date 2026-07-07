@@ -149,8 +149,48 @@ Daten-Port, Engine bauen) hat noch nicht begonnen.
    Zuordnung der Magischen Hacks zu ihrer Mindeststufe war im
    pdftotext-Layout nicht eindeutig (als `unsicher: true` geflaggt) —
    bei Bedarf mit pdfplumber oder Seitenbild nachprüfen.
-6. Ausrüstung (Kapitel 7) + Kampfmechanik (Kapitel 8) — EAC/KAC,
-   Ausdauer/TP/Reserve-System, Gegenstandsstufen.
+6. ~~**Ausrüstung (Kapitel 7) + Kampfmechanik (Kapitel 8)**~~ — erledigt.
+   Größter Einzelschritt bisher (Waffenkapitel allein: 28 Buchseiten,
+   PDF-Seiten 169-196). Ergebnisse:
+   - `app/src/data/weapons.json`: ~350 Waffen über 13 Tabellen (einfache/
+     fortschrittliche Nahkampfwaffen je ein-/zweihändig, Handfeuerwaffen,
+     Langwaffen, Schwere Waffen, Scharfschützenwaffen, Granaten,
+     Spezialwaffen, Standard-/Sondermunition, Solarier-Waffenkristalle,
+     Verwundende-Waffen-Tabelle, Materialaufschläge, Fusionspreise) plus
+     Eigenschaften- und Fusionsglossar. Einzelne Unstimmigkeiten aus dem
+     Rohtext (z.B. zwei "Suchergewehr, Taktisches"-Einträge mit
+     unterschiedlichen Werten, ein vermuteter OCR-Fehler bei einem
+     Kritisch-Wert) sind mit `unsicher: true` geflaggt statt stillschweigend
+     geraten.
+   - `app/src/data/armor.json`: 42 Leichte + 38 Schwere Rüstungen + 5
+     Servorüstungs-Statblöcke mit vollständigen Spielwerten.
+   - `app/src/data/conditions.json`: alle 35 Starfinder-Zustände (Tabelle
+     8-2) mit voller Beschreibung — eigenständig von Pathfinders 22
+     Zuständen in `ConditionsPanel.jsx`, Basis für dessen späteren Umbau.
+   - `app/src/data/equipment_rules.json`: Crediteinheiten-Wirtschaft,
+     Gegenstandsstufen-Zugangsregel, Tragkapazität/Beladen-Formeln.
+   - `app/src/engine/combat.js`: EAC/KAC-Formel, Angriffswürfe (inkl.
+     Entfernungsmalus), kritischer Treffer, Massiver-Schaden-Regel — gegen
+     Testfälle verifiziert.
+   - `app/src/engine/equipment.js`: Gegenstandsstufen-Zugang nach
+     Charakterstufe, Verkaufspreis-Formel, Tragkapazität/Beladen-Status.
+   **Vorgehen:** wie bei Klassen — pdftotext-Extraktion pro Unterabschnitt,
+   dann parallele Sub-Agenten (Kampfgrundlagen, Zustände, Waffen, Rüstungen)
+   strikt aus dem jeweiligen Rohtext, Ergebnisse stichprobenhaft gegen die
+   Rohtexte geprüft (Kopfblock-Werte, Formeln gegen Buchbeispiele).
+   **Bewusst NICHT erfasst:** Rüstungsverbesserungen (Tabelle 7-17, ~30
+   Einträge), Kraftfelder (Tabelle 7-18), Technische/Magische/Hybride
+   Gegenstände, Fahrzeuge, „Andere Erwerbungen" (Kapitel 7 restliche
+   Abschnitte S. 213-236), sowie aus Kapitel 8: Kampfmodifikationen
+   (Deckung/Flankieren/Tarnung — im Kampfgrundlagen-Agenten als Nebenfund
+   dokumentiert, aber nicht strukturiert), Fortbewegung/Größenkategorien,
+   Sinneswahrnehmung, Besondere Fähigkeiten, Boni/Mali, Effekte bestimmen,
+   Taktische Fahrzeugregeln. Diese sind alle noch im Rohtext vorhanden
+   (`extraction/kapitel7_*`, `extraction/kapitel8_kampfgrundlagen_raw.txt`)
+   und bei Bedarf nachträglich extrahierbar — hier bewusst zurückgestellt,
+   um bei vertretbarem Aufwand die für einen funktionierenden Kampf-Tab
+   wichtigsten Teile (EAC/KAC, Zustände, Waffen/Rüstungen-Katalog) fertig zu
+   bekommen.
 7. Talente (Kapitel 6), Zauber (Kapitel 10 — nur 2 Zauberklassen).
 8. Danach: `App.jsx` von Platzhalter auf echte Tabs umstellen.
 9. **Raumschiffe (Kapitel 9) — eigene, spätere Phase**, erst wenn 1-8 stehen
