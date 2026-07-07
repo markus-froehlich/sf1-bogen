@@ -97,5 +97,64 @@
     {"name": "Flugharnisch", "stufe": 11, "preis": 27100, "erk_bonus": 12, "krk_bonus": 19, "max_ge_bonus": 3, "ruestungsmalus": -5, "bewegungsrate": "9 m, Fliegen 9 m (durchschnittlich)", "staerke": "22 (+6)", "schaden": "2W6 W", "groesse": "Riesig (3 m Reichweite)", "magazin": 100, "verbrauch": "1/Minute", "waffensteckplaetze": 3, "verbesserungssteckplaetze": 4, "last": 40},
     {"name": "Jarltöter", "stufe": 15, "preis": 125500, "erk_bonus": 18, "krk_bonus": 24, "max_ge_bonus": 4, "ruestungsmalus": -6, "bewegungsrate": "6 m", "staerke": "29 (+9)", "schaden": "2W8 W", "groesse": "Groß (3 m Reichweite)", "magazin": 100, "verbrauch": "1/Minute", "waffensteckplaetze": 2, "verbesserungssteckplaetze": 2, "last": 43}
   ],
-  "notes": "NICHT erfasst: Tabelle 7-17 Rüstungsverbesserungen (S. 204, ~30 Einträge wie Infrarotsensoren, Sprungdüsen, Kraftfelder, Jetpack), Tabelle 7-18 Kraftfelder (S. 206, Detailwerte pro Farbe), Fließtext-Beschreibungen einzelner Rüstungsmodelle (reiner Fluff). Bei Bedarf aus extraction/kapitel7_ruestungen_raw.txt nachträglich extrahierbar."
+  "armor_upgrades": [
+    {"name": "Infrarotsensoren", "item_level": 1, "preis": 200, "slots": 1, "fits": "alle", "last": "L", "description": "Du erhältst Dunkelsicht 18 m."},
+    {"name": "Sprungscheide", "item_level": 1, "preis": 325, "slots": 1, "fits": "alle", "last": "L", "description": "Dieses Fach fasst eine Einhandwaffe von maximal Leichter Last. Du kannst diese Verbesserung als Schnelle Aktion aktivieren, damit dir der Gegenstand in die Hand springt, als hättest du ihn gezogen."},
+    {"name": "Strahlenschutz", "item_level": 1, "preis": 200, "slots": 1, "fits": "alle", "last": "L", "description": "Bonus +2 auf den ersten Rettungswurf gegen Strahlung (neben ggf. vorhandenen Boni durch Schutzmechanismen gegen Umwelteinflüsse). Kein Bonus auf Rettungswürfe gegen Sekundäreffekte von Strahlung."},
+    {"name": "Panzerungsverstärkung", "item_level": 1, "preis": 150, "slots": 1, "fits": "alle", "last": "—", "description": "Bei Berechnung von Härte und Trefferpunkten der Rüstung gilt deren effektive Gegenstandsstufe als um 5 höher."},
+    {"name": "Nachladeautomatik", "item_level": 2, "preis": 750, "slots": 1, "fits": "energetisch", "last": "1", "description": "Kleiner Roboterarm mit Lagereinheit (bis 2 Last) an Servorüstung, ermöglicht Bewegungsaktion zum Nachladen/Wiederaufladen einer installierten Waffe (nicht der Rüstungsbatterien selbst). Nur in Servorüstungen installierbar."},
+    {"name": "Sprungdüsen", "item_level": 2, "preis": 1000, "slots": 1, "fits": "leicht, schwer", "last": "L", "magazin": 20, "verbrauch": "2/Runde", "description": "Als Teil einer Bewegungsaktion: bis zu 9 m fliegen (durchschnittliche Manövrierfähigkeit), max. 3 m Höhe (alternativ 6 m auf der Stelle steigen). Muss am Ende der Bewegungsaktion landen. Nur bei Unbeladenheit nutzbar. Nur Leichte/Schwere Rüstung."},
+    {"name": "Kraftfeld, Braun", "item_level": 3, "preis": 1600, "slots": 2, "fits": "alle", "last": "L", "description": "Siehe force_fields."},
+    {"name": "Reservegenerator", "item_level": 4, "preis": 2100, "slots": 1, "fits": "alle", "last": "1", "description": "Lädt angeschlossene energetische Gegenstände (z.B. Batterien) aus kinetischer Bewegungsenergie (1 Ladung/10 Min. Fortbewegung). Nur ein Gegenstand anschließbar, keine Ladung im Ruhezustand."},
+    {"name": "Ausstiegskapsel", "item_level": 4, "preis": 1750, "slots": 1, "fits": "schwer, energetisch", "last": "2", "description": "Erlaubt Verlassen einer Servo-/Schweren Rüstung als Bewegungsaktion statt Volle Aktion (Betreten bleibt unverändert)."},
+    {"name": "Zielcomputer", "item_level": 4, "preis": 2250, "slots": 1, "fits": "alle", "last": "—", "description": "Ignoriert Tarnung von Zielen bei Angriffen (nicht bei Vollständiger Tarnung)."},
+    {"name": "Elektrostatikfeld, Mk. 1", "item_level": 5, "preis": 3000, "slots": 1, "fits": "alle", "last": "—", "description": "Elektrizitätsresistenz 5, Berühren/Nahkampftreffer gegen dich verursacht 1W6 Elektrizitätsschaden beim Angreifer.", "unsicher": true, "unsicher_kommentar": "Werte per Spalten-Rekonstruktion im zweispaltigen Layout zugeordnet (inhaltlich passend, aber nicht direkt neben dem Namen im Rohtext)."},
+    {"name": "Jetpack", "item_level": 5, "preis": 3100, "slots": 1, "fits": "leicht, schwer", "last": "1", "magazin": 40, "verbrauch": "2/Runde", "description": "Bewegungsrate Fliegen 9 m (durchschnittlich). Rundflugmodus (1 Ladung/Minute, verleiht Auf dem Falschen Fuß + Haltlos), Wechsel je Standard-Aktion. Nur bei Unbeladenheit, nur Leichte/Schwere Rüstung."},
+    {"name": "Lastenheber", "item_level": 5, "preis": 2550, "slots": 1, "fits": "alle", "last": "—", "description": "Künstliche Muskeln: tragbare Last +3 während die Rüstung getragen wird."},
+    {"name": "Thermalregulator, Mk. 1", "item_level": 5, "preis": 3600, "slots": 1, "fits": "alle", "last": "—", "description": "Schützt vor Extremtemperaturen (-45°C bis 77°C ohne Zähigkeitswurf). Feuer-/Kälteresistenz 5."},
+    {"name": "Atemfilter", "item_level": 6, "preis": 4600, "slots": 1, "fits": "alle", "last": "1", "description": "Liefert Atemluft für Wochen = Gegenstandsstufe, filtert Toxine/Dämpfe. Säureresistenz 5, +2 auf Rettungswürfe gegen Gifte/Krankheiten."},
+    {"name": "Kraftfeld, Purpur", "item_level": 6, "preis": 4550, "slots": 2, "fits": "alle", "last": "L", "description": "Siehe force_fields."},
+    {"name": "Phasenschild", "item_level": 6, "preis": 4325, "slots": 1, "fits": "schwer, energetisch", "last": "1", "magazin": 40, "verbrauch": 2, "description": "Aktivierbarer Schild an einem Arm, +1 ERK (Verbesserungsbonus) solange aktiv; belegter Arm kann nichts halten/nutzen/angreifen. Nur Schwere/Servorüstung."},
+    {"name": "Glatte Oberfläche", "item_level": 7, "preis": 7500, "slots": 1, "fits": "alle", "last": "1", "description": "SR 5/—. Rüstungsmalus bei Akrobatik zum Entkommen um 2 reduziert."},
+    {"name": "Schalldämpfung", "item_level": 7, "preis": 7150, "slots": 1, "fits": "alle", "last": "L", "description": "Schallresistenz 5, Rüstungsmalus bei Heimlichkeit um 1 reduziert."},
+    {"name": "Kraftfeld, Schwarz", "item_level": 8, "preis": 10500, "slots": 2, "fits": "alle", "last": "L", "description": "Siehe force_fields."},
+    {"name": "Hast-Schaltkreis (Magisch)", "item_level": 8, "preis": 9250, "slots": 1, "fits": "leicht, schwer", "last": "L", "magazin": 10, "verbrauch": "1/Runde", "description": "Schnelle Aktion aktiviert Vorteile von Hast bis Deaktivierung/Ladungen aufgebraucht (täglich erneuert). Nur Leichte/Schwere Rüstung."},
+    {"name": "Elektrostatikfeld, Mk. 2", "item_level": 9, "preis": 13000, "slots": 1, "fits": "alle", "last": "—", "description": "Resistenz 10, 2W6 Elektrizitätsschaden beim Angreifer."},
+    {"name": "Energierucksack (Hybrid)", "item_level": 9, "preis": 13100, "slots": 1, "fits": "leicht, schwer", "last": "1", "magazin": 100, "verbrauch": "2/Runde", "description": "Bewegungsrate Fliegen 18 m (durchschnittlich), Rundflugmodus wie Jetpack. Nur Leichte/Schwere Rüstung."},
+    {"name": "Kraftfeld, Weiß", "item_level": 10, "preis": 20000, "slots": 2, "fits": "alle", "last": "L", "description": "Siehe force_fields."},
+    {"name": "Elektrostatikfeld, Mk. 3", "item_level": 12, "preis": 35000, "slots": 1, "fits": "alle", "last": "—", "description": "Resistenz 15, 3W6 Elektrizitätsschaden beim Angreifer."},
+    {"name": "Kraftfeld, Grau", "item_level": 12, "preis": 40000, "slots": 2, "fits": "alle", "last": "L", "description": "Siehe force_fields."},
+    {"name": "Thermalregulator, Mk. 2", "item_level": 12, "preis": 36250, "slots": 1, "fits": "alle", "last": "—", "description": "Feuer-/Kälteresistenz 10."},
+    {"name": "Zauberreflektor, Mk. 1 (Magisch)", "item_level": 13, "preis": 47950, "slots": 1, "fits": "leicht, schwer", "last": "1", "magazin": 1, "verbrauch": 1, "description": "Reaktion bei Zauberziel (nicht Flächenzauber): reflektiert Zauber bis max. Grad 4 auf Wirker zurück. Ladungen täglich erneuert. Nur Leichte/Schwere Rüstung."},
+    {"name": "Kraftfeld, Grün", "item_level": 14, "preis": 80000, "slots": 2, "fits": "alle", "last": "L", "description": "Siehe force_fields."},
+    {"name": "Titanenschild", "item_level": 14, "preis": 75000, "slots": 1, "fits": "energetisch", "last": "2", "magazin": 40, "verbrauch": 10, "description": "Emitter für breiten Energieschild über 3 Feldbreiten (gewählte Seite = Zentrum), schützt vor Angriffen von der anderen Seite, Schnelle Aktion zum Aktivieren/Deaktivieren."},
+    {"name": "Thermalregulator, Mk. 3", "item_level": 15, "preis": 120000, "slots": 1, "fits": "alle", "last": "—", "description": "Feuer-/Kälteresistenz 15."},
+    {"name": "Kraftfeld, Rot", "item_level": 16, "preis": 180000, "slots": 2, "fits": "alle", "last": "L", "description": "Siehe force_fields."},
+    {"name": "Kraftfeld, Blau", "item_level": 17, "preis": 280000, "slots": 2, "fits": "alle", "last": "L", "description": "Siehe force_fields."},
+    {"name": "Zauberreflektor, Mk. 2 (Magisch)", "item_level": 18, "preis": 360000, "slots": 1, "fits": "leicht, schwer", "last": "1", "description": "Reflektiert Zauber bis max. Grad 6."},
+    {"name": "Kraftfeld, Orange", "item_level": 18, "preis": 400000, "slots": 2, "fits": "alle", "last": "L", "description": "Siehe force_fields."},
+    {"name": "Kraftfeld, Prismatisch", "item_level": 20, "preis": 1000000, "slots": 2, "fits": "alle", "last": "L", "description": "Siehe force_fields."}
+  ],
+  "force_fields": {
+    "kraftfeld_mechanik": "Standard-Aktion zum Aktivieren/Deaktivieren. Blockiert feste/flüssige Materie, nicht Gase oder Licht (auch keine Laser). Atmen möglich, Essen/Trinken nicht. Verleiht Temporäre TP (je nach Farbe), die zuerst Schaden abfangen. Schnelle Heilung erneuert am Ende des Zuges Temporäre TP bis Maximum. Bei 0 Temporären TP wird das Kraftfeld bis Ende des nächsten Zuges inaktiv. Verbrauch 1 Ladung/Runde. Stärkere Modelle haben zusätzlich 'Bollwerk': Prozent-Chance, dass ein erlittener Kritischer Treffer als normaler Treffer behandelt wird. Eine Rüstung trägt maximal ein Kraftfeld.",
+    "kraftfeld_farben": [
+      {"model": "Braun", "item_level": 3, "preis": 1600, "magazin": 10, "temporaere_tp": 1, "schnelle_heilung": 1, "bollwerk": "0%"},
+      {"model": "Purpur", "item_level": 6, "preis": 4550, "magazin": 10, "temporaere_tp": 5, "schnelle_heilung": 2, "bollwerk": "0%"},
+      {"model": "Schwarz", "item_level": 8, "preis": 10500, "magazin": 10, "temporaere_tp": 10, "schnelle_heilung": 3, "bollwerk": "0%"},
+      {"model": "Weiß", "item_level": 10, "preis": 20000, "magazin": 20, "temporaere_tp": 15, "schnelle_heilung": 4, "bollwerk": "0%"},
+      {"model": "Grau", "item_level": 12, "preis": 40000, "magazin": 20, "temporaere_tp": 20, "schnelle_heilung": 5, "bollwerk": "0%"},
+      {"model": "Grün", "item_level": 14, "preis": 80000, "magazin": 20, "temporaere_tp": 25, "schnelle_heilung": 6, "bollwerk": "20%"},
+      {"model": "Rot", "item_level": 16, "preis": 180000, "magazin": 40, "temporaere_tp": 30, "schnelle_heilung": 7, "bollwerk": "40%"},
+      {"model": "Blau", "item_level": 17, "preis": 280000, "magazin": 40, "temporaere_tp": 35, "schnelle_heilung": 8, "bollwerk": "60%"},
+      {"model": "Orange", "item_level": 18, "preis": 400000, "magazin": 40, "temporaere_tp": 40, "schnelle_heilung": 9, "bollwerk": "80%"},
+      {"model": "Prismatisch", "item_level": 20, "preis": 1000000, "magazin": 100, "temporaere_tp": 50, "schnelle_heilung": 10, "bollwerk": "100%"}
+    ],
+    "sonstige_kraftfeld_typen": [
+      {"name": "Elektrostatikfeld", "description": "Elektrizitätsresistenz + Elektrizitätsschaden gegen Nahkampf-/Berührungsangreifer, Stufe je Mk.-Modell (siehe armor_upgrades).", "unsicher": true},
+      {"name": "Thermalregulator", "description": "Feuer-/Kälteresistenz je Mk.-Modell (siehe armor_upgrades)."},
+      {"name": "Zauberreflektor (Magisch)", "description": "Reflektiert Zauber bis max. Grad je Mk.-Modell (siehe armor_upgrades)."},
+      {"name": "Titanenschild", "description": "Einzelversion ohne Mk.-Progression, siehe armor_upgrades."}
+    ]
+  },
+  "notes": "Rüstungsverbesserungen (Tabelle 7-17, 30 Einträge) und Kraftfelder (Tabelle 7-18, 10 Farbmodelle + 3 Mk.-Familien) jetzt vollständig erfasst (siehe armor_upgrades/force_fields oben), Quelle extraction/kapitel7_ruestungen_raw.txt. Fließtext-Beschreibungen einzelner Basis-Rüstungsmodelle (reiner Fluff) weiterhin nicht erfasst — nicht spielrelevant."
 }

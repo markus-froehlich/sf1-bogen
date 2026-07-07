@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 4: Klassen — Unterwahllisten, die in classes.json bewusst ausgelassen wurden (siehe dortiges _meta.scope_note)",
-    "note": "Per Sub-Agenten aus den bereits vorhandenen Rohtext-Dateien (extraction/kapitel4_<klasse>_raw.txt) strukturiert, strikt aus dem Rohtext, keine Ergänzungen aus Trainingswissen. Einzelne Einträge sind mit 'unsicher': true markiert, wo die Zuordnung (z.B. Mindeststufe, Gravitonen/Photonen-Kategorie) im zweispaltigen PDF-Layout nicht eindeutig war - siehe jeweiligen Kommentar. Noch nicht enthalten: aspirant (Verbindungsfähigkeiten je Verbindung) - wird nachgereicht."
+    "note": "Per Sub-Agenten aus den bereits vorhandenen Rohtext-Dateien (extraction/kapitel4_<klasse>_raw.txt) strukturiert, strikt aus dem Rohtext, keine Ergänzungen aus Trainingswissen. Einzelne Einträge sind mit 'unsicher': true markiert, wo die Zuordnung (z.B. Mindeststufe, Gravitonen/Photonen-Kategorie) im zweispaltigen PDF-Layout nicht eindeutig war - siehe jeweiligen Kommentar."
   },
   "agent": {
     "specializations": [
