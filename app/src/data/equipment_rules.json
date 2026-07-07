@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 7: Ausrüstung, S. 166-167 (Währung, Tragkapazität, Gegenstandsstufe, Magie und Technik)",
+    "pdf_pages": "166-167"
+  },
+  "currency": {
+    "unit": "Crediteinheit",
+    "note": "Standardwährung der Paktwelten, meist digital auf Credsticks gespeichert. Ausrüstung verkaufen: normalerweise 10% des Handelspreises, Handelsgüter (S. 232) 100%."
+  },
+  "item_level_economy": {
+    "note": "Alle Waffen, Rüstungen und Ausrüstungsgegenstände haben eine Gegenstandsstufe - Indikator für Seltenheit, Wert, Härte/TP und ab welcher Charakterstufe Zugang/Eigenherstellung möglich ist.",
+    "typical_settlement_max_item_level": "Charakterstufe + 1",
+    "major_settlement_max_item_level": "Charakterstufe + 2",
+    "starting_wealth_credits": 1000
+  },
+  "item_tech_type": {
+    "note": "Waffen/Rüstungen gelten als Technisch, außer sie haben die Eigenschaft Analog. Sonstige Gegenstände sind Magisch, Technisch oder Hybrid (beides). Wird eine magische Fusion/Verbesserung einem technischen Gegenstand hinzugefügt, wird er zum Hybridgegenstand."
+  },
+  "encumbrance": {
+    "load_categories": {
+      "note": "Jeder Gegenstand hat einen Lastwert: eine Zahl, 'L' (Leicht) oder '-' (Vernachlässigbar). 10 Gegenstände der Kategorie Leicht = 1 Last (abgerundet). Vernachlässigbare Gegenstände zählen nur in großer Menge nach SL-Ermessen."
+    },
+    "carry_limit_normal": "1/2 Stärkewert an Last ohne Einschränkung tragbar",
+    "carry_limit_beladen": "über 1/2 Stärke bis Stärkewert: Zustand Beladen",
+    "carry_limit_ueberladen": "über Stärkewert (nur unfreiwillig möglich, z.B. wechselnde Schwerkraft): Zustand Überladen",
+    "conditions": {
+      "beladen": {
+        "name": "Beladen",
+        "effects": "Bewegungsrate -3 m, maximaler GE-Bonus auf RK auf +2 begrenzt, -5 auf stärke- und geschicklichkeitsbasierte Würfe."
+      },
+      "ueberladen": {
+        "name": "Überladen",
+        "effects": "Bewegungsrate auf 1,50 m reduziert, maximaler GE-Bonus auf RK auf +0 begrenzt, -5 auf stärke- und geschicklichkeitsbasierte Würfe."
+      }
+    },
+    "armor_and_load_penalty_note": "Bei getragener Rüstung gilt für Bewegungsrate und Fertigkeitswürfe stets der schlechtere Malus aus Rüstung oder Last, nicht kumulativ."
+  }
+}
