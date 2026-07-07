@@ -1,0 +1,211 @@
+{
+  "_meta": {
+    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 5: Fertigkeiten, S. 130-149",
+    "pdf_pages": "132-151",
+    "count": 20,
+    "class_skill_bonus": 3,
+    "note": "Gesamtfertigkeitsbonus = 1W20 + Fertigkeitsränge + (Bonus für Geübte Klassenfertigkeit: +3, falls mind. 1 Rang investiert und Klassenfertigkeit) + Schlüsselattributsmodifikator + sonstige Modifikatoren (u.a. Rüstungsmalus bei mit '*' markierten Fertigkeiten). Fertigkeitsränge pro Stufe dürfen die Charakterstufe nicht übersteigen. Nur-geübte Fertigkeiten (untrained: false) können nur mit mind. 1 investiertem Rang eingesetzt werden.",
+    "skill_ranks_per_level": {
+      "note": "Fertigkeitsränge pro Stufe = IN-Modifikator + Klassenwert (mind. 1 Rang pro Stufe, unabhängig vom IN-Modifikator), siehe S. 132",
+      "AGE": 8,
+      "ASP": 6,
+      "GES": 8,
+      "MEC": 4,
+      "SOL": 4,
+      "SLD": 4,
+      "TEC": 4
+    },
+    "class_abbr": {
+      "AGE": "Agent",
+      "ASP": "Aspirant",
+      "GES": "Gesandter",
+      "MEC": "Mechaniker",
+      "SOL": "Solarier",
+      "SLD": "Soldat",
+      "TEC": "Technomagier"
+    }
+  },
+  "skills": [
+    {
+      "id": "akrobatik",
+      "name": { "de": "Akrobatik" },
+      "key_ability": "GE",
+      "armor_check_penalty": true,
+      "untrained": true,
+      "class_skill_for": ["AGE", "GES", "SOL", "SLD"],
+      "description": "Du kannst das Gleichgewicht bewahren, während du schmale oder schwierige Oberflächen überquerst. Du bist ferner in der Lage, Fesseln zu entschlüpfen und turnend Angriffen auszuweichen. Außerdem kannst du Akrobatik einsetzen, um den Erfolg schwieriger Flugmanöver zu bestimmen."
+    },
+    {
+      "id": "athletik",
+      "name": { "de": "Athletik" },
+      "key_ability": "ST",
+      "armor_check_penalty": true,
+      "untrained": true,
+      "class_skill_for": ["AGE", "GES", "MEC", "SOL", "SLD"],
+      "description": "Du kannst senkrechte Oberflächen erklettern, über Hindernisse springen und schwimmen."
+    },
+    {
+      "id": "beruf",
+      "name": { "de": "Beruf" },
+      "key_ability": "CH_IN_oder_WE",
+      "key_ability_note": "Schlüsselattribut wird bei Wahl des Berufes festgelegt: Charisma, Intelligenz oder Weisheit.",
+      "armor_check_penalty": false,
+      "untrained": false,
+      "class_skill_for": ["AGE", "ASP", "GES", "MEC", "SOL", "SLD", "TEC"],
+      "description": "Du übst einen bestimmten Beruf aus, hast dich in einer besonderen Fähigkeit spezialisiert oder bist künstlerisch tätig. Du weißt mit den Handwerkszeugen deines Berufes umzugehen, seine alltäglichen Aufgaben auszuüben, Helfer anzuleiten und mit herkömmlichen Problemen umzugehen. 'Beruf' fasst in Wahrheit mehrere separate Fertigkeiten zusammen; du kannst über mehrere Berufsfertigkeiten mit jeweils eigenen Fertigkeitsrängen verfügen."
+    },
+    {
+      "id": "biowissenschaften",
+      "name": { "de": "Biowissenschaften" },
+      "key_ability": "IN",
+      "armor_check_penalty": false,
+      "untrained": false,
+      "class_skill_for": ["ASP", "TEC"],
+      "description": "Du kennst dich auf dem Gebiet der wissenschaftlichen Studien an Lebewesen aus, egal ob es sich um die kleinsten Organismen oder die größten biologischen Systeme handelt."
+    },
+    {
+      "id": "bluffen",
+      "name": { "de": "Bluffen" },
+      "key_ability": "CH",
+      "armor_check_penalty": false,
+      "untrained": true,
+      "class_skill_for": ["AGE", "ASP", "GES"],
+      "description": "Du kannst mittels Worten und Handlungen Ablenkungen erzeugen, Gegner in die Irre führen, überzeugende Lügen erzählen und geheime Botschaften weitergeben."
+    },
+    {
+      "id": "computer",
+      "name": { "de": "Computer" },
+      "key_ability": "IN",
+      "armor_check_penalty": false,
+      "untrained": false,
+      "class_skill_for": ["AGE", "GES", "MEC", "TEC"],
+      "description": "Du kannst mit Computersystemen umgehen, sie manipulieren und dich in sie hineinhacken."
+    },
+    {
+      "id": "diplomatie",
+      "name": { "de": "Diplomatie" },
+      "key_ability": "CH",
+      "armor_check_penalty": false,
+      "untrained": true,
+      "class_skill_for": ["ASP", "GES", "SOL"],
+      "description": "Du kannst andere dazu bringen, sich dir gegenüber freundlich zu verhalten, Konflikte und Streitigkeiten beilegen sowie allgemeine Informationen und Gerüchte in Erfahrung bringen, welche in einer Ortschaft kursieren."
+    },
+    {
+      "id": "einschuechtern",
+      "name": { "de": "Einschüchtern" },
+      "key_ability": "CH",
+      "armor_check_penalty": false,
+      "untrained": true,
+      "class_skill_for": ["AGE", "ASP", "GES", "SOL", "SLD"],
+      "description": "Du kannst deine Gegner mit verbalen Drohungen oder Zurschaustellungen deiner Fähigkeiten verunsichern oder schikanieren, damit sie tun, was du willst."
+    },
+    {
+      "id": "fingerfertigkeit",
+      "name": { "de": "Fingerfertigkeit" },
+      "key_ability": "GE",
+      "armor_check_penalty": true,
+      "untrained": false,
+      "class_skill_for": ["AGE", "GES", "TEC"],
+      "description": "Du kannst kleine Gegenstände verstecken, Taschendiebstahl begehen und andere Handlungen unbemerkt ausführen, welche Fingerfertigkeit erfordern."
+    },
+    {
+      "id": "heimlichkeit",
+      "name": { "de": "Heimlichkeit" },
+      "key_ability": "GE",
+      "armor_check_penalty": true,
+      "untrained": true,
+      "class_skill_for": ["AGE", "GES", "SOL"],
+      "description": "Du kannst verborgen bleiben und dich lautlos bewegen. Auf diese Weise kannst du an Gegnern vorbeischleichen oder aus einem Versteck heraus zuschlagen."
+    },
+    {
+      "id": "kultur",
+      "name": { "de": "Kultur" },
+      "key_ability": "IN",
+      "armor_check_penalty": false,
+      "untrained": false,
+      "class_skill_for": ["AGE", "ASP", "GES"],
+      "description": "Du kennst dich mit den vielen bekannten Kulturen der Galaxis aus und verfügst im Allgemeinen über ein umfassendes und reichhaltiges Verständnis für die subtilen Untertöne von Kulturen und Sprachen. Jedes Mal, wenn du einen Fertigkeitsrang in Kultur investierst, lernst du, eine neue Sprache zu sprechen und zu lesen."
+    },
+    {
+      "id": "medizin",
+      "name": { "de": "Medizin" },
+      "key_ability": "IN",
+      "armor_check_penalty": false,
+      "untrained": false,
+      "class_skill_for": ["AGE", "ASP", "GES", "MEC", "SLD"],
+      "description": "Du verfügst über Wissen zur Biologie vieler Spezies und kannst unterschiedliche Arten von Wunden und Leiden behandeln."
+    },
+    {
+      "id": "motiv_erkennen",
+      "name": { "de": "Motiv erkennen" },
+      "key_ability": "WE",
+      "armor_check_penalty": false,
+      "untrained": true,
+      "class_skill_for": ["AGE", "ASP", "GES", "SOL"],
+      "description": "Du kannst Täuschungen erkennen und kleine Einblicke in die wahren Absichten von Kreaturen erhalten, mit denen du interagierst."
+    },
+    {
+      "id": "mystik",
+      "name": { "de": "Mystik" },
+      "key_ability": "WE",
+      "armor_check_penalty": false,
+      "untrained": false,
+      "class_skill_for": ["ASP", "SOL", "TEC"],
+      "description": "Du kennst dich auf dem Gebiet der Magie, der Religion, der Ebenen und der Zauberei aus. Daher bist du imstande, magische Gegenstände und Zauber zu identifizieren sowie magische Gegenstände anzufertigen."
+    },
+    {
+      "id": "naturwissenschaften",
+      "name": { "de": "Naturwissenschaften" },
+      "key_ability": "IN",
+      "armor_check_penalty": false,
+      "untrained": false,
+      "class_skill_for": ["MEC", "SOL", "TEC"],
+      "description": "Du kennst dich auf dem Gebiet der wissenschaftlichen Studien an leblosen Systemen aus, egal ob es sich um die kleinsten Atome oder die größten Himmelskörper handelt."
+    },
+    {
+      "id": "steuerung",
+      "name": { "de": "Steuerung" },
+      "key_ability": "GE",
+      "armor_check_penalty": false,
+      "untrained": true,
+      "class_skill_for": ["AGE", "GES", "MEC", "SLD", "TEC"],
+      "description": "Du kannst Fahrzeuge und Raumschiffe steuern und navigieren."
+    },
+    {
+      "id": "technik",
+      "name": { "de": "Technik" },
+      "key_ability": "IN",
+      "armor_check_penalty": false,
+      "untrained": false,
+      "class_skill_for": ["AGE", "GES", "MEC", "SLD", "TEC"],
+      "description": "Du kannst technische Gerätschaften identifizieren, bauen, reparieren oder ausschalten. Ferner kannst du die Stabilität von Gebäuden und Maschinen einschätzen sowie Sprengstoffe scharf machen oder entschärfen. Ohne Technikerausrüstung unterliegen Fertigkeitswürfe für Technik einem Malus von -2."
+    },
+    {
+      "id": "ueberlebenskunst",
+      "name": { "de": "Überlebenskunst" },
+      "key_ability": "WE",
+      "armor_check_penalty": false,
+      "untrained": true,
+      "class_skill_for": ["AGE", "ASP", "SLD"],
+      "description": "Du kannst in nahezu jeder Art von Wildnis überleben und dich dort zurechtfinden, Spuren und Wegen folgen, mit wilden Tieren arbeiten sowie gezähmte Tiere reiten."
+    },
+    {
+      "id": "verkleiden",
+      "name": { "de": "Verkleiden" },
+      "key_ability": "CH",
+      "armor_check_penalty": false,
+      "untrained": true,
+      "class_skill_for": ["AGE", "ASP", "GES"],
+      "description": "Du bist imstande, dein Aussehen zu verändern, um dich unter andere Wesen zu mischen und sie zu täuschen, egal ob du infiltrieren oder fliehen willst."
+    },
+    {
+      "id": "wahrnehmung",
+      "name": { "de": "Wahrnehmung" },
+      "key_ability": "WE",
+      "armor_check_penalty": false,
+      "untrained": true,
+      "class_skill_for": ["AGE", "ASP", "GES", "MEC", "SOL"],
+      "description": "Du kannst all deine Sinne (Gehör, Geruch, Geschmack, Sicht und Tastsinn) nutzen, um Gefahren zu bemerken, winzige Details zu entdecken und nach verborgenen Gegenständen oder Kreaturen zu suchen."
+    }
+  ]
+}

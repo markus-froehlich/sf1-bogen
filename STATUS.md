@@ -72,17 +72,35 @@ Daten-Port, Engine bauen) hat noch nicht begonnen.
 
 ## Nächste Schritte (in Reihenfolge)
 1. ~~**PDF-Extraktionspipeline aufbauen und testen (Völker, Kapitel 3)**~~ —
-   erledigt, siehe oben. Rohtext liegt vor, noch **nicht** strukturiert.
-2. **Völker-Rohtext zu `data/races.json` strukturieren** — aus
-   `extraction/kapitel3_voelker_raw.txt` die 7 Völker in eine strukturierte
-   JSON überführen (Attributsmodifikatoren, TP, Größenkategorie/Kreaturenart,
-   Volksmerkmale, Sprachen), analog zur `races.json`-Struktur bei Pathfinder.
-   Noch nicht begonnen.
-3. Fertigkeiten (Kapitel 5, S. 130-149) — auch klein, gutes zweites Dataset.
-4. Attribut-/Fertigkeiten-Rechenkern (`engine/attributes.js`,
-   `engine/skills.js`) — vermutlich einfacher als Pathfinders Version, da
-   Starfinder weniger Sonderfälle hat (bisher keine Volks-Attributsboni-
-   Eigenheit wie bei Pathfinder bekannt, muss aber noch geprüft werden).
+   erledigt.
+2. ~~**Völker-Rohtext zu `app/src/data/races.json` strukturieren**~~ —
+   erledigt (Commit 62b5d81). Alle 7 Völker mit Attributsmodifikatoren, TP,
+   Größenkategorie/Kreaturenart, Volksmerkmalen (voller Fließtext) und
+   Vitalwerten (Tabelle 3-1).
+3. ~~**Fertigkeiten extrahieren und zu `app/src/data/skills.json`
+   strukturieren**~~ — erledigt. Kapitel 5 liegt auf PDF-Seiten 132-151
+   (gedruckt 130-149, Offset weiterhin +2). Alle 20 Fertigkeiten mit
+   Schlüsselattribut, Nur-geübt-Flag, Rüstungsmalus-Flag, Klassenfertigkeit
+   pro Klasse (aus Tabelle 5-1) und Kurzbeschreibung. **Vorsicht bei
+   pdftotext -layout in diesem Kapitel:** an mindestens einer Stelle
+   (Athletik-Überschrift) hat sich eine Zeile aus der rechten Spalte
+   (unzusammenhängender Text zu Akrobatik-Flugregeln) mit der linken
+   Spalten-Überschrift vermischt und einen falschen Attributs-Anhang
+   suggeriert (schien "GE" statt korrekt "ST" zu sein) — verifiziert und
+   korrigiert anhand der maßgeblichen Tabelle 5-1, nicht anhand der
+   Fließtext-Überschrift. Faustregel für weitere Kapitel: bei
+   zweispaltigem Layout **Tabellen als Wahrheitsquelle nehmen**, Fließtext
+   nur für Beschreibungstext, nicht für Kennzahlen wie Attribute/SG.
+   Volle Fertigkeits-Unterregeln (SG-Tabellen für Klettern/Schwimmen/etc.)
+   sind NICHT übernommen, nur die für den Charakterbogen nötigen
+   Kennzahlen + eine Kurzbeschreibung pro Fertigkeit.
+4. **Attribut-/Fertigkeiten-Rechenkern** (`app/src/engine/attributes.js`,
+   `app/src/engine/skills.js`) — noch nicht begonnen. Formeln bereits aus
+   dem Fließtext bekannt: Fertigkeitsränge/Stufe = IN-Mod + Klassenwert
+   (min. 1), Gesamtbonus = Rang + (Klassenfertigkeit? +3 : 0) +
+   Attributsmod + sonstige Mods. Attributssteigerung alle 5 Stufen noch zu
+   extrahieren (S. 18/24, Kapitel 2 — nicht Teil dieser Kapitelliste,
+   eigener Blick nötig).
 5. Klassen (Kapitel 4, S. 56-129) — größter Brocken trotz nur 7 Klassen,
    74 Seiten mit Stufenprogressionen + Klassenmerkmalen.
 6. Ausrüstung (Kapitel 7) + Kampfmechanik (Kapitel 8) — EAC/KAC,
@@ -105,11 +123,12 @@ Daten-Port, Engine bauen) hat noch nicht begonnen.
   (z.B. Augmentierungen/Cyberware als eigene Homebrew-Kategorie)?
 
 ## GitHub / Deploy
-- Noch **kein** GitHub-Repo angelegt, noch kein Push. Passiert im nächsten
-  Schritt dieser Session (2026-07-07), dann trägt sich dieser Abschnitt
-  selbst nach mit Repo-URL und Deploy-Status.
-- Wenn eingerichtet: analog zu `pf1-bogen` GitHub-Pages-Deploy via Actions,
-  URL vermutlich `https://markus-froehlich.github.io/sf1-bogen/`.
+- GitHub-Repo existiert bereits: `git@github.com-private:markus-froehlich/sf1-bogen.git`
+  (privater SSH-Alias, siehe AGENTS.md). Lokale Commits laufen, es wurde
+  aber in dieser Session noch **nicht gepusht** (kein Push ohne explizite
+  Nutzerfreigabe).
+- GitHub-Pages-Deploy via Actions (analog `pf1-bogen`) noch nicht
+  eingerichtet.
 
 ## Hinweise
 - PDF liegt lokal im Projektordner (`Starfinder_Grundregelwerk_(PDF).pdf`,
