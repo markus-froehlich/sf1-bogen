@@ -3,6 +3,7 @@ import weaponsData from '../data/weapons.json'
 import conditionsData from '../data/conditions.json'
 import { computeCharacterStats } from '../engine/characterStats.js'
 import { meleeAttackBonus, rangedAttackBonus } from '../engine/combat.js'
+import { BuffTracker } from './BuffTracker.jsx'
 import './CombatTab.css'
 
 const WEAPON_CATEGORIES = [
@@ -23,10 +24,10 @@ function allWeapons() {
   )
 }
 
-export function CombatTab({ char, setConditions, lang }) {
+export function CombatTab({ char, setConditions, setActiveBuffs, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { abilityMods, bab, eac, kac, armor } = stats
+  const { abilityMods, bab, eac, kac, armor, buffTotals } = stats
   const weapons = useMemo(allWeapons, [])
   const [weaponName, setWeaponName] = useState('')
 
@@ -44,8 +45,8 @@ export function CombatTab({ char, setConditions, lang }) {
 
   const attackBonus = weapon
     ? (weapon._isRanged
-        ? rangedAttackBonus({ baseAttackBonus: bab, dexModifier: abilityMods.GE })
-        : meleeAttackBonus({ baseAttackBonus: bab, strengthModifier: abilityMods.ST }))
+        ? rangedAttackBonus({ baseAttackBonus: bab, dexModifier: abilityMods.GE, otherModifiers: buffTotals.attack })
+        : meleeAttackBonus({ baseAttackBonus: bab, strengthModifier: abilityMods.ST, otherModifiers: buffTotals.attack }))
     : null
 
   return (
@@ -114,6 +115,8 @@ export function CombatTab({ char, setConditions, lang }) {
           ))}
         </div>
       </section>
+
+      <BuffTracker char={char} setActiveBuffs={setActiveBuffs} lang={lang} />
     </div>
   )
 }

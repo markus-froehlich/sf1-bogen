@@ -1,0 +1,119 @@
+.buff-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.buff-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+.buff-row.inactive { opacity: 0.5; }
+
+.buff-toggle {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 1.1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buff-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.buff-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+.buff-mods { font-size: 0.72rem; color: var(--text-muted); }
+
+.buff-del-btn {
+  background: none;
+  border: 1px solid #c96e6e;
+  color: #c96e6e;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.buff-add-btn {
+  align-self: flex-start;
+  background: var(--surface3);
+  border: 1px dashed var(--border);
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.buff-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.buff-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.buff-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+.buff-form-field input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 4px 6px;
+  font-size: 0.85rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.buff-form-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.buff-save-btn, .buff-cancel-btn {
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.buff-save-btn { background: var(--accent); border: none; color: var(--bg); }
+.buff-save-btn:disabled { opacity: 0.4; cursor: default; }
+.buff-cancel-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); }

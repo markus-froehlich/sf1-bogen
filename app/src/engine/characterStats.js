@@ -9,6 +9,7 @@ import armorData from '../data/armor.json'
 import { abilityModifier } from './attributes.js'
 import { totalHitPoints, totalStaminaPoints, totalResolvePoints } from './resources.js'
 import { armorClass } from './combat.js'
+import { computeBuffTotals } from './buffs.js'
 
 export const ABILITY_KEYS = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH']
 
@@ -70,9 +71,11 @@ export function computeCharacterStats(char) {
   const klass = getClass(classEntry.id)
   const level = Math.max(1, Number(classEntry.level) || 1)
 
+  const buffTotals = computeBuffTotals(char.active_buffs)
+
   const abilityMods = {}
   for (const k of ABILITY_KEYS) {
-    abilityMods[k] = abilityModifier(Number(char.attributes?.[k]) || 10)
+    abilityMods[k] = abilityModifier((Number(char.attributes?.[k]) || 10) + buffTotals[k])
   }
 
   const levelRow = findLevelRow(klass, level)
@@ -95,11 +98,13 @@ export function computeCharacterStats(char) {
     armorBonus: armor?.erk_bonus || 0,
     dexModifier: abilityMods.GE,
     maxDexBonus: armor?.max_ge_bonus ?? null,
+    otherModifiers: buffTotals.eac,
   })
   const kac = armorClass({
     armorBonus: armor?.krk_bonus || 0,
     dexModifier: abilityMods.GE,
     maxDexBonus: armor?.max_ge_bonus ?? null,
+    otherModifiers: buffTotals.kac,
   })
 
   return {
@@ -109,9 +114,10 @@ export function computeCharacterStats(char) {
     tp, ap, rp,
     armor, eac, kac,
     bab: levelRow?.bab ?? 0,
-    saveRef: levelRow?.save_ref ?? 0,
-    saveWill: levelRow?.save_will ?? 0,
-    saveZah: levelRow?.save_zah ?? 0,
+    saveRef: (levelRow?.save_ref ?? 0) + buffTotals.saveRef,
+    saveWill: (levelRow?.save_will ?? 0) + buffTotals.saveWill,
+    saveZah: (levelRow?.save_zah ?? 0) + buffTotals.saveZah,
     classAbbr: CLASS_ABBR[classEntry.id] || null,
+    buffTotals,
   }
 }
