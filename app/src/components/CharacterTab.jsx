@@ -3,11 +3,12 @@ import racesData from '../data/races.json'
 import classesData from '../data/classes.json'
 import skillsData from '../data/skills.json'
 import { AttributeBlock } from './AttributeBlock.jsx'
+import { BioSection } from './BioSection.jsx'
 import { computeCharacterStats } from '../engine/characterStats.js'
 import { computeSkillBonus } from '../engine/skills.js'
 import './CharacterTab.css'
 
-export function CharacterTab({ char, setMeta, setClass, setAttr, update, lang }) {
+export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
   const { race, klass, level, abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, classAbbr } = stats
@@ -67,6 +68,12 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, lang })
         </div>
         {race && <p className="char-hint">{race.ability_mods_text} · {race.hp_bonus} TP · {race.size} · {race.creature_type}</p>}
         {klass && <p className="char-hint">{klass.key_ability_note}</p>}
+      </section>
+
+      {/* ── Bio ── */}
+      <section>
+        <h3 className="section-title">{L ? 'Bio' : 'Bio'}</h3>
+        <BioSection char={char} setBio={setBio} lang={lang} />
       </section>
 
       {/* ── Attribute ── */}

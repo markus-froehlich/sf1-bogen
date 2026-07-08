@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 2: Charaktererschaffung, Abschnitt Charaktermotive, S. 28-37",
+    "note": "Per Sub-Agent aus extraction/kapitel2_charaktermotive_raw.txt (S. 29-37) strukturiert; die Sonderregel 'Motivlose Charaktere' (S. 28) wurde separat per pdftotext nachextrahiert und von Hand ergänzt, da sie im ursprünglichen Seitenbereich fehlte."
+  },
+  "motivlose_charaktere": {
+    "description": "Solltest du zu der Ansicht kommen, dass keines der aufgeführten Motive zu deinem Charakterkonzept passt, kannst du auch beschließen, gar kein Motiv zu haben. In diesem Fall erhältst du zu den genannten Stufen die folgenden Vorteile. Ein motivloser Charakter ist deutlich schwächer als ein Charakter mit einem Motiv, daher wähle diese Option mit Sorgfalt.",
+    "stufen_faehigkeiten": [
+      {"min_level": 1, "name": "Allgemeinwissen", "description": "Du erhältst bei Erschaffung eines motivlosen Charakters eine Klassenfertigkeit deiner Wahl. Ferner erhältst du eine Attributsanpassung von +1 auf einen Attributswert deiner Wahl."},
+      {"min_level": 6, "name": "Gewissheit", "description": "Ein Mal am Tag erhältst du vor Ablegen eines Fertigkeitswurfes einen Bonus von +2 auf diesen Wurf."},
+      {"min_level": 12, "name": "Umfangreiche Studien", "description": "Wähle eine deiner Klassenfertigkeiten. Du kannst ein Mal am Tag einen Wurf für diese Fertigkeit wiederholen, ehe du erfährst, ob der erste Wurf ein Erfolg oder Misserfolg ist. Du musst das zweite Ergebnis behalten, selbst wenn es schlechter ausfallen sollte."},
+      {"min_level": 18, "name": "Eiserne Entschlossenheit", "description": "Erhöhe deinen Reservepunktevorrat um 1."}
+    ]
+  },
+  "motives": [
+    {
+      "name": "Berühmtheit",
+      "ability_bonus": "+1 CH",
+      "description": "Dank interstellarer Funkverbindungen und Hyperraumreisen ist die Galaxis kleiner als jemals zuvor - und diese Vernetzung hat deinen Aufstieg zu einer Berühmtheit ermöglicht. Du könntest ein berühmter Künstler oder gefeierter Wissenschaftler sein, wirst aber nur auf den Paktwelten und in mit ihnen assoziierten Systemen erkannt. Möglicherweise bereist du unbekannte Welten, um deinen Ruhm zu verbreiten - oder um ihm zu entkommen.",
+      "fachwissen": {"description": "Wähle eine Berufsfertigkeit. Du verfügst über umfassende Kenntnisse zum Hintergrund dieses Berufs. Wenn du einen Fertigkeitswurf für diese Berufsfertigkeit oder für Kultur ablegst, um dich an Wissen über andere bekannte Angehörige deines Berufsstandes, die Geschichte deines Berufes oder Details zu seinen kulturellen Aspekten zu erinnern, dann senke den SG um 5. Du erhältst einen Bonus von +1 auf Fertigkeitswürfe für deine gewählte Berufsfertigkeit. Kultur ist für dich eine Klassenfertigkeit; sollte es zudem eine Klassenfertigkeit der Klasse sein, die du mit der 1. Charakterstufe wählst, so erhältst du stattdessen einen Bonus von +1 auf deine Fertigkeitswürfe für Kultur. Ferner erhältst du bei der Charaktererschaffung eine Attributsanpassung von +1 auf Charisma."},
+      "stufen_faehigkeiten": [
+        {"min_level": 6, "name": "Berühmt", "description": "Du bist bekannt genug, dass so ziemlich jeder schon von dir gehört hat oder recht schnell Informationen über dich finden kann (Kultur SG 10 um Namen wiederzuerkennen, SG 20 um dich äußerlich zu erkennen). Fans mit Anfangseinstellung Freundlich/Hilfsbereit finden (2W4 Std.), ggf. verbilligte/kostenlose Dienstleistungen."},
+        {"min_level": 12, "name": "Sehr berühmt", "description": "SG auf 5 (kennen) bzw. 10 (erkennen) reduziert; Fan-Suche nur 1W4 Std.; 10% Rabatt beim Erwerb von Gütern durch Fans."},
+        {"min_level": 18, "name": "Unglaublich berühmt", "description": "Bis zu 2x/Tag: 10+ Minuten Interaktion mit der Öffentlichkeit im Rahmen deines Berufes gibt 1 Reservepunkt zurück."}
+      ]
+    },
+    {
+      "name": "Geistlicher",
+      "ability_bonus": "+1 WE",
+      "description": "Du gehörst einer organisierten Religion oder ähnlichen Gruppierung an. Dein Glaube ist ein integraler Bestandteil deines Charakters, egal ob du ihn seit deiner Kindheit besitzt oder erst später zu ihm gefunden haben solltest. Möglicherweise bereist du die Sterne, um zu predigen und zu missionieren, vielleicht befindest du dich auch auf einer heiligen (oder unheiligen) Mission für deine Kirche.",
+      "fachwissen": {"description": "Wähle eine Gottheit oder Philosophie, deren Gesinnung auf der Gut-Böse-Achse oder der Ordnung-Chaos-Achse maximal einen Schritt von der deinen entfernt ist. Reduziere den SG von Fertigkeitswürfen für Kultur und Mystik um 5, wenn du Wissen zu religiösen Traditionen, Symbolen und Anführern abrufst. Mystik ist für dich eine Klassenfertigkeit; sollte es zudem Klassenfertigkeit der 1.-Stufen-Klasse sein, +1 Bonus auf Mystik statt Klassenfertigkeits-Status. +1 Attributsanpassung auf Weisheit."},
+      "stufen_faehigkeiten": [
+        {"min_level": 6, "name": "Kleriker", "description": "Autorität innerhalb deiner Religion. Laien haben Anfangseinstellung Hilfsbereit. +2 auf Diplomatie/Einschüchtern gegen Laien und rangniedere Klerus-Angehörige deiner Religion."},
+        {"min_level": 12, "name": "Göttlicher Segen", "description": "Wähle einen Aspirantenzauber 1. Grades passend zum Bereich deiner Gottheit. Als Aspirant: 1 Zusatzzauber/Tag + zur bekannten Liste hinzugefügt. Sonst: 1x/Tag als Zauberähnliche Fähigkeit."},
+        {"min_level": 18, "name": "Kommunion", "description": "Bis zu 2x/Tag: 10 Minuten Meditation/Gebet nach bedeutsamer glaubensbezogener Handlung gibt 1 Reservepunkt zurück."}
+      ]
+    },
+    {
+      "name": "Gelehrter",
+      "ability_bonus": "+1 IN",
+      "description": "Du bist ein hochgelehrter Intellektueller, der seinen Verstand bei Problemen und Rätseln einsetzt, vor denen andere verzagen. Möglicherweise bist du Lehrer an einer großen Universität oder erkundest die Galaxis auf der Suche nach uralten Artefakten oder neuen wissenschaftlichen Phänomenen.",
+      "fachwissen": {"description": "Wähle Biowissenschaften oder Naturwissenschaften und dann eine Spezialisierung (z.B. Biologie, Xenobiologie, Astronomie, Physik, ...). Reduziere den SG von Fertigkeitswürfen zu deiner Spezialisierung um 5. Gewählte Fertigkeit wird Klassenfertigkeit (bzw. +1 Bonus falls schon Klassenfertigkeit der 1.-Stufen-Klasse). +1 Attributsanpassung auf Intelligenz."},
+      "stufen_faehigkeiten": [
+        {"min_level": 6, "name": "Gründliches Überdenken", "description": "1x/Tag: Wissensabruf-Fertigkeitswurf wiederholen (Entscheidung nach dem Wurf, vor Erhalt der Information; zweites Ergebnis zählt)."},
+        {"min_level": 12, "name": "Erfahrener Forscher", "description": "Nachforschungen (Datenbanken/Bibliotheken) nur 1/4 der normalen Zeit; i.d.R. 20 nehmen für Wissensabruf in 5 Runden möglich."},
+        {"min_level": 18, "name": "Meisterhafter Gelehrter", "description": "Bis zu 2x/Tag: 10 Minuten Nachforschung zu deinem Spezialgebiet gibt zusätzlich 1 Reservepunkt zurück (zählt nicht als AP-Rast)."}
+      ]
+    },
+    {
+      "name": "Gesetzloser",
+      "ability_bonus": "+1 GE",
+      "description": "Aufgrund deines früheren oder gegenwärtigen gesetzlosen Verhaltens wirst du irgendwo in den Regionen der Paktwelten gesucht. Möglicherweise bist du unschuldig und strebst danach, deinen Namen reinzuwaschen, oder du gibst zu, ein Verbrecher zu sein, hältst aber die gebrochenen Gesetze für ungerecht.",
+      "fachwissen": {"description": "Reduziere den SG von Fertigkeitswürfen für Kultur um 5, wenn du Wissen über die kriminelle Unterwelt abrufst. Fingerfertigkeit wird Klassenfertigkeit (bzw. +1 Bonus falls schon Klassenfertigkeit der 1.-Stufen-Klasse). +1 Attributsanpassung auf Geschicklichkeit."},
+      "stufen_faehigkeiten": [
+        {"min_level": 6, "name": "Bestechungskunst", "description": "Unterweltkontakte helfen aus Ärger mit dem Gesetz heraus, Preis 500-10.000 Credits × Charakterstufe je nach Schwere."},
+        {"min_level": 12, "name": "Schwarzmarktkontakte", "description": "Verkauf von Gütern (auch illegal/Luxus) zum üblichen Preis in jeder Stadt; 10% Aufpreis für Lieferung an abgelegenen Abwurfort im selben Sonnensystem."},
+        {"min_level": 18, "name": "Verbrechergenie", "description": "Bis zu 2x/Tag: 1 Reservepunkt zurück nach mind. 10 Minuten Planung + erfolgreicher Ausführung eines bedeutsamen Verbrechens."}
+      ]
+    },
+    {
+      "name": "Kopfgeldjäger",
+      "ability_bonus": "+1 KO",
+      "description": "Du jagst Leute für Geld. Es ist ein gefährlicher Beruf, da die meisten deiner Ziele verständlicherweise nicht gefangen werden wollen. Du könntest einen Kodex besitzen oder moralfrei jeden Job annehmen, wenn der Preis stimmt.",
+      "fachwissen": {"description": "Wähle eine bestimmte intelligente Kreatur als dein Ziel. Senke SG von Beruf(Kopfgeldjäger)/Kultur um 5 für Wissen über dein Ziel bzw. Gesetzeshüter. Nach Besiegen/Aufgeben (Wechsel ohne Sieg: -2 auf alle Fertigkeitswürfe für 1 Woche) neues Ziel wählbar (1 Min. Studium). Überlebenskunst wird Klassenfertigkeit (bzw. +1 Bonus). +1 Attributsanpassung auf Konstitution."},
+      "stufen_faehigkeiten": [
+        {"min_level": 6, "name": "Schneller Jäger", "description": "Diplomatie zum Informationensammeln über ein Individuum in halber Zeit. Malus auf Überlebenskunst zum Spurenlesen bei voller Bewegungsrate auf 0 reduziert."},
+        {"min_level": 12, "name": "Unnachgiebig", "description": "12 statt 8 Std. gehen/aktiv vor Gewaltmarsch-Konstitutionswurf; 2 statt 1 Std. Eilen/Tag bei Überlandreisen. Spurenlesen-Malus bei doppelter Bewegungsrate auf -10."},
+        {"min_level": 18, "name": "Nimrod", "description": "1x/Tag: 10 Min. Informationsstudium während Zieljagd gibt 1 Reservepunkt zurück. Zusätzlich 1x/Tag 1 Reservepunkt nach Besiegen des Ziels."}
+      ]
+    },
+    {
+      "name": "Pilotenass",
+      "ability_bonus": "+1 GE",
+      "description": "Du fühlst dich hinter der Steuerung eines Fahrzeuges am wohlsten, egal ob Raumschiff oder Bodenfahrzeug. Möglicherweise militärische Elite-Ausbildung oder blutiger Amateur mit angeborenem Talent.",
+      "fachwissen": {"description": "Senke SG von Kultur zum Abrufen von Wissen über Raumschiff-/Fahrzeugmodelle, Teile und berühmte Piloten um 5. Steuerung wird Klassenfertigkeit (bzw. +1 Bonus). +1 Attributsanpassung auf Geschicklichkeit."},
+      "stufen_faehigkeiten": [
+        {"min_level": 6, "name": "Einsamer Wolf", "description": "Bei Raumschiffskampf-Fertigkeitswürfen oder Reparatur/Wartung: halbe Steuerungs-Fertigkeitsränge nutzbar für die nötige Fertigkeit, falls das einen höheren Bonus ergibt (gilt als geübt)."},
+        {"min_level": 12, "name": "Rennpilot", "description": "Steuerungsmali beim Fahrzeugsteuern um 1 reduziert. Bei Doppelte-Handlung-Manöver in Fahrzeugverfolgungsjagd erst Konsequenzen bei Misslingen um 10+."},
+        {"min_level": 18, "name": "Meisterpilot", "description": "Bis zu 2x/Tag: 1 Reservepunkt zurück nach Sieg gegen bedeutsamen Gegner im Raumschiffskampf als Pilot oder Gewinn einer Fahrzeugverfolgungsjagd."}
+      ]
+    },
+    {
+      "name": "Raumfahrer",
+      "ability_bonus": "+1 KO",
+      "description": "Deine Sehnsucht, zwischen den Sternen zu reisen, kann nicht befriedigt werden. Du sehnst dich nach dem Abenteuer und willst ferne Welten betreten und ihre Geheimnisse erkunden.",
+      "fachwissen": {"description": "Reduziere SG von Naturwissenschaften-Würfen zum Abrufen von Wissen über neue Welten/Weltraum um 5. Naturwissenschaften wird Klassenfertigkeit (bzw. +1 Bonus). +1 Attributsanpassung auf Konstitution."},
+      "stufen_faehigkeiten": [
+        {"min_level": 6, "name": "Improvisationskünstler", "description": "+2 auf Fertigkeitswürfe für Fertigkeiten ohne investierte Ränge (erlaubt aber keine nur-geübt-Fertigkeiten)."},
+        {"min_level": 12, "name": "Tausendsassa", "description": "Alle Fertigkeiten ungeübt einsetzbar. Bei Natürlicher 20 auf ungeübte Fertigkeit steigt Improvisationskünstler-Bonus auf +4."},
+        {"min_level": 18, "name": "Meisterhafter Entdecker", "description": "Bis zu 2x/Tag: 10 Min. Erkundung/Kartografierung eines neuen geografischen Orientierungspunkts auf unerforschtem Planeten gibt 1 Reservepunkt zurück."}
+      ]
+    },
+    {
+      "name": "Söldner",
+      "ability_bonus": "+1 ST",
+      "description": "Du bist ein Söldling, egal ob du nur Jobs annimmst, die zu deinen moralischen Ansichten passen, oder für jeden kämpfst, der dich bezahlen kann.",
+      "fachwissen": {"description": "Reduziere SG von Beruf(Söldner)/Kultur um 5 für Wissen über militärische Hierarchien/Praktiken. Athletik wird Klassenfertigkeit (bzw. +1 Bonus). +1 Attributsanpassung auf Stärke."},
+      "stufen_faehigkeiten": [
+        {"min_level": 6, "name": "Fußsoldat", "description": "Effektive Stärke für Tragkapazitätsberechnung +1."},
+        {"min_level": 12, "name": "Truppführer", "description": "Automatischer Erfolg bei Jemand-anderem-helfen-Fertigkeitswürfen für Truppangehörige/alte Verbündete."},
+        {"min_level": 18, "name": "Kommandant", "description": "1 Reservepunkt zurück nach 3 Kämpfen gegen unterschiedliche bedeutende Gegnergruppen an einem Tag; 2. Reservepunkt nach 6 Kämpfen."}
+      ]
+    },
+    {
+      "name": "Xenosucher",
+      "ability_bonus": "+1 CH",
+      "description": "Der Gedanke, fremden Lebensformen zu begegnen, begeistert dich. Je mehr sie sich in Aussehen und Gebräuchen von dir unterscheiden, umso besser!",
+      "fachwissen": {"description": "Reduziere SG von Biowissenschaften-Würfen zum Identifizieren einer seltenen Kreatur um 5. Biowissenschaften wird Klassenfertigkeit (bzw. +1 Bonus). +1 Attributsanpassung auf Charisma."},
+      "stufen_faehigkeiten": [
+        {"min_level": 6, "name": "Mit Händen und Füßen", "description": "10 Min. Kommunikationsversuch ohne gemeinsame Sprache + Kultur SG 25 = einfache Mischsprache für diese spezifischen Kreaturen; +2 Kultur für ähnliche Sprachentwicklung bei verwandten Kreaturen."},
+        {"min_level": 12, "name": "Erstkontakt", "description": "Unbekanntes Volk mit normaler Einstellung Unfreundlich wird stattdessen als Gleichgültig behandelt (kein Effekt bei bereits Feindselig/Gleichgültig/Freundlich/Hilfsbereit)."},
+        {"min_level": 18, "name": "Wunderbare Entdeckung", "description": "Bis zu 2x/Tag: 1 Reservepunkt für Entdeckung+Dokumentation einer neuen Tier-/Pflanzenart (10 Min. auf unerforschtem Planeten, bis 1W4 Std. auf bekannten Welten)."}
+      ]
+    }
+  ],
+  "notes": "10 Einträge insgesamt: 9 vollwertige Motive (Berühmtheit, Geistlicher, Gelehrter, Gesetzloser, Kopfgeldjäger, Pilotenass, Raumfahrer, Söldner, Xenosucher) + die Sonderregel 'Motivlose Charaktere' für Charaktere ohne Motiv. Jedes Motiv hat Fachwissen (Stufe 1) sowie Stufenfähigkeiten auf 6./12./18. Alle Texte aus extraction/kapitel2_charaktermotive_raw.txt bzw. einer gezielten Nachextraktion von S. 28 (siehe _meta) - keine Ergänzung aus Trainingswissen."
+}
