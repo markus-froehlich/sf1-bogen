@@ -1,154 +1,174 @@
 # STATUS
 
-_Stand: 2026-07-07_
+_Stand: 2026-07-08_
 
 ## Wo wir stehen
-**Erster durchgehender Charakterbogen-Durchlauf steht.** Volk wählen → Klasse
-wählen → Attribute eintragen → TP/AP/RP, EAC/KAC, Fertigkeiten, Angriffsbonus
-und Zauberliste werden korrekt live berechnet. Alle 7 Kern-Datenkapitel des
-Regelwerks (Völker, Fertigkeiten, Klassen, Ausrüstung/Kampf, Talente, Zauber)
-sind extrahiert und in der App verdrahtet. Nur Raumschiffe (Kapitel 9, bewusst
-zurückgestellt) und einige bewusst zurückgestellte Detail-Unterlisten fehlen
-noch — siehe „Bekannte Lücken" unten.
+**Charakterbogen inhaltlich und funktional vollständig für den in AGENTS.md
+definierten Kernumfang** (alles außer Raumschiffe, Kapitel 9, das bewusst
+zurückgestellt bleibt). Volk wählen → Klasse wählen → Attribute eintragen →
+TP/AP/RP, EAC/KAC, Fertigkeiten, Angriffsbonus, Zauberliste, Talente und
+Buffs werden korrekt live berechnet. Alle Datenkapitel des Regelwerks sind
+extrahiert (inkl. Klassen-Unterwahllisten, volle Zauber- und Talent-
+beschreibungen, Charaktermotive, restliche Kampfmechanik, restliche
+Ausrüstung), und alle in der vorherigen Session-Runde offenen UI-Komfort-
+Funktionen (Punkte 1-11 unten in „Erledigt seit letztem Stand") sind gebaut
+und im Browser-Preview getestet.
 
 ## Entscheidungen (siehe AGENTS.md für Details)
-1. **Eigener Rechenkern**, nicht in `pf1-bogen` integriert — Starfinders
-   Kernmechanik (EAC/KAC, Ausdauer/TP/Reserve, Raumschiffe) ist zu anders.
-2. **Gleiches Grundgerüst** wie `pf1-bogen` (React/Vite/PWA, Charakterverwaltung,
-   Gist-Backup) — spart Zeit, ist spielsystem-neutral.
-3. **Raumschiffe explizit zurückgestellt** — eigene, spätere Phase, kein Teil
-   vom "Charakterbogen fertig"-Ziel.
-4. **PDF-Extraktion statt Excel-Extraktion** — keine Referenz-Zahlen wie bei
-   Pathfinder; Verifikation lief über Buch-eigene Rechenbeispiele (Kapitel 2)
-   und Stichproben-Gegenchecks der Sub-Agenten-Ergebnisse gegen die Rohtexte.
-5. **Große Kapitel per parallelen Sub-Agenten extrahiert**: pro Kapitel/
-   Unterabschnitt erst `pdftotext -layout` in eine Rohtext-Datei
-   (`extraction/kapitel<N>_<name>_raw.txt`, gitignored), dann je ein Agent
-   pro Datei strukturiert daraus JSON — strikt nur aus dem gelieferten
-   Rohtext, mit Anweisung Unsicherheiten explizit zu flaggen statt zu raten.
-   Ergebnisse danach stichprobenhaft von Hand gegen die Rohtexte geprüft.
-6. **Umfangreiche Unterwahl-Listen bewusst nicht vollständig erfasst**
-   (Agententricks, Kampfstile, Sternenoffenbarungen, Magische Hacks,
-   Rüstungsverbesserungen, volle Zauberbeschreibungen, Fahrzeuge, etc.) —
-   das wäre ein Vielfaches des bisherigen Aufwands gewesen. Jede Lücke ist
-   im jeweiligen `_meta`/`notes`-Feld der betroffenen JSON-Datei UND unten
-   in „Bekannte Lücken" dokumentiert, damit nichts still verschwindet.
+1. **Eigener Rechenkern**, nicht in `pf1-bogen` integriert.
+2. **Gleiches Grundgerüst** wie `pf1-bogen` (React/Vite/PWA, Charakterverwaltung, Gist-Backup).
+3. **Raumschiffe explizit zurückgestellt** — einzige verbleibende große Lücke.
+4. **PDF-Extraktion statt Excel-Extraktion** — Verifikation über Buch-eigene Rechenbeispiele und Handnachrechnung statt Excel-Referenzwerten.
+5. **Große Kapitel per parallelen Sub-Agenten extrahiert** (siehe AGENTS.md „PDF-Extraktion").
+6. **Unsichere Extraktions-Stellen sind explizit markiert** (`"unsicher": true` + Kommentar in den JSON-Dateien), nie stillschweigend geraten.
 
 ## Datenstand (`app/src/data/`)
 | Datei | Inhalt | Quelle (Buch) |
 |---|---|---|
-| `races.json` | 7 Völker, Attributsmods, TP, Merkmale, Vitalwerte | Kapitel 3, S. 38-55 |
-| `skills.json` | 20 Fertigkeiten, Schlüsselattribut, Klassenzuordnung | Kapitel 5, S. 130-149 |
+| `races.json` | 7 Völker, Attributsmods, TP, Merkmale | Kapitel 3, S. 38-55 |
+| `skills.json` | 20 Fertigkeiten | Kapitel 5, S. 130-149 |
 | `classes.json` | 7 Klassen, volle 20-Stufen-Tabellen, Merkmale | Kapitel 4, S. 56-129 |
 | `archetypes.json` | Archetypen-Mechanismus + 2 Beispiele | Kapitel 4, S. 126-129 |
+| `class_options.json` | Klassen-Unterwahllisten: Agententricks+Spezialisierungen, Mechanikertricks+Drohnen, Kampfstile+Ausrüstungskniffe (Soldat), Gravitonen/Photonen/Zenit-Offenbarungen (Solarier), Magische Hacks (Technomagier) | Kapitel 4 |
+| `motives.json` | 9 Charaktermotive + Motivlos-Sonderregel, je mit Stufenfähigkeiten 6/12/18 | Kapitel 2, S. 28-37 |
 | `weapons.json` | ~350 Waffen über 13 Tabellen + Glossare | Kapitel 7, S. 168-195 |
-| `armor.json` | 42 leichte + 38 schwere + 5 Servorüstungen | Kapitel 7, S. 196-207 |
-| `conditions.json` | 35 Zustände mit voller Beschreibung | Kapitel 8, S. 273-277 |
+| `armor.json` | 42 leichte + 38 schwere + 5 Servorüstungen + Rüstungsverbesserungen + Kraftfelder | Kapitel 7, S. 196-207 |
+| `equipment_extras.json` | Computer-Regeln, Technische/Magische/Hybride Gegenstände, Fahrzeuge, Andere Erwerbungen | Kapitel 7, S. 213-236 |
 | `equipment_rules.json` | Credits, Gegenstandsstufen-Zugang, Tragkapazität | Kapitel 7, S. 166-167 |
-| `feats.json` | 97 Talente (Tabelle 6-1, Kurzfassung) | Kapitel 6, S. 150-164 |
-| `spells.json` | Zauberregeln + 131/130 Zauber (Aspirant/Technomagier) | Kapitel 10, S. 328-339 |
+| `conditions.json` | 35 Zustände mit voller Beschreibung | Kapitel 8, S. 273-277 |
+| `tactical_rules_extra.json` | Bewegung/Position, Sinneswahrnehmung, Besondere Fähigkeiten, Boni/Mali, Effekte definieren, Fahrzeug-/Verfolgungsjagdregeln | Kapitel 8, S. 256-287 |
+| `feats.json` | 97 Talente (Kurzfassung: Name/Voraussetzungen/Vorteil) | Kapitel 6, S. 150-164 |
+| `feats_full.json` | Dieselben 97 Talente mit vollem Fließtext + Normal-/Speziell-Absätzen | Kapitel 6, S. 150-164 |
+| `spells.json` | Zauberregeln + Kurzlisten je Klasse/Grad (Aspirant/Technomagier) | Kapitel 10, S. 328-339 |
+| `spell_descriptions.json` | 183 vollständige Zauberbeschreibungen (Statblock + Fließtext) | Kapitel 10, S. 340-386 |
 
-Engine-Module (`app/src/engine/`): `attributes.js` (Modifikator, Stufenaufstieg),
-`skills.js` (Fertigkeitsbonus), `resources.js` (TP/AP/RP), `combat.js`
-(EAC/KAC, Angriffswurf, Massiver Schaden), `equipment.js` (Gegenstandsstufen-
-Zugang, Tragkapazität), `characterStats.js` (aggregiert alles zu einem
-Kennwerte-Objekt pro Charakter — zentrale Stelle für alle Tabs).
-
-Alle Engine-Formeln wurden gegen die im Buch selbst vorgerechneten Beispiele
-verifiziert (nicht nur aus dem Fließtext abgeleitet).
+Engine-Module (`app/src/engine/`): `attributes.js`, `skills.js`, `resources.js`
+(TP/AP/RP), `combat.js` (EAC/KAC, Angriffswurf), `equipment.js`,
+`buffs.js` (aggregiert `char.active_buffs` zu Gesamtboni), `characterStats.js`
+(zentrale Aggregation aller Kennwerte inkl. Buff-Einfluss — einzige Stelle,
+die alle Tabs lesen).
 
 ## UI-Stand (`app/src/components/`)
-`App.jsx` hat jetzt echte Tabs statt Platzhalter:
-- **Charakter** (`CharacterTab.jsx`): Volk/Klasse/Stufe wählen, Attribute
-  (Wert bereits inkl. Volksmod, wie im Buch/pf1-bogen üblich), TP/AP/RP mit
-  aktuellem Wert + „voll auffüllen", GAB/Rettungswürfe, 20-Fertigkeiten-
-  Tabelle mit Rang-Eingabe und Live-Bonus, Volksmerkmale und Klassenmerkmale
-  bis zur aktuellen Stufe als Referenztext.
-- **Kampf** (`CombatTab.jsx`): EAC/KAC live (abhängig von angelegter Rüstung
-  + GE-Mod), Angriffsrechner (Waffe wählen → Angriffsbonus/Schaden aus
-  `weapons.json`), Zustände-Toggle-Liste (alle 35 aus `conditions.json`).
-- **Ausrüstung** (`GearTab.jsx`): Credits, Rüstung ausrüsten (setzt EAC/KAC),
-  Waffen/Rüstungen aus dem Katalog ins Inventar, einfache Inventarliste.
-- **Zauber** (`SpellsTab.jsx`): nur für Aspirant/Technomagier — Zauberplätze
-  pro Tag (aus `classes.json`), bekannte Zauber pro Grad antippen/abwählen
-  aus der vollen Zauberliste.
-- **Raumschiff**: bewusst weiterhin Platzhalter (siehe Entscheidung 3).
-- **Notizen**: einfaches Textfeld (ersetzt den alten Platzhalter).
+- **Charakter** (`CharacterTab.jsx`): datengetrieben gerendert (HEADINGS/BODIES-
+  Maps), jeder Abschnitt mit unabhängigem Klapp-Pfeil (▶/▼) UND Verschiebe-
+  Pfeilen (↑/↓) — Reihenfolge/Collapse-Zustand in localStorage
+  (`sf1_char_order`, `sf1_char_collapsed`). Abschnitte: Volk&Klasse, Bio
+  (`BioSection.jsx` — Kampagne/Gesinnung/Gottheit/Aussehen/Hintergrund etc.),
+  Attribute, TP/AP/RP, Kampfwerte, Fertigkeiten, **Talente** (`FeatsTab.jsx`
+  — Budget-Anzeige nach Tabelle 2-4, Autocomplete-Suche, volle Beschreibung
+  aus `feats_full.json`), Volks-/Klassenmerkmale.
+- **Kampf** (`CombatTab.jsx`): EAC/KAC live (inkl. Buff-Einfluss), Angriffs-
+  rechner, 35-Zustände-Toggle-Liste, **Buffs** (`BuffTracker.jsx` — Liste mit
+  Ein/Aus-Toggle ohne Löschen + Formular für 12 Bonusfelder, fließt über
+  `engine/buffs.js` in Attribute/EAC/KAC/Angriffsbonus/Rettungswürfe ein).
+- **Ausrüstung** (`GearTab.jsx`): Credits, Rüstung ausrüsten, Inventar.
+- **Zauber** (`SpellsTab.jsx`): Zauberplätze, bekannte Zauber pro Grad.
+- **Raumschiff**: weiterhin bewusster Platzhalter.
+- **Notizen**: Textfeld.
+- **Druckansicht** (`PrintView.jsx`, über Menü „🖨 Drucken"): weißes A4-Layout,
+  `@media print` blendet App-Shell aus, zeigt alle Kennwerte + Talente +
+  Merkmale + Ausrüstung + Zauber + Notizen kompakt zusammengefasst.
+- **Topbar**: Schriftgrößen-Regler (−Aa+, `fs-s/l/xl`), Sprachumschaltung
+  DE/EN, einklappbar, SP/SL-Profil-Umschalter (getrennte localStorage-Keys
+  über `_gm`-Suffix).
+- **HomebrewPanel**: Formular-Buttons auf Icon-Muster (🗑/✕/✓, 40×40px)
+  umgestellt.
 
-**Getestet:** Build (`npm run build`) grün, manuell im Dev-Server durchgeklickt
-(Vesk/Soldat Stufe 3 → TP 27/AP 21/RP 5/GAB+3/Angriffsbonus+7 — alle Werte von
-Hand gegen die Formeln nachgerechnet, stimmen), sowie mobiles Layout via
-iOS-Preview-Rig (`~/.claude/tools/ios-preview/shoot.js`) in Portrait UND
-Landscape geprüft — kein Overflow, Bottom-Nav bleibt sichtbar.
+**Aufgeräumt:** `ConditionsPanel.jsx`, `ResourcesPanel.jsx`, `InventoryTab.jsx`,
+`XpTracker.jsx` gelöscht (alle vier waren entweder komplett Pathfinder-
+spezifisch/falsch für Starfinder oder redundant zu den neuen Starfinder-
+eigenen Tab-Implementierungen). `BioSection.jsx` war spielsystem-neutral und
+wurde stattdessen eingebaut statt gelöscht.
 
-**Store-Änderung:** `useCharacters.js` `DEFAULT_CHAR` um vier Starfinder-Felder
-ergänzt (`credits`, `equipped`, `resources_current`, `spells_known`) — additiv,
-nichts Bestehendes entfernt. Alte Pathfinder-Felder (`buffs`, `xp`, `domains`,
-`magic_slots` etc.) sind noch im Objekt, werden aber von keinem Starfinder-Tab
-mehr gelesen; Aufräumen wäre ein separater, risikoarmer Schritt.
+**Getestet (jede Session-Runde):** `npm run build` grün, im Browser-Preview
+durchgeklickt (Werte gegen Formeln von Hand nachgerechnet — z.B. Vesk/
+Technomagier Stufe 3: EAC 10→11 nach GE-Buff, Angriffsbonus +6→+7 nach
+Angriffs-Buff, beides nach Deaktivieren zurückgesetzt), mobiles Layout bei
+`fs-xl` auf 375px Breite ohne horizontalen Overflow geprüft.
 
-**`ConditionsPanel.jsx`, `InventoryTab.jsx`, `ResourcesPanel.jsx`** (aus
-pf1-bogen übernommen, Pathfinder-geprägt) werden von den neuen Tabs NICHT
-mehr verwendet — `CombatTab`/`GearTab` haben eigene, schlankere Starfinder-
-Versionen der gleichen Grundidee. Die alten Dateien liegen noch im Repo
-(toter Code), könnten in einem Aufräum-Schritt gelöscht werden.
+## Bekannte Lücken (bewusst zurückgestellt bzw. Extraktionsgrenzen)
+- **Raumschiffe (Kapitel 9)** — eigene, spätere Phase.
+- **Kleinere Lücken innerhalb der Klassen-Unterwahllisten** (`class_options.json`,
+  siehe dortige `notes`-Felder): Agententricks Stufe 20 nicht im Rohtext
+  gefunden; Solarier Stufe 14 hat nur eine Photonen-, keine Gravitonen-
+  Offenbarung gefunden; Technomagier Magische Hacks der Stufen 17/20 fehlen
+  (Rohtext endet vorher); Aspirant Geistschinger/Heiler-Verbindungszauber
+  Grad 6 nicht im Rohtext auffindbar.
+- **Ausrüstung**: einige technische Gegenstände (Bewegungsmelder, Lasermikro-
+  phon, Röntgenblickvisor, Spionagedrohne, Regenerationsbett in
+  `equipment_extras.json`) ohne Preis/Stufe im Rohtext gefunden — als
+  `unsicher` markiert statt geraten.
+- **Kampfmechanik**: Größenkategorien-Tabelle (Winzling–Kolossal mit
+  Reichweiten) wurde gesucht, aber in den extrahierten Rohtexten nicht
+  gefunden (`tactical_rules_extra.json` `notes`) — müsste bei Bedarf gezielt
+  nachrecherchiert werden.
+- **Zauber**: `spell_descriptions.json` hat 183 vollständige Beschreibungen;
+  der alphabetisch erste Zauber vor „Ausbessern" (vermutlich „Auflösung")
+  beginnt vor dem extrahierten Seitenbereich und fehlt komplett.
+- **PWA-Icons** noch die alten Pathfinder-Platzhalter (`public/icons/`).
+- **Homebrew-Kategorien** (classes/races/weapons/armor/shields, aus
+  Pathfinder übernommen) — ob Augmentierungen/Cyberware als eigene Kategorie
+  sinnvoll wären, ist noch offen.
+- **Deutsche Starfinder-SRD-Website** analog `prd.5footstep.de` für
+  Verweislinks — noch nicht geprüft, ob es sowas gibt.
 
-## Bekannte Lücken (bewusst zurückgestellt, nicht vergessen)
-- **Raumschiffe (Kapitel 9)** — eigene, spätere Phase, startet erst wenn die
-  Gruppe tatsächlich Raumschiffkampf spielt.
-- **Umfangreiche Klassen-Unterwahllisten** nicht einzeln erfasst: Agententricks
-  (~35-40), Mechanikertricks, Kampfstile (7×5 Stiltechniken), Sternenoffen-
-  barungen (~40+), Magische Hacks (~25-30), Aspiranten-Verbindungen (7, je
-  mit eigener Zauberliste), Drohnenchassis/-modifikationen/-talente. Nur als
-  Kategorie mit Fundstelle in `classes.json` `notes` vermerkt.
-- **Ausrüstung**: Rüstungsverbesserungen (Tabelle 7-17, ~30 Einträge),
-  Kraftfelder (Tabelle 7-18), Technische/Magische/Hybride Gegenstände,
-  Fahrzeuge, „Andere Erwerbungen" (Kapitel 7, S. 213-236) nicht extrahiert.
-- **Kampfmechanik**: Kampfmodifikationen (Deckung/Flankieren/Tarnung),
-  Fortbewegung/Größenkategorien, Sinneswahrnehmung, Besondere Fähigkeiten,
-  Boni/Mali, Effekte bestimmen, Taktische Fahrzeugregeln (Kapitel 8, restliche
-  Abschnitte) nicht strukturiert — Rohtext liegt in
-  `extraction/kapitel8_kampfgrundlagen_raw.txt` als Nebenfund vor.
-- **Zauber**: nur Zauberlisten (Name + 1-Satz-Kurzbeschreibung) erfasst, NICHT
-  die vollständigen Einzel-Zauberbeschreibungen (Reichweite, Wirkungsdauer,
-  Rettungswurf-SG, S. 340-386, ~46 Seiten). Technomagier-Zauberliste Grad 5
-  eventuell unvollständig (Spaltenzuordnungs-Unsicherheit, siehe
-  `spells.json` `_meta.technomancer_grad5_caveat`).
-- **Talente**: nur Tabellen-Kurzfassung (Name/Voraussetzungen/Vorteil), nicht
-  die ausführlichen Einzelbeschreibungen mit Normal-/Speziell-Abschnitten.
-- **Charaktermotive** (Kapitel 2, S. 28-37) nicht extrahiert — kein Teil der
-  ursprünglichen Schrittliste.
-- **UI-Politur**: kein Fertigkeitsränge-Limit-Hinweis bei Überschreiten, kein
-  Speichern mehrerer Waffen gleichzeitig im Kampf-Tab (nur Ad-hoc-Rechner),
-  keine Talent-Auswahl-UI (Talente werden bisher nirgends im Charakterbogen
-  ausgewählt/angezeigt — `feats.json` existiert, ist aber noch nicht in einen
-  Tab eingebaut). Toter Pathfinder-Code (`ConditionsPanel.jsx` u.a., s.o.)
-  noch nicht aufgeräumt. PWA-Icons noch die alten Pathfinder-Platzhalter.
+## Erledigt seit letztem Stand (diese Session-Runde, 2026-07-07/08)
+Alle 13 in der vorherigen Runde aufgelisteten UI-Komfort-Funktionen sowie
+alle Daten-Extraktionsaufgaben sind jetzt erledigt:
+1.-3., 10. Schriftgrößen-Regler, Sprachumschaltung, Topbar-Einklappen,
+   SP/SL-Profil — ✅ (Commit `b357fea`)
+4.-5. Panel-Umsortierung + unabhängiges Ein-/Ausklappen im Charakter-Tab —
+   ✅ (Commit `af38e56`, nutzt bereits vorhandenen `useSectionOrder`-Hook)
+6. Icon-Buttons-Muster — ✅ im HomebrewPanel umgestellt (Commit `1ddf047`);
+   GearTab/CombatTab nutzten das Muster bereits vorher korrekt.
+7. Tote Komponenten aufgeräumt/eingebaut — ✅ (Commit `e131eba`)
+8. Druckansicht — ✅ (Commit `666acbf`)
+9. Buff-Tracker mit echter Rechenkern-Anbindung — ✅ (Commit `9ab60be`)
+11. Talente-Auswahl-UI — ✅ (Commit `20eeaae`)
+12. PWA-Icons — noch offen, siehe „Bekannte Lücken".
+13. Push — noch offen, siehe unten.
+
+Zusätzlich alle Daten-Erweiterungsaufgaben: Klassen-Unterwahllisten,
+Ausrüstungslücken (Rüstungsverbesserungen/Kraftfelder/Technische-Magische-
+Hybride-Gegenstände/Fahrzeuge/Andere Erwerbungen), restliche Kampfmechanik
+(Kapitel 8 komplett), volle Zauberbeschreibungen (183 Zauber), volle
+Talentbeschreibungen (alle 97), Charaktermotive (9+Motivlos).
 
 ## Offene Fragen (für die nächste Session, nicht vorentschieden)
-- Gibt es eine deutsche Starfinder-SRD-Website analog zu `prd.5footstep.de`
-  für Verweislinks? Noch nicht geprüft.
-- Homebrew-Kategorien (aktuell aus Pathfinder übernommen: classes/races/
-  weapons/armor/shields) — passen die 1:1 für Starfinder oder fehlt was
-  (z.B. Augmentierungen/Cyberware als eigene Homebrew-Kategorie)?
+- Gibt es eine deutsche Starfinder-SRD-Website analog zu `prd.5footstep.de`?
+- Homebrew-Kategorien — passen die 1:1 für Starfinder oder fehlt was?
+- Sollen die in „Bekannte Lücken" genannten kleineren Extraktionslücken
+  (Agent Stufe 20, Solarier Stufe 14, Technomagier 17/20, Größenkategorien-
+  Tabelle, erster Zauber vor „Ausbessern") gezielt nachrecherchiert werden,
+  oder ist der aktuelle Stand für den Spielbetrieb ausreichend?
 
 ## GitHub / Deploy
 - GitHub-Repo existiert bereits: `git@github.com-private:markus-froehlich/sf1-bogen.git`
-  (privater SSH-Alias, siehe AGENTS.md). Alle Commits dieser Session sind
-  lokal, **noch nicht gepusht** (kein Push ohne explizite Nutzerfreigabe).
-- GitHub-Pages-Deploy via Actions (analog `pf1-bogen`) noch nicht eingerichtet.
-- `.claude/launch.json` (Projekt-Root) neu angelegt für den Preview-Dev-Server
+  (privater SSH-Alias, siehe AGENTS.md).
+- **Alle Commits sind weiterhin lokal, noch nicht gepusht** (kein Push ohne
+  explizite Nutzerfreigabe — siehe AGENTS.md „Git / Account-Trennung").
+- GitHub-Pages-Deploy via Actions noch nicht eingerichtet.
+- `.claude/launch.json` (Projekt-Root) für den Preview-Dev-Server vorhanden
   (`npm --prefix app run dev`, Port 5173).
 
 ## Hinweise
 - PDF liegt lokal im Projektordner (`Starfinder_Grundregelwerk_(PDF).pdf`,
-  ~210 MB), ist gitignored, bleibt nur auf diesem Rechner.
-- Alle `extraction/kapitel*_raw.txt`-Dateien sind gitignored, bleiben aber auf
-  der Platte liegen — nützlich, falls eine der „Bekannten Lücken" oben später
-  nachträglich extrahiert werden soll, ohne das PDF erneut aufschneiden zu
-  müssen.
-- **Wichtige Faustregel aus dieser Session:** bei zweispaltigem PDF-Layout
-  sind Tabellen die verlässlichere Quelle für Kennzahlen (Attribute, SG,
-  Boni) als Fließtext-Überschriften — `pdftotext -layout` kann Text aus der
-  falschen Spalte an eine Überschrift der Nachbarspalte anhängen (gefunden
-  bei Fertigkeiten-Kapitel, Athletik-Überschrift).
+  ~210 MB), gitignored.
+- Alle `extraction/kapitel*_raw.txt`-Dateien sind gitignored, bleiben aber
+  auf der Platte — nützlich für gezielte Nachextraktion der oben genannten
+  kleineren Lücken, ohne das PDF erneut aufschneiden zu müssen. Neu in
+  dieser Runde hinzugekommen: `kapitel2_charaktermotive_raw.txt`,
+  `kapitel7_sonstige_ausruestung_raw.txt`, `kapitel8_rest_raw.txt`,
+  `kapitel10_zauberbeschreibungen_raw.txt`.
+- **Faustregel zu zweispaltigem PDF-Layout** (bestätigt sich in dieser
+  Runde mehrfach): Tabellen sind verlässlicher als Fließtext-Überschriften;
+  bei Statblock-Verweiszaubern („funktioniert wie X") können einzelne
+  Header-Felder (Zeitaufwand/Reichweite/etc.) im Rohtext komplett fehlen,
+  weil das Original nur die Delta-Felder zum Basiszauber auflistet — das
+  ist keine Extraktionslücke, sondern Originaltreue.
+- **Testing-Hinweis:** `window.print()` lässt sich im headless Browser-
+  Preview nicht sicher auslösen — ein echter Systemdialog blockiert den
+  Browser-Prozess (in dieser Runde einmal passiert, per Server-Neustart
+  behoben). Bei zukünftigen PrintView-Änderungen die Vorschau visuell
+  prüfen, aber den tatsächlichen `.print-go`-Button im automatisierten
+  Preview nicht anklicken.
