@@ -150,16 +150,22 @@
   padding-top: 4px;
 }
 .hb-save-btn, .hb-cancel-btn, .hb-del-btn {
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-size: 0.75rem;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
 }
 .hb-save-btn   { background: var(--accent); border: none; color: var(--bg); }
 .hb-save-btn:disabled { opacity: 0.4; cursor: default; }
 .hb-cancel-btn { background: var(--surface3); border: 1px solid var(--border); color: var(--text-muted); }
-.hb-del-btn    { background: none; border: 1px solid #c96e6e; color: #c96e6e; margin-right: auto; }
+.hb-del-btn    { background: none; border: 1px solid #c96e6e; color: #c96e6e; margin-right: auto; font-size: 0.95rem; }
 
 /* Item list */
 .hb-list {

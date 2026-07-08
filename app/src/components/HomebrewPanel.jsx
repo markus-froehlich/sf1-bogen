@@ -95,14 +95,14 @@ export function HomebrewPanel({ hb, saveHBItem, deleteHB, onClose, lang }) {
             {type === 'shields'  && <ShieldForm draft={draft} setDraft={setDraft} L={L} />}
             <div className="hb-form-actions">
               {editId !== '__new__' && (
-                <button className="hb-del-btn" onClick={handleDelete}>{L ? 'Löschen' : 'Delete'}</button>
+                <button className="hb-del-btn" onClick={handleDelete} title={L ? 'Löschen' : 'Delete'}>🗑</button>
               )}
-              <button className="hb-cancel-btn" onClick={() => { setEditId(null); setDraft(null) }}>
-                {L ? 'Abbrechen' : 'Cancel'}
+              <button className="hb-cancel-btn" onClick={() => { setEditId(null); setDraft(null) }} title={L ? 'Abbrechen' : 'Cancel'}>
+                ✕
               </button>
               <button className="hb-save-btn" onClick={handleSave}
-                disabled={!draft?.name?.de?.trim()}>
-                {L ? 'Speichern' : 'Save'}
+                disabled={!draft?.name?.de?.trim()} title={L ? 'Speichern' : 'Save'}>
+                ✓
               </button>
             </div>
           </div>
