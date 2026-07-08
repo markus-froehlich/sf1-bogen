@@ -4,11 +4,12 @@ import classesData from '../data/classes.json'
 import skillsData from '../data/skills.json'
 import { AttributeBlock } from './AttributeBlock.jsx'
 import { BioSection } from './BioSection.jsx'
+import { FeatsTab } from './FeatsTab.jsx'
 import { computeCharacterStats } from '../engine/characterStats.js'
 import { computeSkillBonus } from '../engine/skills.js'
 import './CharacterTab.css'
 
-export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, lang }) {
+export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, setFeats, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
   const { race, klass, level, abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, classAbbr } = stats
@@ -155,6 +156,9 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
         </div>
         <p className="attr-note">{L ? '• = Klassenfertigkeit, 🔒 = nur geübt nutzbar (mind. 1 Rang nötig)' : '• = class skill, 🔒 = trained only'}</p>
       </section>
+
+      {/* ── Talente ── */}
+      <FeatsTab char={char} setFeats={setFeats} lang={lang} />
 
       {/* ── Volksmerkmale ── */}
       {race && (

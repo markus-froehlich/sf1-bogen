@@ -49,7 +49,7 @@ export default function App() {
 
   const {
     char, index, activeId, setMeta, update, setAttr, setClass,
-    setInventory, setConditions, setNotes, setBio,
+    setInventory, setConditions, setNotes, setBio, setFeats,
     newChar, switchChar, deleteChar, importChar,
   } = useCharacters(profile)
   const { hb, saveHBItem, deleteHB } = useHomebrew()
@@ -151,7 +151,7 @@ export default function App() {
       </header>
 
       <main className="main-scroll">
-        {tab === 'char'   && <CharacterTab char={char} setMeta={setMeta} setClass={setClass} setAttr={setAttr} update={update} setBio={setBio} lang={lang} />}
+        {tab === 'char'   && <CharacterTab char={char} setMeta={setMeta} setClass={setClass} setAttr={setAttr} update={update} setBio={setBio} setFeats={setFeats} lang={lang} />}
         {tab === 'combat' && <CombatTab char={char} setConditions={setConditions} lang={lang} />}
         {tab === 'gear'   && <GearTab char={char} update={update} setInventory={setInventory} lang={lang} />}
         {tab === 'spells' && <SpellsTab char={char} update={update} lang={lang} />}

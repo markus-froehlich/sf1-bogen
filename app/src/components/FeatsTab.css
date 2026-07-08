@@ -1,0 +1,102 @@
+.feats-tab section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.feats-budget.over { color: #c96e6e; }
+
+.feats-search { position: relative; }
+
+.feats-candidates {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.feats-candidate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 10px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  cursor: pointer;
+}
+.feats-candidate:last-child { border-bottom: none; }
+.feats-candidate:hover { background: var(--surface2); }
+.feats-candidate-name { font-size: 0.85rem; color: var(--text); font-weight: 600; }
+.feats-candidate-prereq { font-size: 0.7rem; color: var(--text-muted); }
+
+.feats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feats-item {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.feats-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.feats-item-name { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+
+.feats-item-del {
+  background: none;
+  border: 1px solid #c96e6e;
+  color: #c96e6e;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.feats-item-prereq {
+  font-size: 0.72rem;
+  color: var(--accent);
+  margin: 0;
+}
+.feats-item-desc {
+  font-size: 0.8rem;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.4;
+}
+.feats-item-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
