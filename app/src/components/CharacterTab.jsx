@@ -1,18 +1,40 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import racesData from '../data/races.json'
 import classesData from '../data/classes.json'
 import skillsData from '../data/skills.json'
 import { AttributeBlock } from './AttributeBlock.jsx'
 import { BioSection } from './BioSection.jsx'
 import { FeatsTab } from './FeatsTab.jsx'
+import { useSectionOrder } from '../store/useSectionOrder.js'
 import { computeCharacterStats } from '../engine/characterStats.js'
 import { computeSkillBonus } from '../engine/skills.js'
 import './CharacterTab.css'
+
+const CHAR_SECTIONS_DEFAULT = ['volk_klasse', 'bio', 'attribute', 'ressourcen', 'kampfwerte', 'fertigkeiten', 'talente', 'volksmerkmale', 'klassenmerkmale']
+
+function useCollapsed(storageKey) {
+  const [collapsed, setCollapsed] = useState(() => {
+    try { return new Set(JSON.parse(localStorage.getItem(storageKey) ?? '[]')) }
+    catch { return new Set() }
+  })
+  function toggle(id) {
+    setCollapsed(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id); else next.add(id)
+      localStorage.setItem(storageKey, JSON.stringify([...next]))
+      return next
+    })
+  }
+  return [collapsed, toggle]
+}
 
 export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, setFeats, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
   const { race, klass, level, abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, classAbbr } = stats
+
+  const [order, moveSection] = useSectionOrder('sf1_char_order', CHAR_SECTIONS_DEFAULT)
+  const [collapsed, toggleCollapsed] = useCollapsed('sf1_char_collapsed')
 
   const classEntry = char.meta?.classes?.[0] || { id: '', level: 1 }
   const current = char.resources_current ?? { tp: null, ap: null, rp: null }
@@ -31,11 +53,21 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
 
   const intMod = abilityMods.IN
 
-  return (
-    <div className="section char-tab">
-      {/* ── Volk & Klasse ── */}
-      <section>
-        <h3 className="section-title">{L ? 'Volk & Klasse' : 'Race & Class'}</h3>
+  const HEADINGS = {
+    volk_klasse: L ? 'Volk & Klasse' : 'Race & Class',
+    bio: L ? 'Bio' : 'Bio',
+    attribute: L ? 'Attribute' : 'Attributes',
+    ressourcen: L ? 'Trefferpunkte, Ausdauer & Reserve' : 'Hit Points, Stamina & Resolve',
+    kampfwerte: L ? 'Kampfwerte' : 'Combat stats',
+    fertigkeiten: L ? 'Fertigkeiten' : 'Skills',
+    talente: L ? 'Talente' : 'Feats',
+    volksmerkmale: L ? 'Volksmerkmale' : 'Racial traits',
+    klassenmerkmale: L ? 'Klassenmerkmale' : 'Class features',
+  }
+
+  const BODIES = {
+    volk_klasse: () => (
+      <>
         <div className="bio-row-2">
           <div className="bio-field">
             <label className="bio-label">{L ? 'Volk' : 'Race'}</label>
@@ -69,17 +101,11 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
         </div>
         {race && <p className="char-hint">{race.ability_mods_text} · {race.hp_bonus} TP · {race.size} · {race.creature_type}</p>}
         {klass && <p className="char-hint">{klass.key_ability_note}</p>}
-      </section>
-
-      {/* ── Bio ── */}
-      <section>
-        <h3 className="section-title">{L ? 'Bio' : 'Bio'}</h3>
-        <BioSection char={char} setBio={setBio} lang={lang} />
-      </section>
-
-      {/* ── Attribute ── */}
-      <section>
-        <h3 className="section-title">{L ? 'Attribute' : 'Attributes'}</h3>
+      </>
+    ),
+    bio: () => <BioSection char={char} setBio={setBio} lang={lang} />,
+    attribute: () => (
+      <>
         <p className="attr-note">{L
           ? 'Trage den fertigen Wert ein (Volksmodifikatoren bereits eingerechnet, siehe races.json).'
           : 'Enter the final score (racial modifiers already included).'}</p>
@@ -99,21 +125,17 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
             />
           ))}
         </div>
-      </section>
-
-      {/* ── Ressourcen: TP/AP/RP ── */}
-      <section>
-        <h3 className="section-title">{L ? 'Trefferpunkte, Ausdauer & Reserve' : 'Hit Points, Stamina & Resolve'}</h3>
-        <div className="sf-resource-row">
-          <ResourceBox label="TP" full={L ? 'Trefferpunkte' : 'Hit Points'} max={tp} current={current.tp} onChange={v => setResourceCurrent('tp', v)} onFill={() => fillResource('tp', tp)} />
-          <ResourceBox label="AP" full={L ? 'Ausdauerpunkte' : 'Stamina Points'} max={ap} current={current.ap} onChange={v => setResourceCurrent('ap', v)} onFill={() => fillResource('ap', ap)} />
-          <ResourceBox label="RP" full={L ? 'Reservepunkte' : 'Resolve Points'} max={rp} current={current.rp} onChange={v => setResourceCurrent('rp', v)} onFill={() => fillResource('rp', rp)} />
-        </div>
-      </section>
-
-      {/* ── Kampfwerte kurz ── */}
-      <section>
-        <h3 className="section-title">{L ? 'Kampfwerte' : 'Combat stats'}</h3>
+      </>
+    ),
+    ressourcen: () => (
+      <div className="sf-resource-row">
+        <ResourceBox label="TP" full={L ? 'Trefferpunkte' : 'Hit Points'} max={tp} current={current.tp} onChange={v => setResourceCurrent('tp', v)} onFill={() => fillResource('tp', tp)} />
+        <ResourceBox label="AP" full={L ? 'Ausdauerpunkte' : 'Stamina Points'} max={ap} current={current.ap} onChange={v => setResourceCurrent('ap', v)} onFill={() => fillResource('ap', ap)} />
+        <ResourceBox label="RP" full={L ? 'Reservepunkte' : 'Resolve Points'} max={rp} current={current.rp} onChange={v => setResourceCurrent('rp', v)} onFill={() => fillResource('rp', rp)} />
+      </div>
+    ),
+    kampfwerte: () => (
+      <>
         <div className="sf-stat-row">
           <StatBox label={L ? 'GAB' : 'BAB'} value={bab >= 0 ? `+${bab}` : bab} />
           <StatBox label={L ? 'Reflex' : 'Reflex'} value={saveRef >= 0 ? `+${saveRef}` : saveRef} />
@@ -121,11 +143,10 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
           <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={saveZah >= 0 ? `+${saveZah}` : saveZah} />
         </div>
         <p className="char-hint">{L ? 'EAC/KAC und Waffen siehe Tab „Kampf".' : 'See "Combat" tab for EAC/KAC and weapons.'}</p>
-      </section>
-
-      {/* ── Fertigkeiten ── */}
-      <section>
-        <h3 className="section-title">{L ? 'Fertigkeiten' : 'Skills'}</h3>
+      </>
+    ),
+    fertigkeiten: () => (
+      <>
         <p className="attr-note">
           {L ? `Fertigkeitsränge pro Stufe: ${klass?.skill_ranks_per_level_formula || '—'} (IN-Mod ${intMod >= 0 ? '+' + intMod : intMod})`
              : `Skill ranks per level: ${klass?.skill_ranks_per_level_formula || '—'}`}
@@ -155,41 +176,62 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
           })}
         </div>
         <p className="attr-note">{L ? '• = Klassenfertigkeit, 🔒 = nur geübt nutzbar (mind. 1 Rang nötig)' : '• = class skill, 🔒 = trained only'}</p>
-      </section>
-
-      {/* ── Talente ── */}
-      <FeatsTab char={char} setFeats={setFeats} lang={lang} />
-
-      {/* ── Volksmerkmale ── */}
-      {race && (
-        <section>
-          <h3 className="section-title">{L ? 'Volksmerkmale' : 'Racial traits'}</h3>
-          <div className="feature-list">
-            {race.traits.map(t => (
-              <div key={t.name} className="feature-item">
-                <span className="feature-name">{t.name}</span>
-                <p className="feature-desc">{t.description}</p>
-              </div>
-            ))}
+      </>
+    ),
+    talente: () => <FeatsTab char={char} setFeats={setFeats} lang={lang} />,
+    volksmerkmale: () => race && (
+      <div className="feature-list">
+        {race.traits.map(t => (
+          <div key={t.name} className="feature-item">
+            <span className="feature-name">{t.name}</span>
+            <p className="feature-desc">{t.description}</p>
           </div>
-        </section>
-      )}
+        ))}
+      </div>
+    ),
+    klassenmerkmale: () => klass && (
+      <>
+        <div className="feature-list">
+          {klass.features.filter(f => f.level_gained <= level).map(f => (
+            <div key={f.name} className="feature-item">
+              <span className="feature-name">{f.name} <span className="feature-level">({L ? 'Stufe' : 'Level'} {f.level_gained})</span></span>
+              <p className="feature-desc">{f.description}</p>
+            </div>
+          ))}
+        </div>
+        {klass.notes && <p className="char-hint">{klass.notes}</p>}
+      </>
+    ),
+  }
 
-      {/* ── Klassenmerkmale bis aktuelle Stufe ── */}
-      {klass && (
-        <section>
-          <h3 className="section-title">{L ? 'Klassenmerkmale' : 'Class features'}</h3>
-          <div className="feature-list">
-            {klass.features.filter(f => f.level_gained <= level).map(f => (
-              <div key={f.name} className="feature-item">
-                <span className="feature-name">{f.name} <span className="feature-level">({L ? 'Stufe' : 'Level'} {f.level_gained})</span></span>
-                <p className="feature-desc">{f.description}</p>
+  // Abschnitte, die ohne Volk/Klasse nichts anzuzeigen hätten, werden übersprungen
+  const visibleOrder = order.filter(id => {
+    if (id === 'volksmerkmale') return !!race
+    if (id === 'klassenmerkmale') return !!klass
+    return true
+  })
+
+  return (
+    <div className="section char-tab">
+      {visibleOrder.map((id, idx) => {
+        const isCollapsed = collapsed.has(id)
+        const Body = BODIES[id]
+        return (
+          <section key={id}>
+            <div className="ct-heading-row">
+              <button className="ct-collapse-btn" onClick={() => toggleCollapsed(id)} title={isCollapsed ? (L ? 'Aufklappen' : 'Expand') : (L ? 'Zuklappen' : 'Collapse')}>
+                {isCollapsed ? '▶' : '▼'}
+              </button>
+              <h3 className="section-title ct-heading-clk" onClick={() => toggleCollapsed(id)}>{HEADINGS[id]}</h3>
+              <div className="ct-move-btns">
+                <button className="ct-move-btn" disabled={idx === 0} onClick={() => moveSection(id, -1)} title={L ? 'Nach oben' : 'Move up'}>↑</button>
+                <button className="ct-move-btn" disabled={idx === visibleOrder.length - 1} onClick={() => moveSection(id, 1)} title={L ? 'Nach unten' : 'Move down'}>↓</button>
               </div>
-            ))}
-          </div>
-          {klass.notes && <p className="char-hint">{klass.notes}</p>}
-        </section>
-      )}
+            </div>
+            {!isCollapsed && <div className="ct-body"><Body /></div>}
+          </section>
+        )
+      })}
     </div>
   )
 }

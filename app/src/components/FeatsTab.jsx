@@ -38,8 +38,7 @@ export function FeatsTab({ char, setFeats, lang }) {
   }
 
   return (
-    <section className="feats-tab">
-      <h3 className="section-title">{L ? 'Talente' : 'Feats'}</h3>
+    <div className="feats-tab">
         <p className={`char-hint feats-budget ${remaining < 0 ? 'over' : ''}`}>
           {L
             ? `${chosen.length} von ${budget} gewählt (1 Talent pro ungerader Stufe, siehe Tabelle 2-4)`
@@ -86,6 +85,6 @@ export function FeatsTab({ char, setFeats, lang }) {
             )
           })}
         </div>
-    </section>
+    </div>
   )
 }

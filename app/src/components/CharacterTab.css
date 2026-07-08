@@ -8,6 +8,52 @@
   padding: 12px;
 }
 
+/* ── Abschnitts-Kopfzeile: Klapp-Pfeil + Titel + Verschiebe-Pfeile ── */
+.ct-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ct-collapse-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.ct-heading-clk {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+.ct-move-btns {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.ct-move-btn {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ct-move-btn:disabled { opacity: 0.3; cursor: default; }
+.ct-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .char-hint {
   font-size: 0.7rem;
   color: var(--text-muted);
