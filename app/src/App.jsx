@@ -5,6 +5,7 @@ import { useGistSync } from './store/useGistSync.js'
 import { CharacterDrawer } from './components/CharacterDrawer.jsx'
 import { GistSyncPanel } from './components/GistSyncPanel.jsx'
 import { HomebrewPanel } from './components/HomebrewPanel.jsx'
+import { PrintView } from './components/PrintView.jsx'
 import { CharacterTab } from './components/CharacterTab.jsx'
 import { CombatTab } from './components/CombatTab.jsx'
 import { GearTab } from './components/GearTab.jsx'
@@ -43,6 +44,7 @@ export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [hbOpen, setHbOpen] = useState(false)
   const [gistOpen, setGistOpen] = useState(false)
+  const [printOpen, setPrintOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [topbarCollapsed, setTopbarCollapsed] = useState(() =>
     localStorage.getItem('sf1_topbar_collapsed') === '1')
@@ -146,6 +148,7 @@ export default function App() {
             </label>
             <button onClick={() => { setHbOpen(true); setMenuOpen(false) }}>⚙ Homebrew</button>
             <button onClick={() => { setGistOpen(true); setMenuOpen(false) }}>☁ Backup</button>
+            <button className="app-menu-print-btn" onClick={() => { setPrintOpen(true); setMenuOpen(false) }}>🖨 {lang === 'de' ? 'Drucken' : 'Print'}</button>
           </div>
         )}
       </header>
@@ -187,6 +190,7 @@ export default function App() {
         />
       )}
       {hbOpen && <HomebrewPanel hb={hb} saveHBItem={saveHBItem} deleteHB={deleteHB} onClose={() => setHbOpen(false)} lang={lang} />}
+      {printOpen && <PrintView char={char} lang={lang} onClose={() => setPrintOpen(false)} />}
       {gistOpen && (
         <GistSyncPanel
           gistSync={gistSync}

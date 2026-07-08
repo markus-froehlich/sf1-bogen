@@ -1,0 +1,95 @@
+.print-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #3a3a3a;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.print-toolbar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--surface2, #1c1c1c);
+  color: var(--text, #eee);
+  border-bottom: 1px solid var(--border, #444);
+}
+.print-toolbar-actions { display: flex; gap: 8px; }
+.print-btn {
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.print-go { width: auto; padding: 0 14px; background: var(--accent, #c9a96e); border: none; color: #1c1c1c; font-weight: 700; gap: 6px; }
+.print-close { background: var(--surface3, #2a2a2a); border: 1px solid var(--border, #444); color: var(--text-muted, #aaa); }
+
+.print-page {
+  width: 210mm;
+  max-width: 100%;
+  min-height: 297mm;
+  background: #fff;
+  color: #111;
+  margin: 16px 0 40px;
+  padding: 14mm;
+  box-sizing: border-box;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.pp-header h1 { margin: 0 0 4px; font-size: 1.6rem; }
+.pp-subline { margin: 0 0 12px; color: #444; font-size: 0.9rem; }
+
+.pp-section { margin-bottom: 14px; page-break-inside: avoid; }
+.pp-section h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #999;
+  margin: 0 0 6px;
+  padding-bottom: 2px;
+  color: #333;
+}
+
+.pp-attr-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.pp-attr-box { display: flex; flex-direction: column; align-items: center; border: 1px solid #ccc; border-radius: 6px; padding: 4px; }
+.pp-attr-key { font-size: 0.65rem; font-weight: 700; color: #555; }
+.pp-attr-score { font-size: 1rem; font-weight: 700; }
+.pp-attr-mod { font-size: 0.75rem; color: #555; }
+
+.pp-stat-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.pp-stat-box { display: flex; flex-direction: column; align-items: center; border: 1px solid #ccc; border-radius: 6px; padding: 4px 10px; min-width: 48px; }
+.pp-stat-label { font-size: 0.65rem; font-weight: 700; color: #555; }
+.pp-stat-value { font-size: 1rem; font-weight: 700; }
+
+.pp-skill-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 16px; font-size: 0.78rem; }
+.pp-skill-row { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; border-bottom: 1px dotted #ddd; padding: 1px 0; }
+
+@media screen and (max-width: 480px) {
+  .print-page { padding: 5mm; }
+  .pp-attr-row { grid-template-columns: repeat(3, 1fr); }
+  .pp-skill-grid { grid-template-columns: 1fr; }
+}
+
+.pp-list { margin: 0; padding-left: 18px; font-size: 0.8rem; }
+.pp-feature, .pp-note { font-size: 0.78rem; margin: 0 0 4px; line-height: 1.35; }
+.pp-notes-text { white-space: pre-wrap; }
+.pp-empty { font-size: 0.78rem; color: #888; margin: 0; }
+
+@media print {
+  .print-toolbar { display: none; }
+  .print-overlay { position: static; background: none; overflow: visible; display: block; }
+  .print-page { box-shadow: none; margin: 0; width: auto; min-height: 0; }
+  .app-shell { display: none !important; }
+}
