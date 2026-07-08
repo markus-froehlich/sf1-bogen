@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 8: Taktische Regeln, restliche Abschnitte (Bewegung/Position-Fortsetzung, Präzise Sinne, Besondere Fähigkeiten, Boni/Mali, Effekte definieren, Fahrzeugregeln), S. 256-287",
+    "note": "Per Sub-Agent aus extraction/kapitel8_rest_raw.txt strukturiert. Zustände-Tabelle bewusst NICHT erneut erfasst (bereits in conditions.json). Größenkategorien-Tabelle wurde GESUCHT, existiert aber nicht in dieser Rohtext-Datei (nur 2 beiläufige Fließtext-Erwähnungen im Fahrzeugkontext) - liegt vermutlich in den bereits erfassten Grundlagen-Abschnitten (S. 236-256), dort bei Bedarf nachschlagen."
+  },
+  "bewegung_und_position": "Diagonale Bewegung: erste diagonale Bewegung kostet normal, jede zweite kostet doppelt. Hindurchzwängen: durch Bereich mind. halb so breit wie eigene Angriffsfläche möglich, halbe Bewegungsrate, wie Zustand Verstrickt behandelt. Verdoppelte Bewegungskosten: 1 Feld Schwieriges Gelände = 2 Felder (diagonal 3); Sehr Schwieriges Gelände (doppelt verdoppelt) = 4 Felder (diagonal 6). Minimale Fortbewegung: trotz jeglicher Mali immer mind. 1,50 m mit Voller Aktion möglich (kein Vorsichtiger Schritt, provoziert normal Gelegenheitsangriffe). Rennen: Anzahl Runden = KO-Wert, danach Konstitutionswurf SG 10+1 pro bisherigem Wurf, bei Misslingen Zwangspause 1 Minute. Überlandfortbewegung: 1 Tag = 8h zu Fuß/Reittier, kleine Fahrzeuge ~10h/Tag, große mit Schichtbetrieb 24h/Tag. Eilen: 1h/Tag ohne Folgen, jede weitere Stunde verdoppelnder Nichttödlicher Schaden + Zustand Erschöpft. Gewaltmarsch: pro Std. über 8h/Tag Konstitutionswurf SG 10+2 pro Zusatzstunde, Misslingen = 1W6 Nichttödlicher Schaden + Erschöpft. Flucht/Verfolgung: bei gleicher Bewegungsrate konkurrierende GE-Würfe (taktisch) bzw. KO-Würfe (überland).",
+  "bewegungsrate_tabelle": [
+    {"basis_bewegungsrate": "6 m", "1_runde_gehen": "6 m", "1_runde_eilen": "12 m", "1_runde_rennen": "24 m", "1_minute_gehen": "60 m", "1_minute_eilen": "120 m", "1_minute_rennen": "240 m", "1_tag_gehen_km": "24 km"},
+    {"basis_bewegungsrate": "9 m", "1_runde_gehen": "9 m", "1_runde_eilen": "18 m", "1_runde_rennen": "36 m", "1_minute_gehen": "90 m", "1_minute_eilen": "180 m", "1_minute_rennen": "360 m", "1_tag_gehen_km": "36 km"},
+    {"basis_bewegungsrate": "12 m", "1_runde_gehen": "12 m", "1_runde_eilen": "24 m", "1_runde_rennen": "48 m", "1_minute_gehen": "120 m", "1_minute_eilen": "240 m", "1_minute_rennen": "480 m", "1_tag_gehen_km": "48 km"}
+  ],
+  "gelaende_multiplikator_tabelle": [
+    {"gelaende": "Wüste (alle Temperaturen)", "ausgebaute_strasse": "×1", "strasse_oder_pfad": "×1/2", "weglos": "×1/2"},
+    {"gelaende": "Wald (typisch)", "ausgebaute_strasse": "×1", "strasse_oder_pfad": "×1", "weglos": "×1/2"},
+    {"gelaende": "Wald (dicht)", "ausgebaute_strasse": "×1", "strasse_oder_pfad": "×3/4", "weglos": "×1/4"},
+    {"gelaende": "Hügel", "ausgebaute_strasse": "×1", "strasse_oder_pfad": "×3/4", "weglos": "×1/2"},
+    {"gelaende": "Moor/Sumpf", "ausgebaute_strasse": "×1", "strasse_oder_pfad": "×3/4", "weglos": "×1/2"},
+    {"gelaende": "Berge", "ausgebaute_strasse": "×3/4", "strasse_oder_pfad": "×3/4", "weglos": "×1/2"},
+    {"gelaende": "Ebene", "ausgebaute_strasse": "×1", "strasse_oder_pfad": "×1", "weglos": "×3/4"},
+    {"gelaende": "Stadt", "ausgebaute_strasse": "×3/4", "strasse_oder_pfad": "×1/2", "weglos": "×1/2"}
+  ],
+  "praezise_sinne": "Präzise Sinne (meist nur Sicht) erlauben detailreiche Wahrnehmung; nichtvisuelle präzise Sinne heißen kollektiv 'Blindsicht'. Unpräzise Sinne (kollektiv 'Blindgespür') erlauben nur eingeschränkte Wahrnehmung. Vier Zustände der Umgebungswahrnehmung: (1) Ahnungslos - keine Kenntnis, kein Direktangriff; (2) Von der Anwesenheit wissend - weiß dass da, nicht wo; (3) Um den Aufenthaltsort wissend - kennt Position, aber kein präziser Sinn beobachtet; (4) Beobachtend - nimmt direkt mit präzisem Sinn wahr, kann normal angreifen. Eine 'Ungesehene' Kreatur hat +40 Heimlichkeit bei Bewegungslosigkeit (+20 bei Bewegung, entfällt gegen Blindgespür), Vollständige Tarnung (50% Fehlschlagchance), Angreifer ist Auf dem Falschen Fuß. Lichtstufen: Helles Licht (volle Sicht), Normales Licht (wie hell, schwächer), Dämmerlicht (Umrisse erkennbar, ohne Dämmersicht/Dunkelsicht/Blindsicht: Tarnung/20% Fehlschlagchance für Betrachter), Dunkelheit (ohne Dunkelsicht effektiv Zustand Blind).",
+  "besondere_faehigkeiten": [
+    {"name": "Außergewöhnliche Fähigkeit (AF)", "description": "Nicht magisch, nicht störbar/bannbar, funktioniert bei unterdrückter Magie normal. SG i.d.R. 10 + halbe Stufe + Attributsmod."},
+    {"name": "Übernatürliche Fähigkeit (ÜF)", "description": "Magisch, aber nicht im Kampf unterbrechbar, unterliegt nicht Zauberresistenz/Magie bannen, funktioniert nicht bei unterdrückter Magie. SG i.d.R. 10 + halbe Stufe + Attributsmod."},
+    {"name": "Zauberähnliche Fähigkeit (ZF)", "description": "Wie ein Zauber, unterliegt Zauberresistenz/Magie bannen, provoziert Gelegenheitsangriffe wie Zauberwirken. SG i.d.R. 10 + Zaubergrad + CH-Mod."},
+    {"name": "Tägliche Anwendungen zurückerlangen", "description": "24h seit letzter Zurückgewinnung + 8h ununterbrochene Ruhe nötig (Unterbrechung verlängert um 1h/Unterbrechung). Zauberkundige zusätzlich 15 Min. Konzentration danach."},
+    {"name": "Blindgespür", "description": "Unpräziser, nichtvisueller Sinn mit Reichweite. Hebt Heimlichkeitsboni ungesehener Kreaturen auf, diese behalten aber Vollständige Tarnung; Nutzer bleibt Auf dem Falschen Fuß gegen ungesehene Angreifer."},
+    {"name": "Blindsicht", "description": "Präzise, nichtvisuelle Wahrnehmung (Gedanken/Gehör/Geruch etc.), Reichweite. Hebt Magische Dunkelheit/Standort vortäuschen/Tarnung/Unsichtbarkeit auf, keine ätherische Wahrnehmung, immun gegen Blind/Blickangriffe, keine Farb-/Schrifterkennung."},
+    {"name": "Dämmersicht", "description": "Sehen bei Dämmerlicht so gut wie bei normalem Licht."},
+    {"name": "Dunkelsicht", "description": "Sehen ohne Lichtquelle in Reichweite, nur schwarz-weiß, kein Sehen von Unsichtbarem, weiter anfällig für Blickangriffe."},
+    {"name": "Energieresistenz", "description": "Ignoriert Schaden einer Energieart pro Angriff. Bei gemischtem Schaden nur Energieanteil betroffen. Mehrere Quellen i.d.R. nicht kumulativ."},
+    {"name": "Hindurchspüren", "description": "Wahrnehmung jenseits von Hindernissen, ergänzt vorhandene Sinne. Sicht-Variante = Dunkelsicht 18 m. Blockiert durch Kraftfelder/dichte Materialien (3m Holz, 1,5m Stein, 0,3m Metall, 0,15m Blei)."},
+    {"name": "Körperlos", "description": "Immun gegen nichtmagische kinetische Angriffe, halber Schaden von Energie/magisch-kinetisch. Immun gegen Kritische Treffer. Angriffe zielen auf ERK. Keine physischen Handlungen/Kampfmanöver möglich/erleidbar. Durchquert feste Gegenstände (nicht Zentren größerer Objekte). Kein Fallschaden/Gewicht, löst keine Fallen aus."},
+    {"name": "Schadensreduzierung (SR)", "description": "Ignoriert Menge Hieb-/Stich-/Wuchtschaden pro Angriff. Nicht gegen Energieschaden. Angabe z.B. 'SR 5/Kaltes Eisen', 'SR 5/-' = gegen alle kinetischen Waffen. Mehrere Quellen i.d.R. nicht kumulativ."},
+    {"name": "Telepathie", "description": "Mentale Kommunikation mit sprachbegabter Kreatur in Reichweite (Standard 30 m)."},
+    {"name": "Eingeschränkte Telepathie", "description": "Wie Telepathie, aber beide Parteien müssen dieselbe Sprache beherrschen."},
+    {"name": "Unsichtbar", "description": "Nicht mittels Sicht wahrnehmbar. Blindsicht nimmt normal wahr. Bleibt hör-/riech-/fühlbar. Aufspüren = normaler Wahrnehmungswurf (nur Anwesenheit, nicht Position). Licht wird nie unsichtbar."},
+    {"name": "Zauberresistenz (ZR)", "description": "RK gegen Magie: Wirker würfelt 1W20+Zauberstufe gegen SG=ZR, bei Misserfolg wirkt Zauber nicht. Automatisch, keine Aktion. Nie gegen eigene Effekte. Als Standard-Aktion freiwillig senkbar."}
+  ],
+  "boni_und_mali": "Boni verschiedener Kategorien sind kumulativ (addiert); Boni derselben Kategorie i.d.R. NICHT kumulativ (höchster zählt), Ausnahme Situationsboni (untereinander kumulativ außer gleiche Quelle). Kategorielose Boni mit allem kumulativ. Kategorien: Attributsbonus, Glücksbonus, Göttlicher Bonus, Grundbonus (GAB/Rettungswürfe nach Klasse+Stufe, bei Multiklasse addiert), Moralbonus (wirkungslos bei INT 0/'-'), Rüstungsbonus (untereinander nicht kumulativ), Situationsbonus, Verbesserungsbonus, Verständnisbonus, Volksbonus (geht bei Volkswechsel verloren). Mali haben KEINE Kategorien; mehrere Anwendungen desselben Malus i.d.R. nicht kumulativ (höchster greift), SL entscheidet bei Quellenfrage.",
+  "effekte_definieren": {
+    "kategorien_mit_regel": [
+      {"name": "Ausspähung", "description": "Unsichtbarer magischer Sensor mit eigener Wahrnehmung, bemerkbar durch Wahrnehmung SG 20+Grad, blockierbar durch Blei/Kraftfelder."},
+      {"name": "Bezauberung", "description": "Ziel wird 'Freund', behält freien Willen/Gesinnung, gehorcht nicht selbstschädigenden Befehlen, endet bei offenem Angriff."},
+      {"name": "Erschaffung", "description": "Manipuliert Materie; bei Wirkungsdauer≠Augenblicklich verschwindet Schöpfung am Ende, bei Augenblicklich bleibt sie dauerhaft."},
+      {"name": "Geistesbeeinflussend", "description": "Wirkt nur bei INT 1+."},
+      {"name": "Herbeirufung", "description": "Holt Kreatur von anderer Ebene, einmalige Rückkehr möglich, herbeigerufene Kreaturen sterben normal, nicht bannbar."},
+      {"name": "Herbeizauberung", "description": "Bringt Kreatur/Gegenstand augenblicklich an Ort, kehrt bei Ablauf zurück; bei Tod/0 TP verschwindet sie (stirbt nicht wirklich), 24h zur Neubildung."},
+      {"name": "Schatten", "description": "Teilweise real, verursachter Schaden ist real."},
+      {"name": "Schmerz", "description": "Keine dauerhaften Schäden, Immunität wie bei Zähigkeitswurf-Immunität."},
+      {"name": "Sinnesabhängig", "description": "Braucht Sicht-/Hörkontakt in beide Richtungen."},
+      {"name": "Sprachabhängig", "description": "Verständliche Sprache nötig (hörbar/sichtbar/telepathisch)."},
+      {"name": "Teleportation", "description": "Zeitverlustfreie Reise über Astralebene, blockierbar wie Astralreisen."},
+      {"name": "Zwang", "description": "Unterdrückt freien Willen des Ziels."}
+    ],
+    "kategorien_ohne_eigene_beschreibung_im_rohtext": ["Böse", "Chaotisch", "Dunkelheit", "Elektrizität", "Energie", "Erde", "Feuer", "Fluch", "Furcht", "Gefühl", "Gift", "Gut", "Heilung", "Kälte", "Krankheit", "Licht", "Luft", "Rechtschaffen", "Säure", "Schall", "Strahlung", "Tod", "Wasser"],
+    "reichweite": {
+      "Persönlich": "nur Anwender",
+      "Berührung": "Nahkampfangriff bei Unwilligkeit gegen ERK, bis zu 6 Ziele berührbar als Teil der Aktivierung",
+      "Nah": "7,50 m + 1,50 m/2 Stufen",
+      "Mittel": "30 m + 3 m/Stufe",
+      "Lang": "120 m + 12 m/Stufe",
+      "Planetenweit": "jeder Punkt auf demselben Planeten inkl. Orbit",
+      "Systemweit": "jeder Punkt im Sonnensystem",
+      "Ebene": "jeder Punkt auf derselben Existenzebene",
+      "Unbegrenzt": "überall, auch andere Ebenen"
+    },
+    "schusslinie_sichtlinie": "Schusslinie: gerade unversperrte Strecke, blockiert durch feste Barrieren, NICHT durch reine Sichthindernisse (Rauch/Dunkelheit). Sichtlinie: ähnlich, aber blockierbar durch Sicht-Einschränkungen (Dunkelheit, Nebel, Vollständige Tarnung).",
+    "wirkungsbereich_formen": "Ausbreitung (reicht um Ecken, deckt ungesehene Bereiche ab), Ausstrahlung (hält für Wirkungsdauer an, meist Kegel/Kugel), Explosion (wirkt auf alles inkl. unsichtbare Kreaturen, nicht bei Vollständiger Deckung, reicht nicht um Ecken), Kegel/Kugel/Linie/Zylinder (geometrische Grundformen), Formbar (F) = Form frei wählbar (Mindestgröße 3 m).",
+    "wirkungsdauer_typen": "Aufhebbar (A) = als Standard-Aktion aufhebbar bei Reichweite+Konzentration; Augenblicklich = beginnt/endet sofort; Begrenzte Wirkungsdauer = Runden/Minuten/Stunden/Tage; Konzentration = hält an solange konzentriert (Standard-Aktion/Runde), oft +1 Runde/Stufe Resteffekt nach Abbruch; Permanent = bis aufgehoben."
+  },
+  "fahrzeugregeln": {
+    "grundlagen": "Fahrzeuge sind Gegenstände ohne eigene Aktionen, brauchen Lenker/Autopilot. Ausrichtung: müssen mit einer Seite zeigen, nicht Ecke; Vollgas/unkontrolliert = gerade Linie (max. 45° Abweichung), 'Fahren' erlaubt Richtungswechsel. Bewegungsaktionen: Besteigen/Verlassen, Starten, Lenken (Bewegungsrate, provoziert Gelegenheitsangriffe). Volle Aktionen: Vollgas geben (Steuerung SG 10+Gegenstandsstufe, aus Stand +5; Misslingen: Abwürgen oder Kursabweichung je nach Gelände; danach 4 Optionen im Folgezug; +2 RK während Vollgas, provoziert Gelegenheitsangriffe), Rammen (Volle Aktion, Höchstgeschwindigkeit geradeaus, doppelter Kollisionsschaden ans Ziel/halber an sich; Ziel-Reflexwurf bzw. Steuerungswettstreit), Überfahren (max. doppelte Bewegungsrate, nur 2+ Größenkategorien kleinere Kreaturen, Wuchtschaden=Kollisionsschaden, Reflex halbiert, Fahrzeug erleidet halben Schaden pro Kreatur). Nothalt: Bewegungsaktion, Steuerungswurf reduziert Restweg um Ergebnis/5 Felder. Schnelle Aktionen: Autokontrolle/Autopilot umschalten, Kontrolle abgeben. Unkontrollierte Fahrzeuge: bewegen sich geradeaus weiter, werden pro Handlung langsamer (~-1/4 Bewegungsrate); bei Kollision doppelter Schaden für beide Parteien. Autokontrolle: schwächer als Autopilot, bewegt sich geradeaus mit letztem Steuerungsergebnis. Autopilot: KI steuert wie ein Lenker (vorsichtig, außer als Kriegsmaschine programmiert), gilt als kontrolliert. Fahrzeugwaffen: wie Fernkampfwaffe mit Fahrzeug-Malus (höherer Malus bei Höchstgeschwindigkeit), nicht kombinierbar mit Vollgas im selben Zug.",
+    "verfolgungsjagd_mechanik": "Zonen-System statt Raster für Hochgeschwindigkeitsverfolgungen. Fahrzeuge in derselben Zone = 15 m Abstand (aufgeschlossen = 0 m); Nachbarzonen ~60 m. Vorsprung: +2 auf Steuerung/Angriff gegen Gegner dahinter. Drei Phasen pro Runde: (1) Lenkerhandlungen wählen+würfeln (Tabelle unten), (2) Vorankommen (SL bewegt Fahrzeuge in neue Zonen), (3) Kampf (Initiative-Reihenfolge, Schießen/Rammen). Entkommen: 2+ Zonen Vorsprung vor allen Gegnern = man scheidet aus (entkommen); 2+ Zonen zurück = scheidet aus (abgehängt). Kampfphase: Fernkampf zwischen Fahrzeugen in gleicher/Nachbarzone möglich (normaler Fahrzeug-Malus); Nahkampf nur bei Aufschließen mit Reichweite-Waffen; Fahrzeug entern = Bewegungsaktion, Akrobatik/Athletik gegen SG 5+KRK Ziel (Scheitern <5 = bleibt, 5+ = Absturz+Liegend+Fallschaden); Kollision = Standard-Aktion, Steuerungswurf gegen SG=KRK Ziel. Aufschließen nur durch Losreißen beendbar. Umgebungseffekte: Aktive Gefahren (Angriff beim Zonenbetreten, siehe Gefahren-Tabelle nach HG), Veränderte Angriffe/Fortbewegung, Neue Tricks, Unterschiedliche Routen."
+  },
+  "fahrzeugregeln_lenkerhandlungen_tabelle": [
+    {"handlung": "Aufschließen zu anderem Fahrzeug", "fertigkeitswurf": "Steuerung", "sg": "KRK des gegnerischen Fahrzeugs", "ergebnis": "Ermöglicht Angriff/Entern zwischen Insassen; 1 Zone vorwärts in Vorankommensphase"},
+    {"handlung": "Ausweichen", "fertigkeitswurf": "Steuerung", "sg": "10 + Gegenstandsstufe", "ergebnis": "+2 RK; 1 Zone vorwärts"},
+    {"handlung": "Beschleunigen", "fertigkeitswurf": "Steuerung", "sg": "17 + Gegenstandsstufe", "ergebnis": "Sofort 1 Zone vorwärts, + 1 weitere Zone in Vorankommensphase"},
+    {"handlung": "Doppelte Handlung", "fertigkeitswurf": "variiert (je -4 Malus)", "sg": "speziell", "ergebnis": "Kombination zweier Handlungen; 1 Zone vorwärts"},
+    {"handlung": "Losreißen", "fertigkeitswurf": "Steuerung", "sg": "5 + KRK des gegnerischen Fahrzeugs", "ergebnis": "Beendet Aufschließen; 1 Zone vorwärts"},
+    {"handlung": "Schritt halten", "fertigkeitswurf": "Steuerung", "sg": "10 + Gegenstandsstufe", "ergebnis": "1 Zone vorwärts"},
+    {"handlung": "Tricksen", "fertigkeitswurf": "variiert (Steuerung/Bluffen/Heimlichkeit)", "sg": "15 + Gegenstandsstufe", "ergebnis": "Gegner dahinter -2 Steuerung für 1 Runde; 1 Zone vorwärts"},
+    {"handlung": "Verlangsamen", "fertigkeitswurf": "—", "sg": "—", "ergebnis": "Keine Bewegung in Vorankommensphase"}
+  ],
+  "fahrzeugregeln_gefahren_nach_hg_tabelle": [
+    {"hg": "1/4", "angriffsbonus": "+3", "schaden": "2W4"}, {"hg": "1/3", "angriffsbonus": "+4", "schaden": "2W4"},
+    {"hg": "1/2", "angriffsbonus": "+6", "schaden": "3W4"}, {"hg": "1", "angriffsbonus": "+8", "schaden": "4W4"},
+    {"hg": "2", "angriffsbonus": "+9", "schaden": "5W4"}, {"hg": "3", "angriffsbonus": "+10", "schaden": "5W4"},
+    {"hg": "4", "angriffsbonus": "+11", "schaden": "5W6"}, {"hg": "5", "angriffsbonus": "+12", "schaden": "5W8"},
+    {"hg": "6", "angriffsbonus": "+14", "schaden": "6W8"}, {"hg": "7", "angriffsbonus": "+15", "schaden": "6W10"},
+    {"hg": "8", "angriffsbonus": "+17", "schaden": "7W10"}, {"hg": "9", "angriffsbonus": "+19", "schaden": "8W10"},
+    {"hg": "10", "angriffsbonus": "+20", "schaden": "9W10"}, {"hg": "11", "angriffsbonus": "+21", "schaden": "10W10"},
+    {"hg": "12", "angriffsbonus": "+23", "schaden": "11W10"}, {"hg": "13", "angriffsbonus": "+24", "schaden": "12W10"},
+    {"hg": "14", "angriffsbonus": "+25", "schaden": "14W10"}, {"hg": "15", "angriffsbonus": "+26", "schaden": "15W10"},
+    {"hg": "16", "angriffsbonus": "+28", "schaden": "17W10"}, {"hg": "17", "angriffsbonus": "+29", "schaden": "18W10"},
+    {"hg": "18", "angriffsbonus": "+30", "schaden": "20W10"}, {"hg": "19", "angriffsbonus": "+31", "schaden": "23W10"},
+    {"hg": "20", "angriffsbonus": "+32", "schaden": "25W10"}
+  ],
+  "notes": "Zustände-Tabelle bewusst übersprungen (in conditions.json). Größenkategorien-Tabelle (Winzling-Kolossal mit Reichweiten) existiert NICHT in der Quelldatei (kapitel8_rest_raw.txt, S. 256-287) - nur 2 beiläufige Fließtext-Erwähnungen im Fahrzeugkontext gefunden; liegt vermutlich in den bereits erfassten Grundlagen-Abschnitten (S. 236-256, extraction/kapitel8_kampfgrundlagen_raw.txt) - dort bei Bedarf nachschlagen, hier nicht erfunden. Bei 'Effekte definieren' sind nur die im Rohtext tatsächlich beschriebenen Kategorien mit Regeltext versehen; die restlichen (Böse, Chaotisch, Elektrizität etc.) erscheinen nur als Namen in der Aufzählung ohne eigene Beschreibung in dieser Quelle - nicht geraten, siehe kategorien_ohne_eigene_beschreibung_im_rohtext. Fahrzeugverfolgungsjagd-Umgebungsbeispiele (Aquatisch/Straße/Wald/Wüste mit konkreten Encounter-Details) und das ausführliche Spielbeispiel (S. 286-287) wurden nicht einzeln übernommen (reines Illustrationsmaterial ohne neue Mechanik) - Rohtext bei Bedarf ab Zeile 2342 von extraction/kapitel8_rest_raw.txt nachschlagbar."
+}
