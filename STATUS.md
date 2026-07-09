@@ -246,11 +246,12 @@ sichtbar ist, analog pf1-bogen.
 ## GitHub / Deploy
 - GitHub-Repo existiert bereits: `git@github.com-private:markus-froehlich/sf1-bogen.git`
   (privater SSH-Alias, siehe AGENTS.md).
-- **Gepusht** (mit expliziter Nutzerfreigabe) bis Commit `31ec11a`
-  (2026-07-09). Die pf1-bogen-Paritäts-Arbeit + Buff-/Zustands-Badges
-  (siehe „Pf1-bogen-Parität + Buff-/Zustands-Badges" oben) sind Stand jetzt
-  noch lokal, nicht committet — vor Commit/Push wie immer erneut Freigabe
-  einholen, siehe AGENTS.md „Git / Account-Trennung".
+- **Gepusht** bis Commit `144f52c` (2026-07-09) — pf1-bogen-Paritäts-Arbeit +
+  Buff-/Zustands-Badges (siehe oben) sind live. Seit dieser Session gilt
+  „Commit & Push — automatisch, ohne Rückfrage" (siehe AGENTS.md) für dieses
+  Repo: neue Arbeit wird nach Test/Build-Check selbstständig committet und
+  gepusht, ohne dass hier extra vermerkt werden muss, ob eine Freigabe schon
+  vorlag.
 - GitHub-Pages-Deploy via Actions (`.github/workflows/deploy.yml`, aus
   pf1-bogen-Chassis übernommen) läuft automatisch bei Push auf `main`.
   Live-URL: `https://markus-froehlich.github.io/sf1-bogen/`. Falls die
