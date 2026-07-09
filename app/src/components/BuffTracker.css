@@ -96,7 +96,10 @@
   font-size: 0.85rem;
   width: 100%;
   box-sizing: border-box;
+  -moz-appearance: textfield;
 }
+.buff-form-field input::-webkit-outer-spin-button,
+.buff-form-field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
 .buff-form-actions {
   display: flex;

@@ -98,7 +98,10 @@
   font-size: 1rem;
   font-weight: 700;
   padding: 3px 4px;
+  -moz-appearance: textfield;
 }
+.sf-resource-input::-webkit-outer-spin-button,
+.sf-resource-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .sf-resource-max {
   font-size: 0.8rem;
   color: var(--text-muted);

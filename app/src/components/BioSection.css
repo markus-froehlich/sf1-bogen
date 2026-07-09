@@ -62,4 +62,7 @@
 .bio-input-num {
   width: 100%;
   box-sizing: border-box;
+  -moz-appearance: textfield;
 }
+.bio-input-num::-webkit-outer-spin-button,
+.bio-input-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }

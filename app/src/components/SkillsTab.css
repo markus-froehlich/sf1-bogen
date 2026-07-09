@@ -23,6 +23,9 @@
   text-align: center;
   font-size: 0.8rem;
   padding: 2px;
+  -moz-appearance: textfield;
 }
+.skill-ranks-input::-webkit-outer-spin-button,
+.skill-ranks-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .skill-bonus { font-size: 0.85rem; font-weight: 700; color: var(--accent); text-align: right; }
 .skill-bonus.disabled { color: var(--text-muted); opacity: 0.5; }
