@@ -209,7 +209,7 @@ function ResourceBox({ label, full, max, current, onChange, onFill }) {
     <div className="sf-resource-box" title={full}>
       <span className="sf-resource-label">{label}</span>
       <div className="sf-resource-values">
-        <NumberField className="sf-resource-input" min={0} max={max} value={value} onCommit={onChange} />
+        <NumberField className="sf-resource-input" min={0} value={value} onCommit={onChange} />
         <span className="sf-resource-max">/ {max}</span>
       </div>
       <button className="sf-resource-fill" onClick={onFill}>↺</button>
