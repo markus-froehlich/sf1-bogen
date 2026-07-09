@@ -1,18 +1,15 @@
 import { useMemo, useState } from 'react'
 import racesData from '../data/races.json'
 import classesData from '../data/classes.json'
-import skillsData from '../data/skills.json'
 import { AttributeBlock } from './AttributeBlock.jsx'
 import { BioSection } from './BioSection.jsx'
 import { FeatsTab } from './FeatsTab.jsx'
 import { XpTracker } from './XpTracker.jsx'
-import { StatTag } from './StatTag.jsx'
 import { useSectionOrder } from '../store/useSectionOrder.js'
 import { computeCharacterStats } from '../engine/characterStats.js'
-import { computeSkillBonus } from '../engine/skills.js'
 import './CharacterTab.css'
 
-const CHAR_SECTIONS_DEFAULT = ['volk_klasse', 'xp', 'bio', 'attribute', 'ressourcen', 'kampfwerte', 'fertigkeiten', 'talente', 'volksmerkmale', 'klassenmerkmale']
+const CHAR_SECTIONS_DEFAULT = ['volk_klasse', 'xp', 'bio', 'attribute', 'talente', 'volksmerkmale', 'klassenmerkmale']
 
 function useCollapsed(storageKey) {
   const [collapsed, setCollapsed] = useState(() => {
@@ -33,36 +30,18 @@ function useCollapsed(storageKey) {
 export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, setFeats, setXp, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { race, klass, level, abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, classAbbr, statTags } = stats
+  const { race, klass, level, abilityMods, statTags } = stats
 
   const [order, moveSection] = useSectionOrder('sf1_attr_order', CHAR_SECTIONS_DEFAULT)
   const [collapsed, toggleCollapsed] = useCollapsed('sf1_attr_collapsed')
 
   const classEntry = char.meta?.classes?.[0] || { id: '', level: 1 }
-  const current = char.resources_current ?? { tp: null, ap: null, rp: null }
-
-  function setResourceCurrent(key, value) {
-    update({ resources_current: { [key]: value === '' ? null : Number(value) } })
-  }
-  function fillResource(key, max) {
-    update({ resources_current: { [key]: max } })
-  }
-  function setSkillRanks(skillId, ranks) {
-    const maxRanks = level
-    const clamped = Math.max(0, Math.min(maxRanks, Number(ranks) || 0))
-    update({ skills: { [skillId]: { ranks: clamped } } })
-  }
-
-  const intMod = abilityMods.IN
 
   const HEADINGS = {
     volk_klasse: L ? 'Volk & Klasse' : 'Race & Class',
     xp: L ? 'Erfahrung' : 'Experience',
     bio: L ? 'Bio' : 'Bio',
     attribute: L ? 'Attribute' : 'Attributes',
-    ressourcen: L ? 'Trefferpunkte, Ausdauer & Reserve' : 'Hit Points, Stamina & Resolve',
-    kampfwerte: L ? 'Kampfwerte' : 'Combat stats',
-    fertigkeiten: L ? 'Fertigkeiten' : 'Skills',
     talente: L ? 'Talente' : 'Feats',
     volksmerkmale: L ? 'Volksmerkmale' : 'Racial traits',
     klassenmerkmale: L ? 'Klassenmerkmale' : 'Class features',
@@ -130,57 +109,6 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
         </div>
       </>
     ),
-    ressourcen: () => (
-      <div className="sf-resource-row">
-        <ResourceBox label="TP" full={L ? 'Trefferpunkte' : 'Hit Points'} max={tp} current={current.tp} onChange={v => setResourceCurrent('tp', v)} onFill={() => fillResource('tp', tp)} />
-        <ResourceBox label="AP" full={L ? 'Ausdauerpunkte' : 'Stamina Points'} max={ap} current={current.ap} onChange={v => setResourceCurrent('ap', v)} onFill={() => fillResource('ap', ap)} />
-        <ResourceBox label="RP" full={L ? 'Reservepunkte' : 'Resolve Points'} max={rp} current={current.rp} onChange={v => setResourceCurrent('rp', v)} onFill={() => fillResource('rp', rp)} />
-      </div>
-    ),
-    kampfwerte: () => (
-      <>
-        <div className="sf-stat-row">
-          <StatBox label={L ? 'GAB' : 'BAB'} value={bab >= 0 ? `+${bab}` : bab} />
-          <StatBox label={L ? 'Reflex' : 'Reflex'} value={saveRef >= 0 ? `+${saveRef}` : saveRef} sources={statTags.saveRef} />
-          <StatBox label={L ? 'Wille' : 'Will'} value={saveWill >= 0 ? `+${saveWill}` : saveWill} sources={statTags.saveWill} />
-          <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={saveZah >= 0 ? `+${saveZah}` : saveZah} sources={statTags.saveZah} />
-        </div>
-        <p className="char-hint">{L ? 'EAC/KAC und Waffen siehe Tab „Kampf".' : 'See "Combat" tab for EAC/KAC and weapons.'}</p>
-      </>
-    ),
-    fertigkeiten: () => (
-      <>
-        <p className="attr-note">
-          {L ? `Fertigkeitsränge pro Stufe: ${klass?.skill_ranks_per_level_formula || '—'} (IN-Mod ${intMod >= 0 ? '+' + intMod : intMod})`
-             : `Skill ranks per level: ${klass?.skill_ranks_per_level_formula || '—'}`}
-        </p>
-        <div className="skill-table">
-          {skillsData.skills.map(s => {
-            const ranks = char.skills?.[s.id]?.ranks || 0
-            const isClassSkill = classAbbr ? s.class_skill_for.includes(classAbbr) : false
-            const keyMod = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH'].includes(s.key_ability) ? abilityMods[s.key_ability] : 0
-            const bonus = computeSkillBonus({ ranks, isClassSkill, keyAbilityModifier: keyMod })
-            const usable = s.untrained || ranks > 0
-            return (
-              <div key={s.id} className={`skill-row ${isClassSkill ? 'is-class' : ''}`}>
-                <span className="skill-name" title={s.description}>
-                  {s.name.de}{isClassSkill ? ' •' : ''}{!s.untrained ? ' 🔒' : ''}
-                </span>
-                <span className="skill-key">{s.key_ability === 'CH_IN_oder_WE' ? 'CH/IN/WE' : s.key_ability}</span>
-                <input
-                  className="skill-ranks-input"
-                  type="number" min={0} max={level}
-                  value={ranks}
-                  onChange={e => setSkillRanks(s.id, e.target.value)}
-                />
-                <span className={`skill-bonus ${usable ? '' : 'disabled'}`}>{bonus >= 0 ? `+${bonus}` : bonus}</span>
-              </div>
-            )
-          })}
-        </div>
-        <p className="attr-note">{L ? '• = Klassenfertigkeit, 🔒 = nur geübt nutzbar (mind. 1 Rang nötig)' : '• = class skill, 🔒 = trained only'}</p>
-      </>
-    ),
     talente: () => <FeatsTab char={char} setFeats={setFeats} lang={lang} />,
     volksmerkmale: () => race && (
       <div className="feature-list">
@@ -235,31 +163,6 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
           </section>
         )
       })}
-    </div>
-  )
-}
-
-function ResourceBox({ label, full, max, current, onChange, onFill }) {
-  const value = current ?? max
-  return (
-    <div className="sf-resource-box" title={full}>
-      <span className="sf-resource-label">{label}</span>
-      <div className="sf-resource-values">
-        <input className="sf-resource-input" type="number" min={0} max={max}
-          value={value} onChange={e => onChange(e.target.value)} />
-        <span className="sf-resource-max">/ {max}</span>
-      </div>
-      <button className="sf-resource-fill" onClick={onFill}>↺</button>
-    </div>
-  )
-}
-
-function StatBox({ label, value, sources }) {
-  return (
-    <div className="sf-stat-box">
-      <span className="sf-stat-value">{value}</span>
-      <span className="sf-stat-label">{label}</span>
-      <StatTag sources={sources} />
     </div>
   )
 }

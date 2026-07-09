@@ -21,7 +21,7 @@ const WEAPON_CATEGORIES = [
   ['special_weapons', 'Spezialwaffen'],
 ]
 
-const COMBAT_SECTIONS_DEFAULT = ['ac', 'attack', 'conditions', 'buffs', 'resources']
+const COMBAT_SECTIONS_DEFAULT = ['tp', 'kampfwerte', 'ac', 'attack', 'conditions', 'buffs', 'resources']
 
 function useCollapsed(storageKey) {
   const [collapsed, setCollapsed] = useState(() => {
@@ -45,10 +45,10 @@ function allWeapons() {
   )
 }
 
-export function CombatTab({ char, setConditions, setActiveBuffs, setResources, lang }) {
+export function CombatTab({ char, update, setConditions, setActiveBuffs, setResources, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { abilityMods, bab, eac, kac, armor, buffTotals, statTags } = stats
+  const { abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, eac, kac, armor, buffTotals, statTags } = stats
   const weapons = useMemo(allWeapons, [])
   const [weaponName, setWeaponName] = useState('')
 
@@ -57,6 +57,14 @@ export function CombatTab({ char, setConditions, setActiveBuffs, setResources, l
 
   const weapon = weapons.find(w => w.name === weaponName) || null
   const activeConditions = new Set(char.conditions ?? [])
+  const current = char.resources_current ?? { tp: null, ap: null, rp: null }
+
+  function setResourceCurrent(key, value) {
+    update({ resources_current: { [key]: value === '' ? null : Number(value) } })
+  }
+  function fillResource(key, max) {
+    update({ resources_current: { [key]: max } })
+  }
 
   function toggleCondition(name) {
     setConditions(prev => {
@@ -74,6 +82,8 @@ export function CombatTab({ char, setConditions, setActiveBuffs, setResources, l
     : null
 
   const HEADINGS = {
+    tp: L ? 'Trefferpunkte, Ausdauer & Reserve' : 'Hit Points, Stamina & Resolve',
+    kampfwerte: L ? 'Kampfwerte' : 'Combat stats',
     ac: L ? 'Rüstungsklassen' : 'Armor Class',
     attack: L ? 'Angriffsrechner' : 'Attack calculator',
     conditions: L ? 'Zustände' : 'Conditions',
@@ -82,6 +92,21 @@ export function CombatTab({ char, setConditions, setActiveBuffs, setResources, l
   }
 
   const BODIES = {
+    tp: () => (
+      <div className="sf-resource-row">
+        <ResourceBox label="TP" full={L ? 'Trefferpunkte' : 'Hit Points'} max={tp} current={current.tp} onChange={v => setResourceCurrent('tp', v)} onFill={() => fillResource('tp', tp)} />
+        <ResourceBox label="AP" full={L ? 'Ausdauerpunkte' : 'Stamina Points'} max={ap} current={current.ap} onChange={v => setResourceCurrent('ap', v)} onFill={() => fillResource('ap', ap)} />
+        <ResourceBox label="RP" full={L ? 'Reservepunkte' : 'Resolve Points'} max={rp} current={current.rp} onChange={v => setResourceCurrent('rp', v)} onFill={() => fillResource('rp', rp)} />
+      </div>
+    ),
+    kampfwerte: () => (
+      <div className="sf-stat-row">
+        <StatBox label={L ? 'GAB' : 'BAB'} value={bab >= 0 ? `+${bab}` : bab} />
+        <StatBox label={L ? 'Reflex' : 'Reflex'} value={saveRef >= 0 ? `+${saveRef}` : saveRef} sources={statTags.saveRef} />
+        <StatBox label={L ? 'Wille' : 'Will'} value={saveWill >= 0 ? `+${saveWill}` : saveWill} sources={statTags.saveWill} />
+        <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={saveZah >= 0 ? `+${saveZah}` : saveZah} sources={statTags.saveZah} />
+      </div>
+    ),
     ac: () => (
       <>
         <div className="sf-stat-row two">
@@ -174,6 +199,31 @@ export function CombatTab({ char, setConditions, setActiveBuffs, setResources, l
           </section>
         )
       })}
+    </div>
+  )
+}
+
+function ResourceBox({ label, full, max, current, onChange, onFill }) {
+  const value = current ?? max
+  return (
+    <div className="sf-resource-box" title={full}>
+      <span className="sf-resource-label">{label}</span>
+      <div className="sf-resource-values">
+        <input className="sf-resource-input" type="number" min={0} max={max}
+          value={value} onChange={e => onChange(e.target.value)} />
+        <span className="sf-resource-max">/ {max}</span>
+      </div>
+      <button className="sf-resource-fill" onClick={onFill}>↺</button>
+    </div>
+  )
+}
+
+function StatBox({ label, value, sources }) {
+  return (
+    <div className="sf-stat-box">
+      <span className="sf-stat-value">{value}</span>
+      <span className="sf-stat-label">{label}</span>
+      <StatTag sources={sources} />
     </div>
   )
 }

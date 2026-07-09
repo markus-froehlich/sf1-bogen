@@ -10,6 +10,7 @@ import { HomebrewPanel } from './components/HomebrewPanel.jsx'
 import { PrintView } from './components/PrintView.jsx'
 import { CharacterTab } from './components/CharacterTab.jsx'
 import { CombatTab } from './components/CombatTab.jsx'
+import { SkillsTab } from './components/SkillsTab.jsx'
 import { GearTab } from './components/GearTab.jsx'
 import { SpellsTab } from './components/SpellsTab.jsx'
 import { NotesTab } from './components/NotesTab.jsx'
@@ -18,6 +19,7 @@ import './App.css'
 const TABS = [
   { id: 'char',    icon: '👤', label: 'Charakter' },
   { id: 'combat',  icon: '⚔',  label: 'Kampf' },
+  { id: 'skills',  icon: '🔨', label: 'Fertigkeiten' },
   { id: 'gear',    icon: '🔫', label: 'Ausrüstung' },
   { id: 'spells',  icon: '✨', label: 'Zauber' },
   { id: 'ship',    icon: '🚀', label: 'Raumschiff' },
@@ -304,7 +306,8 @@ export default function App() {
 
       <main className="main-scroll">
         {tab === 'char'   && <CharacterTab char={char} setMeta={setMeta} setClass={setClass} setAttr={setAttr} update={update} setBio={setBio} setFeats={setFeats} setXp={setXp} lang={lang} />}
-        {tab === 'combat' && <CombatTab char={char} setConditions={setConditions} setActiveBuffs={setActiveBuffs} setResources={setResources} lang={lang} />}
+        {tab === 'combat' && <CombatTab char={char} update={update} setConditions={setConditions} setActiveBuffs={setActiveBuffs} setResources={setResources} lang={lang} />}
+        {tab === 'skills' && <SkillsTab char={char} update={update} lang={lang} />}
         {tab === 'gear'   && <GearTab char={char} update={update} setInventory={setInventory} lang={lang} />}
         {tab === 'spells' && <SpellsTab char={char} update={update} lang={lang} />}
         {tab === 'ship'   && <PlaceholderTab label="Raumschiff (spätere Phase, siehe STATUS.md)" />}
