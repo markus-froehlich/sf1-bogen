@@ -183,7 +183,6 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
     <div className="section combat-tab">
       {order.map((id, idx) => {
         const isCollapsed = collapsed.has(id)
-        const Body = BODIES[id]
         return (
           <section key={id}>
             <div className="ct-heading-row">
@@ -196,7 +195,7 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
                 <button className="ct-move-btn" disabled={idx === order.length - 1} onClick={() => moveSection(id, 1)} title={L ? 'Nach unten' : 'Move down'}>↓</button>
               </div>
             </div>
-            {!isCollapsed && <div className="ct-body"><Body /></div>}
+            {!isCollapsed && <div className="ct-body">{BODIES[id]()}</div>}
           </section>
         )
       })}
