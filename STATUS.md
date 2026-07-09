@@ -52,18 +52,29 @@ Engine-Module (`app/src/engine/`): `attributes.js`, `skills.js`, `resources.js`
 die alle Tabs lesen).
 
 ## UI-Stand (`app/src/components/`)
-- **Charakter** (`CharacterTab.jsx`): datengetrieben gerendert (HEADINGS/BODIES-
-  Maps), jeder Abschnitt mit unabhängigem Klapp-Pfeil (▶/▼) UND Verschiebe-
-  Pfeilen (↑/↓) — Reihenfolge/Collapse-Zustand in localStorage
-  (`sf1_char_order`, `sf1_char_collapsed`). Abschnitte: Volk&Klasse, Bio
-  (`BioSection.jsx` — Kampagne/Gesinnung/Gottheit/Aussehen/Hintergrund etc.),
-  Attribute, TP/AP/RP, Kampfwerte, Fertigkeiten, **Talente** (`FeatsTab.jsx`
-  — Budget-Anzeige nach Tabelle 2-4, Autocomplete-Suche, volle Beschreibung
-  aus `feats_full.json`), Volks-/Klassenmerkmale.
-- **Kampf** (`CombatTab.jsx`): EAC/KAC live (inkl. Buff-Einfluss), Angriffs-
-  rechner, 35-Zustände-Toggle-Liste, **Buffs** (`BuffTracker.jsx` — Liste mit
-  Ein/Aus-Toggle ohne Löschen + Formular für 12 Bonusfelder, fließt über
-  `engine/buffs.js` in Attribute/EAC/KAC/Angriffsbonus/Rettungswürfe ein).
+Bottom-Nav-Tabs (8, wie pf1-bogen): Charakter/Kampf/Fertigkeiten/Ausrüstung/
+Zauber/Raumschiff/Notizen. Charakter- UND Kampf-Tab sind beide datengetrieben
+gerendert (HEADINGS/BODIES-Maps), jeder Abschnitt mit unabhängigem Klapp-Pfeil
+(▶/▼) UND Verschiebe-Pfeilen (↑/↓) — Reihenfolge/Collapse-Zustand in
+localStorage (`sf1_attr_order`/`sf1_attr_collapsed` bzw. `sf1_combat_order`/
+`sf1_combat_collapsed`).
+- **Charakter** (`CharacterTab.jsx`): Volk&Klasse, **Erfahrung**
+  (`XpTracker.jsx` — Starfinders eigene Tabelle 2-4, einzelne EP-Progression
+  1-20), Bio (`BioSection.jsx`), Attribute (inkl. Buff-/Zustands-Badge, siehe
+  unten), **Talente** (`FeatsTab.jsx` — Budget-Anzeige nach Tabelle 2-4,
+  Autocomplete-Suche, volle Beschreibung aus `feats_full.json`),
+  Volks-/Klassenmerkmale.
+- **Kampf** (`CombatTab.jsx`): TP/AP/RP, Kampfwerte (GAB/Rettungswürfe),
+  EAC/KAC, Angriffsrechner, 35-Zustände-Toggle-Liste, **Buffs**
+  (`BuffTracker.jsx` — Liste mit Ein/Aus-Toggle ohne Löschen + Formular für
+  12 Bonusfelder), **Ressourcen** (`ResourcesPanel.jsx` — generischer
+  Verbrauchsressourcen-Tracker, ohne PF1e-Klassenformeln). Buffs UND
+  Zustände fließen über `engine/buffs.js`/`engine/conditions.js` in
+  Attribute/EAC/KAC/Angriffsbonus/Rettungswürfe ein, sichtbar als ✦-Badge
+  (`StatTag.jsx`) überall dort, wo etwas eingerechnet ist.
+- **Fertigkeiten** (`SkillsTab.jsx`, eigener Tab seit 2026-07-09, vorher
+  Abschnitt im Charakter-Tab): volle Fertigkeitsliste mit Rängen-Eingabe,
+  Klassenfertigkeits-Markierung, IN-Mod-Hinweis zur Rang-Formel.
 - **Ausrüstung** (`GearTab.jsx`): Credits, Rüstung ausrüsten, Inventar.
 - **Zauber** (`SpellsTab.jsx`): Zauberplätze, bekannte Zauber pro Grad.
 - **Raumschiff**: weiterhin bewusster Platzhalter.
@@ -77,11 +88,15 @@ die alle Tabs lesen).
 - **HomebrewPanel**: Formular-Buttons auf Icon-Muster (🗑/✕/✓, 40×40px)
   umgestellt.
 
-**Aufgeräumt:** `ConditionsPanel.jsx`, `ResourcesPanel.jsx`, `InventoryTab.jsx`,
-`XpTracker.jsx` gelöscht (alle vier waren entweder komplett Pathfinder-
-spezifisch/falsch für Starfinder oder redundant zu den neuen Starfinder-
-eigenen Tab-Implementierungen). `BioSection.jsx` war spielsystem-neutral und
-wurde stattdessen eingebaut statt gelöscht.
+**Aufgeräumt (2026-07-07/08):** ursprünglich aus pf1-bogen kopierte
+`ConditionsPanel.jsx`, `InventoryTab.jsx` sowie die damaligen (Pathfinder-
+geprägten) `ResourcesPanel.jsx`/`XpTracker.jsx` gelöscht — komplett
+Pathfinder-spezifisch/falsch für Starfinder. `BioSection.jsx` war
+spielsystem-neutral und wurde stattdessen eingebaut statt gelöscht.
+**`ResourcesPanel.jsx`/`XpTracker.jsx` gibt es seit 2026-07-09 wieder** —
+diesmal als eigenständige Starfinder-Neubauten (eigene EP-Tabelle bzw.
+generischer Ressourcen-Tracker ohne PF1e-Klassenformeln), nicht die alten
+Dateien.
 
 **Getestet (jede Session-Runde):** `npm run build` grün, im Browser-Preview
 durchgeklickt (Werte gegen Formeln von Hand nachgerechnet — z.B. Vesk/
