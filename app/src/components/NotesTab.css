@@ -1,0 +1,114 @@
+.notes-mode-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.notes-mode-row::-webkit-scrollbar { display: none; }
+
+.notes-mode-btn {
+  flex: 0 0 auto;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 8px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.notes-mode-btn.active { background: color-mix(in srgb, var(--accent) 18%, var(--surface2)); border-color: var(--accent); color: var(--accent); }
+
+.entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.entry-row {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.entry-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.entry-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+.entry-notes { font-size: 0.78rem; color: var(--text-muted); margin: 0; line-height: 1.4; white-space: pre-wrap; }
+
+.entry-del-btn {
+  background: none;
+  border: 1px solid #c96e6e;
+  color: #c96e6e;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.entry-add-btn {
+  align-self: flex-start;
+  background: var(--surface2);
+  border: 1px dashed var(--border);
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.entry-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.entry-notes-input {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 8px;
+  font-size: 0.85rem;
+  min-height: 70px;
+  resize: vertical;
+  font-family: inherit;
+}
+.entry-form-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.entry-save-btn, .entry-cancel-btn {
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.entry-save-btn { background: var(--accent); border: none; color: var(--bg); }
+.entry-save-btn:disabled { opacity: 0.4; cursor: default; }
+.entry-cancel-btn { background: var(--surface3); border: 1px solid var(--border); color: var(--text-muted); }

@@ -8,6 +8,44 @@
   padding: 12px;
 }
 
+.spell-mode-toggle {
+  display: flex;
+  gap: 6px;
+}
+.spell-mode-btn {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 8px;
+  cursor: pointer;
+}
+.spell-mode-btn.active { background: color-mix(in srgb, var(--accent) 18%, var(--surface2)); border-color: var(--accent); color: var(--accent); }
+.spell-mode-btn:disabled { opacity: 0.4; cursor: default; }
+
+.spell-lookup-search { margin: 4px 0; }
+
+.spell-lookup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.spell-lookup-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 9px;
+}
+.spell-lookup-meta { font-size: 0.68rem; color: var(--accent); }
+
 .spell-slots-row {
   display: flex;
   gap: 5px;

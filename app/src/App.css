@@ -611,6 +611,7 @@
 .bottom-nav::-webkit-scrollbar { display: none; }
 
 .nav-btn {
+  position: relative;
   flex: 1 0 36px;
   display: flex;
   flex-direction: column;
@@ -622,11 +623,22 @@
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  transition: color 0.15s;
+  transition: color 0.15s, background 0.15s;
   min-height: 40px;
 }
-.nav-btn.active { color: var(--accent); }
+.nav-btn.active { color: var(--accent); background: var(--surface3); }
+.nav-btn.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 22%;
+  right: 22%;
+  height: 2px;
+  border-radius: 0 0 2px 2px;
+  background: var(--accent);
+}
 .nav-btn:active { opacity: 0.7; }
 
-.nav-icon { font-size: 1.15rem; line-height: 1; }
+.nav-icon { font-size: 1.15rem; line-height: 1; filter: grayscale(85%) opacity(0.75); transition: filter 0.15s; }
+.nav-btn.active .nav-icon { filter: none; }
 .nav-label { font-size: 0.65rem; font-weight: 600; white-space: nowrap; }

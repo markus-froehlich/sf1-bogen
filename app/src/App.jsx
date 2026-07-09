@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useCharacters } from './store/useCharacters.js'
 import { useHomebrew } from './store/useHomebrew.js'
 import { useGistSync } from './store/useGistSync.js'
+import racesData from './data/races.json'
+import classesData from './data/classes.json'
 import { CharacterDrawer } from './components/CharacterDrawer.jsx'
 import { GistSyncPanel } from './components/GistSyncPanel.jsx'
 import { HomebrewPanel } from './components/HomebrewPanel.jsx'
@@ -10,6 +12,7 @@ import { CharacterTab } from './components/CharacterTab.jsx'
 import { CombatTab } from './components/CombatTab.jsx'
 import { GearTab } from './components/GearTab.jsx'
 import { SpellsTab } from './components/SpellsTab.jsx'
+import { NotesTab } from './components/NotesTab.jsx'
 import './App.css'
 
 const TABS = [
@@ -32,6 +35,9 @@ function PlaceholderTab({ label }) {
   )
 }
 
+const RACE_MAP = Object.fromEntries(racesData.races.map(r => [r.id, r]))
+const CLASS_MAP = Object.fromEntries(classesData.classes.map(c => [c.id, c]))
+
 const _SCALES = ['s', 'm', 'l', 'xl']
 const _initScale = localStorage.getItem('sf1_font_scale') ?? 'm'
 if (_initScale !== 'm') document.documentElement.classList.add(`fs-${_initScale}`)
@@ -52,6 +58,7 @@ export default function App() {
   const {
     char, index, activeId, setMeta, update, setAttr, setClass,
     setInventory, setConditions, setNotes, setBio, setFeats, setActiveBuffs,
+    setContacts, setSpecials,
     newChar, switchChar, deleteChar, importChar,
   } = useCharacters(profile)
   const { hb, saveHBItem, deleteHB } = useHomebrew()
@@ -122,9 +129,26 @@ export default function App() {
             value={char.meta?.name || ''}
             onChange={e => setMeta('name', e.target.value)}
           />
-          <div className="topbar-actions">
+          <div className="topbar-actions app-menu-wrap">
             <button className="topbar-icon-btn bar-collapse-btn" onClick={toggleTopbar} title={lang === 'de' ? 'Menü einklappen' : 'Collapse menu'}>−</button>
             <button className="topbar-icon-btn" onClick={() => setMenuOpen(v => !v)} title={lang === 'de' ? 'Menü' : 'Menu'}>⚙</button>
+            {menuOpen && (
+              <>
+                <div className="app-menu-backdrop" onClick={() => setMenuOpen(false)} />
+                <div className="app-menu">
+                  <button className="app-menu-item" onClick={() => { exportChar(); setMenuOpen(false) }}>⬇ {lang === 'de' ? 'Export' : 'Export'}</button>
+                  <label className="app-menu-item app-menu-import">
+                    ⬆ {lang === 'de' ? 'Import' : 'Import'}
+                    <input type="file" accept="application/json" onChange={e => { handleImportFile(e); setMenuOpen(false) }} hidden />
+                  </label>
+                  <div className="app-menu-divider" />
+                  <button className="app-menu-item" onClick={() => { setHbOpen(true); setMenuOpen(false) }}>⚙ Homebrew</button>
+                  <button className="app-menu-item" onClick={() => { setGistOpen(true); setMenuOpen(false) }}>☁ Backup</button>
+                  <div className="app-menu-divider" />
+                  <button className="app-menu-item app-menu-print-btn" onClick={() => { setPrintOpen(true); setMenuOpen(false) }}>🖨 {lang === 'de' ? 'Drucken' : 'Print'}</button>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="topbar-row2">
@@ -139,18 +163,6 @@ export default function App() {
           </div>
           <button className="lang-btn" onClick={toggleLang} title={lang === 'de' ? 'Sprache' : 'Language'}>{lang === 'de' ? 'EN' : 'DE'}</button>
         </div>
-        {menuOpen && (
-          <div className="app-menu">
-            <button onClick={exportChar}>⬇ {lang === 'de' ? 'Export' : 'Export'}</button>
-            <label className="app-menu-import">
-              ⬆ {lang === 'de' ? 'Import' : 'Import'}
-              <input type="file" accept="application/json" onChange={handleImportFile} hidden />
-            </label>
-            <button onClick={() => { setHbOpen(true); setMenuOpen(false) }}>⚙ Homebrew</button>
-            <button onClick={() => { setGistOpen(true); setMenuOpen(false) }}>☁ Backup</button>
-            <button className="app-menu-print-btn" onClick={() => { setPrintOpen(true); setMenuOpen(false) }}>🖨 {lang === 'de' ? 'Drucken' : 'Print'}</button>
-          </div>
-        )}
       </header>
 
       <main className="main-scroll">
@@ -159,14 +171,7 @@ export default function App() {
         {tab === 'gear'   && <GearTab char={char} update={update} setInventory={setInventory} lang={lang} />}
         {tab === 'spells' && <SpellsTab char={char} update={update} lang={lang} />}
         {tab === 'ship'   && <PlaceholderTab label="Raumschiff (spätere Phase, siehe STATUS.md)" />}
-        {tab === 'notes'  && (
-          <textarea
-            className="notes-textarea"
-            placeholder="Notizen …"
-            value={char.notes ?? ''}
-            onChange={e => setNotes(e.target.value)}
-          />
-        )}
+        {tab === 'notes'  && <NotesTab char={char} setNotes={setNotes} setContacts={setContacts} setSpecials={setSpecials} lang={lang} />}
       </main>
 
       <nav className="bottom-nav">
@@ -187,6 +192,8 @@ export default function App() {
           onDelete={deleteChar}
           onClose={() => setDrawerOpen(false)}
           lang={lang}
+          raceMap={RACE_MAP}
+          classMap={CLASS_MAP}
         />
       )}
       {hbOpen && <HomebrewPanel hb={hb} saveHBItem={saveHBItem} deleteHB={deleteHB} onClose={() => setHbOpen(false)} lang={lang} />}
