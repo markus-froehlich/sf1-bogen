@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { NumberField } from './NumberField.jsx'
 import './ResourcesPanel.css'
 
 function genId() { return 'res_' + Math.random().toString(36).slice(2, 9) }
@@ -71,11 +72,11 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
           />
           <div className="res-form-row">
             <label className="res-form-label">{L ? 'Max' : 'Max'}</label>
-            <input
+            <NumberField
               className="res-form-max"
-              type="number" min={1} max={999}
+              min={1} max={999}
               value={draft.max}
-              onChange={e => setDraft(d => ({ ...d, max: Math.max(1, Number(e.target.value) || 1) }))}
+              onCommit={v => setDraft(d => ({ ...d, max: v }))}
             />
             <input
               className="res-form-unit"

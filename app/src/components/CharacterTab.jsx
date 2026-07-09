@@ -5,6 +5,7 @@ import { AttributeBlock } from './AttributeBlock.jsx'
 import { BioSection } from './BioSection.jsx'
 import { FeatsTab } from './FeatsTab.jsx'
 import { XpTracker } from './XpTracker.jsx'
+import { NumberField } from './NumberField.jsx'
 import { useSectionOrder } from '../store/useSectionOrder.js'
 import { computeCharacterStats } from '../engine/characterStats.js'
 import './CharacterTab.css'
@@ -73,8 +74,8 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
         <div className="bio-row-2">
           <div className="bio-field">
             <label className="bio-label">{L ? 'Charakterstufe' : 'Character level'}</label>
-            <input className="bio-input bio-input-num" type="number" min={1} max={20}
-              value={classEntry.level} onChange={e => setClass(0, 'level', Math.max(1, Math.min(20, Number(e.target.value) || 1)))} />
+            <NumberField className="bio-input bio-input-num" min={1} max={20}
+              value={classEntry.level} onCommit={v => setClass(0, 'level', v)} />
           </div>
           <div className="bio-field">
             <label className="bio-label">{L ? 'Schlüsselattribut' : 'Key ability'}</label>

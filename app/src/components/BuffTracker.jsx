@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { NumberField } from './NumberField.jsx'
 import './BuffTracker.css'
 
 const EMPTY = { name: '', ST: 0, GE: 0, KO: 0, IN: 0, WE: 0, CH: 0, attack: 0, eac: 0, kac: 0, saveRef: 0, saveWill: 0, saveZah: 0 }
@@ -80,7 +81,7 @@ export function BuffTracker({ char, setActiveBuffs, lang, hideTitle = false }) {
             {FIELD_LABELS.map(([key, label]) => (
               <label key={key} className="buff-form-field">
                 <span>{label}</span>
-                <input type="number" value={draft[key]} onChange={e => setField(key, e.target.value)} />
+                <NumberField value={draft[key]} onCommit={v => setField(key, v)} />
               </label>
             ))}
           </div>

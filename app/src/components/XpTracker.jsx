@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { NumberField } from './NumberField.jsx'
 import './XpTracker.css'
 
 // Tabelle 2-4: Charakterverbesserung (Starfinder Grundregelwerk, S. 24) —
@@ -58,11 +59,11 @@ export function XpTracker({ char, setXp, totalLevel = 0, lang }) {
       </div>
 
       <div className="xp-row">
-        <input
+        <NumberField
           className="xp-input"
-          type="number" min={0}
+          min={0}
           value={current}
-          onChange={e => setXp('current', Math.max(0, Number(e.target.value) || 0))}
+          onCommit={v => setXp('current', v)}
         />
         <span className="xp-unit">EP</span>
         <input

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import weaponsData from '../data/weapons.json'
 import { allArmor } from '../engine/characterStats.js'
+import { NumberField } from './NumberField.jsx'
 import './GearTab.css'
 
 const WEAPON_CATEGORIES = [
@@ -37,7 +38,7 @@ export function GearTab({ char, update, setInventory, lang }) {
   const totalSpent = items.reduce((sum, it) => sum + (Number(it.price) || 0) * (it.qty || 1), 0)
 
   function setCredits(value) {
-    update({ credits: Math.max(0, Number(value) || 0) })
+    update({ credits: Math.max(0, value) })
   }
 
   function addItem(item) {
@@ -75,7 +76,7 @@ export function GearTab({ char, update, setInventory, lang }) {
       <section>
         <h3 className="section-title">{L ? 'Crediteinheiten' : 'Credits'}</h3>
         <div className="bio-field">
-          <input className="bio-input bio-input-num" type="number" min={0} value={credits} onChange={e => setCredits(e.target.value)} />
+          <NumberField className="bio-input bio-input-num" min={0} value={credits} onCommit={setCredits} />
         </div>
         <p className="char-hint">
           {L ? `Ausgegeben laut Inventar: ${totalSpent} Credits · Gesamtlast: ${Math.round(totalLoad * 10) / 10}`

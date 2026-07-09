@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import skillsData from '../data/skills.json'
 import { computeCharacterStats } from '../engine/characterStats.js'
 import { computeSkillBonus } from '../engine/skills.js'
+import { NumberField } from './NumberField.jsx'
 import './SkillsTab.css'
 
 export function SkillsTab({ char, update, lang }) {
@@ -34,11 +35,11 @@ export function SkillsTab({ char, update, lang }) {
                 {s.name.de}{isClassSkill ? ' •' : ''}{!s.untrained ? ' 🔒' : ''}
               </span>
               <span className="skill-key">{s.key_ability === 'CH_IN_oder_WE' ? 'CH/IN/WE' : s.key_ability}</span>
-              <input
+              <NumberField
                 className="skill-ranks-input"
-                type="number" min={0} max={level}
+                min={0} max={level}
                 value={ranks}
-                onChange={e => setSkillRanks(s.id, e.target.value)}
+                onCommit={v => setSkillRanks(s.id, v)}
               />
               <span className={`skill-bonus ${usable ? '' : 'disabled'}`}>{bonus >= 0 ? `+${bonus}` : bonus}</span>
             </div>

@@ -1,4 +1,5 @@
 import { StatTag } from './StatTag.jsx'
+import { NumberField } from './NumberField.jsx'
 import './AttributeBlock.css'
 
 const ATTR_LABELS = {
@@ -17,12 +18,11 @@ export function AttributeBlock({ attrKey, computed, onScoreChange, lang = 'de' }
         <div className="attr-abbr">{attrKey}</div>
         <div className="attr-name">{label}</div>
       </div>
-      <input
+      <NumberField
         className="attr-score"
-        type="number"
         min={1} max={50}
         value={score}
-        onChange={e => onScoreChange(attrKey, e.target.value)}
+        onCommit={v => onScoreChange(attrKey, v)}
       />
       <StatTag sources={sources} />
       <div className={`attr-mod ${mod >= 0 ? 'pos' : 'neg'}`}>{modStr}</div>

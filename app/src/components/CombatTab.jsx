@@ -6,6 +6,7 @@ import { meleeAttackBonus, rangedAttackBonus } from '../engine/combat.js'
 import { BuffTracker } from './BuffTracker.jsx'
 import { ResourcesPanel } from './ResourcesPanel.jsx'
 import { StatTag } from './StatTag.jsx'
+import { NumberField } from './NumberField.jsx'
 import { useSectionOrder } from '../store/useSectionOrder.js'
 import './CombatTab.css'
 
@@ -60,7 +61,7 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
   const current = char.resources_current ?? { tp: null, ap: null, rp: null }
 
   function setResourceCurrent(key, value) {
-    update({ resources_current: { [key]: value === '' ? null : Number(value) } })
+    update({ resources_current: { [key]: Number(value) } })
   }
   function fillResource(key, max) {
     update({ resources_current: { [key]: max } })
@@ -209,8 +210,7 @@ function ResourceBox({ label, full, max, current, onChange, onFill }) {
     <div className="sf-resource-box" title={full}>
       <span className="sf-resource-label">{label}</span>
       <div className="sf-resource-values">
-        <input className="sf-resource-input" type="number" min={0} max={max}
-          value={value} onChange={e => onChange(e.target.value)} />
+        <NumberField className="sf-resource-input" min={0} max={max} value={value} onCommit={onChange} />
         <span className="sf-resource-max">/ {max}</span>
       </div>
       <button className="sf-resource-fill" onClick={onFill}>↺</button>
