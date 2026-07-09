@@ -1,6 +1,6 @@
 # STATUS
 
-_Stand: 2026-07-08_
+_Stand: 2026-07-09_
 
 ## Wo wir stehen
 **Charakterbogen inhaltlich und funktional vollständig für den in AGENTS.md
@@ -10,9 +10,12 @@ TP/AP/RP, EAC/KAC, Fertigkeiten, Angriffsbonus, Zauberliste, Talente und
 Buffs werden korrekt live berechnet. Alle Datenkapitel des Regelwerks sind
 extrahiert (inkl. Klassen-Unterwahllisten, volle Zauber- und Talent-
 beschreibungen, Charaktermotive, restliche Kampfmechanik, restliche
-Ausrüstung), und alle in der vorherigen Session-Runde offenen UI-Komfort-
-Funktionen (Punkte 1-11 unten in „Erledigt seit letztem Stand") sind gebaut
-und im Browser-Preview getestet.
+Ausrüstung), alle UI-Komfort-Funktionen sind gebaut, und die 6 in einem
+Live-Audit gegen `pf1-bogen` gefundenen Layout-Abweichungen (App-Menü,
+aktiver Tab, Charakterliste, Zauber-Nachschlagen, Notizen-Moden) sind
+behoben — siehe „Struktur-/Layout-Unterschiede zu pf1-bogen" unten.
+Der aktuelle Stand ist gepusht und via GitHub Pages live unter
+`https://markus-froehlich.github.io/sf1-bogen/`.
 
 ## Entscheidungen (siehe AGENTS.md für Details)
 1. **Eigener Rechenkern**, nicht in `pf1-bogen` integriert.
@@ -134,6 +137,35 @@ Hybride-Gegenstände/Fahrzeuge/Andere Erwerbungen), restliche Kampfmechanik
 (Kapitel 8 komplett), volle Zauberbeschreibungen (183 Zauber), volle
 Talentbeschreibungen (alle 97), Charaktermotive (9+Motivlos).
 
+## Struktur-/Layout-Unterschiede zu pf1-bogen (Browser-Audit der Live-Seite, 2026-07-08)
+Durchgeklickt auf `https://markus-froehlich.github.io/sf1-bogen/` (Desktop-
+Breite) und mit pf1-bogen verglichen. 6 konkrete Abweichungen gefunden —
+**alle 6 sind jetzt behoben** (Commit `e68251e`, 2026-07-09):
+
+1. ✅ **⚙-Menü** war eine horizontale Button-Reihe, ist jetzt ein
+   **vertikales Dropdown-Panel** (`.app-menu-wrap`/`.app-menu`/`.app-menu-item`
+   — diese CSS-Klassen lagen bereits fertig aus dem pf1-bogen-Chassis vor,
+   `App.jsx` nutzte nur noch nicht die passende Markup-Struktur).
+2. ✅ **Menü schließt jetzt automatisch** bei Klick daneben (`.app-menu-backdrop`,
+   volle Overlay-Fläche, `onClick` schließt).
+3. ✅ **Aktiver Tab klar erkennbar**: Akzent-Balken oben am Button, Hintergrund-
+   Tint, Icon farbig (inaktive Icons per `grayscale()`-Filter entsättigt, da
+   Emoji-Glyphen `color:` ignorieren — das war der eigentliche Grund für die
+   „kaum erkennbar"-Beobachtung).
+4. ✅ **Charakterliste zeigt jetzt Volk/Klasse/Stufe** — `raceMap`/`classMap`
+   aus `races.json`/`classes.json` in `App.jsx` gebaut und an
+   `CharacterDrawer` durchgereicht (Komponente selbst brauchte keine Änderung,
+   war schon 1:1 aus pf1-bogen kopiert).
+5. ✅ **Zauber-Nachschlagen-Modus ergänzt** (🔍 Nachschlagen / 📖 Zauberbuch),
+   durchsucht alle 183 Zauber aus `spell_descriptions.json` unabhängig von
+   Klasse/eigenem Zauberbuch, mit Gradauswahl + Namenssuche.
+6. ✅ **Notizen-Moden-Umschalter ergänzt** (Notizen/Kontakte/Sonderfähigkeiten,
+   horizontal scrollbare Button-Reihe, neue `NotesTab.jsx`) — nutzt die schon
+   vorhandenen, bis dahin unbenutzten `setContacts`/`setSpecials` aus dem
+   Store. „Gifte"/„Schablonen" aus pf1-bogen bewusst nicht übernommen, da kein
+   sauberes Starfinder-Äquivalent (Gifte sind in `equipment_extras.json`
+   bereits als Ausrüstungsposten erfasst, keine eigene Verwaltungslogik nötig).
+
 ## Offene Fragen (für die nächste Session, nicht vorentschieden)
 - Gibt es eine deutsche Starfinder-SRD-Website analog zu `prd.5footstep.de`?
 - Homebrew-Kategorien — passen die 1:1 für Starfinder oder fehlt was?
@@ -145,9 +177,15 @@ Talentbeschreibungen (alle 97), Charaktermotive (9+Motivlos).
 ## GitHub / Deploy
 - GitHub-Repo existiert bereits: `git@github.com-private:markus-froehlich/sf1-bogen.git`
   (privater SSH-Alias, siehe AGENTS.md).
-- **Alle Commits sind weiterhin lokal, noch nicht gepusht** (kein Push ohne
-  explizite Nutzerfreigabe — siehe AGENTS.md „Git / Account-Trennung").
-- GitHub-Pages-Deploy via Actions noch nicht eingerichtet.
+- **Gepusht** (mit expliziter Nutzerfreigabe) bis Commit `d80da74`
+  (2026-07-08). Neuere Commits (Layout-Fixes, `e68251e`) sind Stand jetzt
+  wieder lokal — vor dem nächsten Push erneut Freigabe einholen, siehe
+  AGENTS.md „Git / Account-Trennung".
+- GitHub-Pages-Deploy via Actions (`.github/workflows/deploy.yml`, aus
+  pf1-bogen-Chassis übernommen) läuft automatisch bei Push auf `main`.
+  Live-URL: `https://markus-froehlich.github.io/sf1-bogen/`. Falls die
+  Seite nach einem Push nicht aktualisiert: in den Repo-Einstellungen
+  prüfen, ob unter Settings → Pages → Source „GitHub Actions" gewählt ist.
 - `.claude/launch.json` (Projekt-Root) für den Preview-Dev-Server vorhanden
   (`npm --prefix app run dev`, Port 5173).
 
