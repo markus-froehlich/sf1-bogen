@@ -1,3 +1,4 @@
+import { StatTag } from './StatTag.jsx'
 import './AttributeBlock.css'
 
 const ATTR_LABELS = {
@@ -6,7 +7,7 @@ const ATTR_LABELS = {
 }
 
 export function AttributeBlock({ attrKey, computed, onScoreChange, lang = 'de' }) {
-  const { score, buff, buffed, mod } = computed
+  const { score, mod, sources } = computed
   const label = ATTR_LABELS[lang]?.[attrKey] ?? attrKey
   const modStr = mod >= 0 ? `+${mod}` : `${mod}`
 
@@ -23,11 +24,7 @@ export function AttributeBlock({ attrKey, computed, onScoreChange, lang = 'de' }
         value={score}
         onChange={e => onScoreChange(attrKey, e.target.value)}
       />
-      {buff !== 0 && (
-        <div className="attr-buff" title={`Buff: ${buff > 0 ? '+' : ''}${buff} → ${buffed}`}>
-          ✦{buff > 0 ? `+${buff}` : buff}
-        </div>
-      )}
+      <StatTag sources={sources} />
       <div className={`attr-mod ${mod >= 0 ? 'pos' : 'neg'}`}>{modStr}</div>
     </div>
   )

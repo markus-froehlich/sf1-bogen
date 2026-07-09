@@ -5,12 +5,14 @@ import skillsData from '../data/skills.json'
 import { AttributeBlock } from './AttributeBlock.jsx'
 import { BioSection } from './BioSection.jsx'
 import { FeatsTab } from './FeatsTab.jsx'
+import { XpTracker } from './XpTracker.jsx'
+import { StatTag } from './StatTag.jsx'
 import { useSectionOrder } from '../store/useSectionOrder.js'
 import { computeCharacterStats } from '../engine/characterStats.js'
 import { computeSkillBonus } from '../engine/skills.js'
 import './CharacterTab.css'
 
-const CHAR_SECTIONS_DEFAULT = ['volk_klasse', 'bio', 'attribute', 'ressourcen', 'kampfwerte', 'fertigkeiten', 'talente', 'volksmerkmale', 'klassenmerkmale']
+const CHAR_SECTIONS_DEFAULT = ['volk_klasse', 'xp', 'bio', 'attribute', 'ressourcen', 'kampfwerte', 'fertigkeiten', 'talente', 'volksmerkmale', 'klassenmerkmale']
 
 function useCollapsed(storageKey) {
   const [collapsed, setCollapsed] = useState(() => {
@@ -28,13 +30,13 @@ function useCollapsed(storageKey) {
   return [collapsed, toggle]
 }
 
-export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, setFeats, lang }) {
+export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, setFeats, setXp, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { race, klass, level, abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, classAbbr } = stats
+  const { race, klass, level, abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, classAbbr, statTags } = stats
 
-  const [order, moveSection] = useSectionOrder('sf1_char_order', CHAR_SECTIONS_DEFAULT)
-  const [collapsed, toggleCollapsed] = useCollapsed('sf1_char_collapsed')
+  const [order, moveSection] = useSectionOrder('sf1_attr_order', CHAR_SECTIONS_DEFAULT)
+  const [collapsed, toggleCollapsed] = useCollapsed('sf1_attr_collapsed')
 
   const classEntry = char.meta?.classes?.[0] || { id: '', level: 1 }
   const current = char.resources_current ?? { tp: null, ap: null, rp: null }
@@ -55,6 +57,7 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
 
   const HEADINGS = {
     volk_klasse: L ? 'Volk & Klasse' : 'Race & Class',
+    xp: L ? 'Erfahrung' : 'Experience',
     bio: L ? 'Bio' : 'Bio',
     attribute: L ? 'Attribute' : 'Attributes',
     ressourcen: L ? 'Trefferpunkte, Ausdauer & Reserve' : 'Hit Points, Stamina & Resolve',
@@ -103,6 +106,7 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
         {klass && <p className="char-hint">{klass.key_ability_note}</p>}
       </>
     ),
+    xp: () => <XpTracker char={char} setXp={setXp} totalLevel={level} lang={lang} />,
     bio: () => <BioSection char={char} setBio={setBio} lang={lang} />,
     attribute: () => (
       <>
@@ -117,9 +121,8 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
               lang={lang}
               computed={{
                 score: char.attributes?.[k] ?? 10,
-                buff: 0,
-                buffed: char.attributes?.[k] ?? 10,
                 mod: abilityMods[k],
+                sources: statTags[k],
               }}
               onScoreChange={(attr, v) => setAttr(attr, v)}
             />
@@ -138,9 +141,9 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
       <>
         <div className="sf-stat-row">
           <StatBox label={L ? 'GAB' : 'BAB'} value={bab >= 0 ? `+${bab}` : bab} />
-          <StatBox label={L ? 'Reflex' : 'Reflex'} value={saveRef >= 0 ? `+${saveRef}` : saveRef} />
-          <StatBox label={L ? 'Wille' : 'Will'} value={saveWill >= 0 ? `+${saveWill}` : saveWill} />
-          <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={saveZah >= 0 ? `+${saveZah}` : saveZah} />
+          <StatBox label={L ? 'Reflex' : 'Reflex'} value={saveRef >= 0 ? `+${saveRef}` : saveRef} sources={statTags.saveRef} />
+          <StatBox label={L ? 'Wille' : 'Will'} value={saveWill >= 0 ? `+${saveWill}` : saveWill} sources={statTags.saveWill} />
+          <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={saveZah >= 0 ? `+${saveZah}` : saveZah} sources={statTags.saveZah} />
         </div>
         <p className="char-hint">{L ? 'EAC/KAC und Waffen siehe Tab „Kampf".' : 'See "Combat" tab for EAC/KAC and weapons.'}</p>
       </>
@@ -251,11 +254,12 @@ function ResourceBox({ label, full, max, current, onChange, onFill }) {
   )
 }
 
-function StatBox({ label, value }) {
+function StatBox({ label, value, sources }) {
   return (
     <div className="sf-stat-box">
       <span className="sf-stat-value">{value}</span>
       <span className="sf-stat-label">{label}</span>
+      <StatTag sources={sources} />
     </div>
   )
 }

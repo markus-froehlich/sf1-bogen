@@ -18,7 +18,7 @@ function summarize(buff, L) {
   return parts.length ? parts.join(', ') : (L ? '(keine Boni)' : '(no bonuses)')
 }
 
-export function BuffTracker({ char, setActiveBuffs, lang }) {
+export function BuffTracker({ char, setActiveBuffs, lang, hideTitle = false }) {
   const L = lang === 'de'
   const buffs = char.active_buffs ?? []
   const [draft, setDraft] = useState(null)
@@ -45,8 +45,8 @@ export function BuffTracker({ char, setActiveBuffs, lang }) {
   }
 
   return (
-    <section>
-      <h3 className="section-title">{L ? 'Buffs' : 'Buffs'}</h3>
+    <div>
+      {!hideTitle && <h3 className="section-title">{L ? 'Buffs' : 'Buffs'}</h3>}
       <p className="char-hint">{L
         ? 'Aktive Buffs fließen automatisch in Attribute, EAC/KAC, Angriffsbonus und Rettungswürfe ein.'
         : 'Active buffs automatically apply to attributes, EAC/KAC, attack bonus and saves.'}</p>
@@ -92,6 +92,6 @@ export function BuffTracker({ char, setActiveBuffs, lang }) {
       ) : (
         <button className="buff-add-btn" onClick={openNew}>+ {L ? 'Neuer Buff' : 'New buff'}</button>
       )}
-    </section>
+    </div>
   )
 }

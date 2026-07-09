@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useCharacters } from './store/useCharacters.js'
 import { useHomebrew } from './store/useHomebrew.js'
 import { useGistSync } from './store/useGistSync.js'
@@ -54,15 +54,121 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [topbarCollapsed, setTopbarCollapsed] = useState(() =>
     localStorage.getItem('sf1_topbar_collapsed') === '1')
+  const [navCollapsed, setNavCollapsed] = useState(() =>
+    localStorage.getItem('sf1_nav_collapsed') === '1')
 
   const {
     char, index, activeId, setMeta, update, setAttr, setClass,
     setInventory, setConditions, setNotes, setBio, setFeats, setActiveBuffs,
-    setContacts, setSpecials,
+    setContacts, setSpecials, setXp, setResources,
     newChar, switchChar, deleteChar, importChar,
+    getBackupData, reinitialize,
   } = useCharacters(profile)
-  const { hb, saveHBItem, deleteHB } = useHomebrew()
+  const { hb, saveHBItem, deleteHB, reloadHB } = useHomebrew()
   const gistSync = useGistSync(profile)
+  const charLevel = char.meta?.classes?.[0]?.id ? (char.meta.classes[0].level || 1) : 0
+
+  // Profilspezifische localStorage-Keys (für die Sync-Effekte unten)
+  const CHARS_INDEX_LS = profile === 'gm' ? 'sf1_chars_index_gm' : 'sf1_chars_index'
+  const ACTIVE_CHAR_LS = profile === 'gm' ? 'sf1_active_char_gm' : 'sf1_active_char'
+  const CHAR_KEY_LS    = id => profile === 'gm' ? `sf1_char_gm_${id}` : `sf1_char_${id}`
+
+  // Auto-Restore vom Gist beim Start, wenn localStorage leer ist (z.B. nach Cache-Löschung)
+  useEffect(() => {
+    if (!gistSync.connected) return
+    const isEmpty = index.length === 1 && !index[0].name && !index[0].race
+    if (!isEmpty) return
+    gistSync.pull().then(data => {
+      if (!data?.index?.length || !data?.chars) return
+      for (const [id, charData] of Object.entries(data.chars)) {
+        localStorage.setItem(CHAR_KEY_LS(id), JSON.stringify(charData))
+      }
+      localStorage.setItem(CHARS_INDEX_LS, JSON.stringify(data.index))
+      if (data.activeId) localStorage.setItem(ACTIVE_CHAR_LS, data.activeId)
+      window.location.reload()
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Refs, damit der Sync-Handler immer aktuelle Werte sieht (verhindert stale closures)
+  const pullRef      = useRef(gistSync.pull)
+  const indexRef     = useRef(index)
+  const getDataRef   = useRef(getBackupData)
+  const pushReadyRef = useRef(false) // erst nach initialem Pull pushen
+  useEffect(() => { pullRef.current    = gistSync.pull },  [gistSync.pull])
+  useEffect(() => { indexRef.current   = index },          [index])
+  useEffect(() => { getDataRef.current = getBackupData },  [getBackupData])
+
+  // Beim Start: erst pullen, dann Push aktivieren (verhindert Überschreiben mit veraltetem lokalem Stand)
+  useEffect(() => {
+    if (!gistSync.connected) return
+    pushReadyRef.current = false
+    async function init() {
+      const data = await pullRef.current()
+      if (data?.index?.length && data?.chars) {
+        const remoteMax = Math.max(...data.index.map(e => e.updated ?? 0))
+        const localMax  = Math.max(...indexRef.current.map(e => e.updated ?? 0))
+        if (remoteMax > localMax) {
+          for (const [id, charData] of Object.entries(data.chars)) {
+            localStorage.setItem(CHAR_KEY_LS(id), JSON.stringify(charData))
+          }
+          localStorage.setItem(CHARS_INDEX_LS, JSON.stringify(data.index))
+          if (data.homebrew) { localStorage.setItem('sf1_homebrew', JSON.stringify(data.homebrew)); reloadHB() }
+          if (data.preferences) {
+            for (const [k, v] of Object.entries(data.preferences)) {
+              localStorage.setItem(k, JSON.stringify(v))
+            }
+          }
+          reinitialize()
+          pushReadyRef.current = true
+          return
+        }
+      }
+      pushReadyRef.current = true
+    }
+    init()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gistSync.connected])
+
+  // Auto-Push zum Gist bei jeder Charakteränderung (debounced, 3s)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (gistSync.connected && pushReadyRef.current) gistSync.schedulePush(getBackupData)
+  }, [index])
+
+  // Alle 20s + bei Tab-Fokus prüfen — neu laden, falls Remote-Stand neuer ist
+  useEffect(() => {
+    if (!gistSync.connected) return
+    let reloading = false
+    async function checkRemote() {
+      if (reloading || !pushReadyRef.current) return
+      const data = await pullRef.current()
+      if (!data?.index?.length || !data?.chars) return
+      const remoteMax = Math.max(...data.index.map(e => e.updated ?? 0))
+      const localMax  = Math.max(...indexRef.current.map(e => e.updated ?? 0))
+      if (remoteMax <= localMax) return
+      reloading = true
+      for (const [id, charData] of Object.entries(data.chars)) {
+        localStorage.setItem(CHAR_KEY_LS(id), JSON.stringify(charData))
+      }
+      localStorage.setItem(CHARS_INDEX_LS, JSON.stringify(data.index))
+      if (data.homebrew) { localStorage.setItem('sf1_homebrew', JSON.stringify(data.homebrew)); reloadHB() }
+      if (data.preferences) {
+        for (const [k, v] of Object.entries(data.preferences)) {
+          localStorage.setItem(k, JSON.stringify(v))
+        }
+      }
+      reinitialize()
+      reloading = false
+    }
+    const interval = setInterval(checkRemote, 20000)
+    function onVisible() { if (document.visibilityState === 'visible') checkRemote() }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => {
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', onVisible)
+    }
+  }, [gistSync.connected])
 
   function applyFont(scale) {
     localStorage.setItem('sf1_font_scale', scale)
@@ -83,6 +189,14 @@ export default function App() {
     setTopbarCollapsed(v => {
       const next = !v
       localStorage.setItem('sf1_topbar_collapsed', next ? '1' : '0')
+      return next
+    })
+  }
+
+  function toggleNav() {
+    setNavCollapsed(v => {
+      const next = !v
+      localStorage.setItem('sf1_nav_collapsed', next ? '1' : '0')
       return next
     })
   }
@@ -122,65 +236,91 @@ export default function App() {
       )}
       <header className={`topbar${topbarCollapsed ? ' bar-collapsed' : ''}`}>
         <div className="topbar-row1">
-          <button className="topbar-icon-btn" onClick={() => setDrawerOpen(true)} title={lang === 'de' ? 'Charaktere' : 'Characters'}>☰</button>
-          <input
-            className="char-name-input"
-            placeholder={lang === 'de' ? 'Charaktername' : 'Character name'}
-            value={char.meta?.name || ''}
-            onChange={e => setMeta('name', e.target.value)}
-          />
-          <div className="topbar-actions app-menu-wrap">
+          <button className="topbar-icon-btn char-list-btn" onClick={() => setDrawerOpen(true)} title={lang === 'de' ? 'Charakterliste' : 'Characters'}>
+            ☰
+            {index.length > 1 && <span className="char-count-badge">{index.length}</span>}
+          </button>
+          {charLevel > 0 && (
+            <span className="topbar-level">{lang === 'de' ? 'Stufe' : 'Lvl'} {charLevel}</span>
+          )}
+          <div className="topbar-actions">
+            <div className="app-menu-wrap">
+              <button className="topbar-icon-btn" onClick={() => setMenuOpen(v => !v)} title={lang === 'de' ? 'Menü' : 'Menu'}>
+                ⚙
+                {gistSync.connected && (
+                  <span className="gist-status-badge"
+                    style={{ background: gistSync.status === 'ok' ? '#6ec97e' : gistSync.status === 'error' ? '#c96e6e' : '#c9a96e' }} />
+                )}
+              </button>
+              {menuOpen && (
+                <>
+                  <div className="app-menu-backdrop" onClick={() => setMenuOpen(false)} />
+                  <div className="app-menu" onClick={e => e.stopPropagation()}>
+                    <button className="app-menu-item" onClick={() => { exportChar(); setMenuOpen(false) }}>⬇ {lang === 'de' ? 'Exportieren' : 'Export'}</button>
+                    <label className="app-menu-item app-menu-import">
+                      ⬆ {lang === 'de' ? 'Importieren' : 'Import'}
+                      <input type="file" accept="application/json" onChange={e => { handleImportFile(e); setMenuOpen(false) }} hidden />
+                    </label>
+                    <button className="app-menu-item app-menu-print-btn" onClick={() => { setPrintOpen(true); setMenuOpen(false) }}>🖨 {lang === 'de' ? 'Drucken' : 'Print'}</button>
+                    <button className="app-menu-item" onClick={() => { setHbOpen(true); setMenuOpen(false) }}>✦ Homebrew</button>
+                    <button className="app-menu-item" onClick={() => { setGistOpen(true); setMenuOpen(false) }}>
+                      ☁ Backup{gistSync.connected && <span className="app-menu-sync-indicator" />}
+                    </button>
+                    <div className="app-menu-divider" />
+                    <div className="app-menu-profile-row">
+                      <span className="app-menu-profile-label">{lang === 'de' ? 'Profil:' : 'Profile:'}</span>
+                      <div className="profile-toggle">
+                        <button className={`profile-btn${profile === 'player' ? ' active' : ''}`} onClick={() => { switchProfile('player'); setMenuOpen(false) }}>SP</button>
+                        <button className={`profile-btn${profile === 'gm' ? ' active' : ''}`} onClick={() => { switchProfile('gm'); setMenuOpen(false) }}>SL</button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="font-scale-stepper" title={lang === 'de' ? 'Schriftgröße' : 'Font size'}>
+              <button className="fss-btn" onClick={fontDown} disabled={fontScale === _SCALES[0]}>−</button>
+              <span className="fss-label">Aa</span>
+              <button className="fss-btn" onClick={fontUp} disabled={fontScale === _SCALES[_SCALES.length - 1]}>+</button>
+            </div>
+            <button className="lang-btn" onClick={toggleLang} title={lang === 'de' ? 'Sprache' : 'Language'}>{lang === 'de' ? 'EN' : 'DE'}</button>
+            <span className="app-version" title="Build-Version">#{typeof __COMMIT__ !== 'undefined' ? __COMMIT__ : '—'}</span>
             <button className="topbar-icon-btn bar-collapse-btn" onClick={toggleTopbar} title={lang === 'de' ? 'Menü einklappen' : 'Collapse menu'}>−</button>
-            <button className="topbar-icon-btn" onClick={() => setMenuOpen(v => !v)} title={lang === 'de' ? 'Menü' : 'Menu'}>⚙</button>
-            {menuOpen && (
-              <>
-                <div className="app-menu-backdrop" onClick={() => setMenuOpen(false)} />
-                <div className="app-menu">
-                  <button className="app-menu-item" onClick={() => { exportChar(); setMenuOpen(false) }}>⬇ {lang === 'de' ? 'Export' : 'Export'}</button>
-                  <label className="app-menu-item app-menu-import">
-                    ⬆ {lang === 'de' ? 'Import' : 'Import'}
-                    <input type="file" accept="application/json" onChange={e => { handleImportFile(e); setMenuOpen(false) }} hidden />
-                  </label>
-                  <div className="app-menu-divider" />
-                  <button className="app-menu-item" onClick={() => { setHbOpen(true); setMenuOpen(false) }}>⚙ Homebrew</button>
-                  <button className="app-menu-item" onClick={() => { setGistOpen(true); setMenuOpen(false) }}>☁ Backup</button>
-                  <div className="app-menu-divider" />
-                  <button className="app-menu-item app-menu-print-btn" onClick={() => { setPrintOpen(true); setMenuOpen(false) }}>🖨 {lang === 'de' ? 'Drucken' : 'Print'}</button>
-                </div>
-              </>
-            )}
           </div>
         </div>
-        <div className="topbar-row2">
-          <div className="profile-toggle">
-            <button className={`profile-btn${profile === 'player' ? ' active' : ''}`} onClick={() => switchProfile('player')}>SP</button>
-            <button className={`profile-btn${profile === 'gm' ? ' active' : ''}`} onClick={() => switchProfile('gm')}>SL</button>
-          </div>
-          <div className="font-scale-stepper" title={lang === 'de' ? 'Schriftgröße' : 'Font size'}>
-            <button className="fss-btn" onClick={fontDown} disabled={fontScale === _SCALES[0]}>−</button>
-            <span className="fss-label">Aa</span>
-            <button className="fss-btn" onClick={fontUp} disabled={fontScale === _SCALES[_SCALES.length - 1]}>+</button>
-          </div>
-          <button className="lang-btn" onClick={toggleLang} title={lang === 'de' ? 'Sprache' : 'Language'}>{lang === 'de' ? 'EN' : 'DE'}</button>
-        </div>
+        <input
+          className="char-name-input"
+          placeholder={lang === 'de' ? 'Charaktername' : 'Character name'}
+          value={char.meta?.name || ''}
+          onChange={e => setMeta('name', e.target.value)}
+        />
+        <input
+          className="player-name-input"
+          placeholder={lang === 'de' ? 'Spielende Person' : 'Player'}
+          value={char.meta?.player ?? ''}
+          onChange={e => setMeta('player', e.target.value)}
+        />
       </header>
 
       <main className="main-scroll">
-        {tab === 'char'   && <CharacterTab char={char} setMeta={setMeta} setClass={setClass} setAttr={setAttr} update={update} setBio={setBio} setFeats={setFeats} lang={lang} />}
-        {tab === 'combat' && <CombatTab char={char} setConditions={setConditions} setActiveBuffs={setActiveBuffs} lang={lang} />}
+        {tab === 'char'   && <CharacterTab char={char} setMeta={setMeta} setClass={setClass} setAttr={setAttr} update={update} setBio={setBio} setFeats={setFeats} setXp={setXp} lang={lang} />}
+        {tab === 'combat' && <CombatTab char={char} setConditions={setConditions} setActiveBuffs={setActiveBuffs} setResources={setResources} lang={lang} />}
         {tab === 'gear'   && <GearTab char={char} update={update} setInventory={setInventory} lang={lang} />}
         {tab === 'spells' && <SpellsTab char={char} update={update} lang={lang} />}
         {tab === 'ship'   && <PlaceholderTab label="Raumschiff (spätere Phase, siehe STATUS.md)" />}
         {tab === 'notes'  && <NotesTab char={char} setNotes={setNotes} setContacts={setContacts} setSpecials={setSpecials} lang={lang} />}
       </main>
 
-      <nav className="bottom-nav">
+      {navCollapsed && (
+        <button className="bar-restore bar-restore-bottom" onClick={toggleNav} title={lang === 'de' ? 'Navigation einblenden' : 'Show navigation'}>▴</button>
+      )}
+      <nav className={`bottom-nav${navCollapsed ? ' bar-collapsed' : ''}`}>
         {TABS.map(t => (
           <button key={t.id} className={`nav-btn ${tab === t.id ? 'active' : ''}`} onClick={() => setTab(t.id)} title={t.label}>
             <span className="nav-icon">{t.icon}</span>
-            <span className="nav-label">{t.label}</span>
           </button>
         ))}
+        <button className="nav-collapse-handle" onClick={toggleNav} title={lang === 'de' ? 'Navigation einklappen' : 'Collapse navigation'}>−</button>
       </nav>
 
       {drawerOpen && (
@@ -202,7 +342,7 @@ export default function App() {
         <GistSyncPanel
           gistSync={gistSync}
           onClose={() => setGistOpen(false)}
-          profile="player"
+          profile={profile}
         />
       )}
     </div>

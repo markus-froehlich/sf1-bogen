@@ -166,6 +166,75 @@ Breite) und mit pf1-bogen verglichen. 6 konkrete Abweichungen gefunden —
    sauberes Starfinder-Äquivalent (Gifte sind in `equipment_extras.json`
    bereits als Ausrüstungsposten erfasst, keine eigene Verwaltungslogik nötig).
 
+## Pf1-bogen-Parität + Buff-/Zustands-Badges (Session 2026-07-09, Runde 2)
+Nutzer-Vorgabe: „Der Pf1 ist schon weiter entwickelt und ich mag die sehr
+ähnlich haben vom feeling und vom UI." Live-Vergleich gegen `pf1-bogen`
+durchgeführt, alle gefundenen Punkte umgesetzt:
+- **Gist-Sync wie pf1-bogen**: die 4 Sync-`useEffect`s (Auto-Restore bei
+  leerem localStorage, Pull-vor-Push-Freigabe via `pushReadyRef`, debounced
+  Auto-Push bei jeder Änderung, 20s-Poll + `visibilitychange`) 1:1 aus
+  pf1-bogen übernommen (`sf1_`-Key-Präfixe statt `pf1_`). Nebenbei Bug
+  gefixt: `GistSyncPanel` bekam hartcodiert `profile="player"` statt
+  `profile={profile}` — SL-Backup zeigte fälschlich „Spieler-Backup".
+- **Topbar/Menü/Bottom-Nav** komplett an pf1-bogen angeglichen: Stufe-Badge,
+  Zähler-Badge auf ☰, vertikales ⚙-Menü mit SP/SL-Profil-Zeile darin (statt
+  eigener Topbar-Zeile), Sync-Status-Punkt, Build-Versions-Tag, Name- und
+  Spielername-Zeile getrennt. Bottom-Nav auf reine Icons ohne Label
+  umgestellt, schlichte Akzentfarben-Hervorhebung (kein Grayscale-Filter/
+  Akzent-Balken mehr), Einklapp-Handle + Restore-Buttons ergänzt.
+- **XP-Tracker** (`XpTracker.jsx`) neu gebaut mit Starfinders eigener
+  Tabelle 2-4 (einzelne EP-Progression 1-20, aus Kapitel 2 Rohtext
+  extrahiert — kein Schnell/Mittel/Langsam wie PF1e), als Sektion im
+  Charakter-Tab reorder-/einklappbar.
+- **Ressourcen-Panel** (`ResourcesPanel.jsx`) generisch nachgebaut — ohne
+  die PF1e-Klassenformeln-Vorschläge (Kampfrausch/Kanalisieren/etc. passen
+  nicht auf Starfinder-Klassen), sonst identisches Verhalten (Max/Aktuell,
+  Verbrauchen/Zurücksetzen, Alle-zurücksetzen).
+- **Kampf-Tab** auf das gleiche Reorder-/Einklapp-Muster wie der
+  Charakter-Tab umgestellt (▶/▼ + ↑/↓ pro Sektion, `sf1_combat_order`/
+  `sf1_combat_collapsed`), Ressourcen-Panel und Buff-Tracker als Sektionen
+  integriert. Klassenmerkmale bewusst NICHT als Sektion ergänzt (Nutzer:
+  „die klassen merkmale lassen wir mal").
+
+**Bugfix + neues Feature, ausgelöst durch Nutzer-Nachfrage** (Screenshot der
+pf1-bogen-Live-Seite mit Buff-Badges auf Attributen): geprüft, ob Buffs
+sich wirklich auf abgeleitete Werte auswirken UND ob das visuell als Badge
+sichtbar ist, analog pf1-bogen.
+- **Bug gefunden & gefixt**: `AttributeBlock` unterstützte das ✦-Badge
+  schon strukturell, aber `CharacterTab.jsx` übergab hartcodiert `buff: 0`
+  — Badge wurde nie angezeigt, obwohl der Modifikator daneben den Buff
+  schon korrekt einrechnete.
+- **Neu: Zustände wirken jetzt auch rechnerisch**, nicht mehr nur
+  beschreibend. `data/conditions.json` hat jetzt bei 16 der 35 Zustände ein
+  `mods`-Feld (nur was explizit als Zahl im Originaltext stand, nichts
+  interpoliert/geraten — z.B. „Erschüttert": `{attack:-2, saveRef:-2,
+  saveWill:-2, saveZah:-2}`, „Gelähmt"/„Hilflos": `{geMod:-5}` als direkter
+  Eingriff in den GE-Modifikator statt in den Attributswert). Neue Engine-
+  Datei `engine/conditions.js` (`computeConditionTotals`, Pendant zu
+  `engine/buffs.js`), verdrahtet in `characterStats.js`: fließt in EAC/KAC,
+  Angriffsbonus, alle drei Rettungswürfe und (nur GE) den Attributsmodifikator
+  ein.
+- **Neue geteilte Badge-Komponente** `StatTag.jsx` (✦-Badge, grün bei
+  positiver, amber bei negativer Summe, Tooltip listet alle Quellen einzeln
+  auf — Buffs UND Zustände gemeinsam, exakt wie im pf1-bogen-Vorbild) —
+  eingebaut bei: Attributen, Reflex/Wille/Zähigkeit (Charakter-Tab),
+  EAC/KAC und Angriffsbonus (Kampf-Tab). BAB bekommt bewusst kein Badge
+  (nichts modifiziert BAB direkt).
+- **Bewusste Umfangsgrenze**: nur Werte, die die Engine bereits aggregiert
+  (Angriff/EAC/KAC/Rettungswürfe/GE-Mod) haben Zahlen-Mods bekommen.
+  Bewegungsrate, Fertigkeitswürfe (pauschal), Initiative und alle rein
+  verhaltensbeschreibenden Effekte („keine Aktionen möglich" etc.) bleiben
+  bewusst nur Fließtext — dafür gibt's keinen passenden Rechenkern-Hook,
+  und Raten wäre hier Regel-Erfindung statt Extraktion. Betroffene
+  19 Zustände ohne `mods`-Feld sind in `conditions.json` einfach ohne das
+  Feld gelassen (kein Platzhalter, kein `mods: {}`).
+- **Verhalten bei Zustands-Verkettung** (z.B. „Betäubt" verweist nur auf
+  „ist auf dem Falschen Fuß" ohne eigene Zahl zu wiederholen): bewusst NICHT
+  automatisch verkettet — nur Zahlen, die im eigenen Beschreibungstext des
+  jeweiligen Zustands stehen, fließen ein. Verkettung hätte Doppelzählung
+  riskiert, falls der Nutzer den referenzierten Zustand zusätzlich manuell
+  aktiviert.
+
 ## Offene Fragen (für die nächste Session, nicht vorentschieden)
 - Gibt es eine deutsche Starfinder-SRD-Website analog zu `prd.5footstep.de`?
 - Homebrew-Kategorien — passen die 1:1 für Starfinder oder fehlt was?
@@ -177,10 +246,11 @@ Breite) und mit pf1-bogen verglichen. 6 konkrete Abweichungen gefunden —
 ## GitHub / Deploy
 - GitHub-Repo existiert bereits: `git@github.com-private:markus-froehlich/sf1-bogen.git`
   (privater SSH-Alias, siehe AGENTS.md).
-- **Gepusht** (mit expliziter Nutzerfreigabe) bis Commit `d80da74`
-  (2026-07-08). Neuere Commits (Layout-Fixes, `e68251e`) sind Stand jetzt
-  wieder lokal — vor dem nächsten Push erneut Freigabe einholen, siehe
-  AGENTS.md „Git / Account-Trennung".
+- **Gepusht** (mit expliziter Nutzerfreigabe) bis Commit `31ec11a`
+  (2026-07-09). Die pf1-bogen-Paritäts-Arbeit + Buff-/Zustands-Badges
+  (siehe „Pf1-bogen-Parität + Buff-/Zustands-Badges" oben) sind Stand jetzt
+  noch lokal, nicht committet — vor Commit/Push wie immer erneut Freigabe
+  einholen, siehe AGENTS.md „Git / Account-Trennung".
 - GitHub-Pages-Deploy via Actions (`.github/workflows/deploy.yml`, aus
   pf1-bogen-Chassis übernommen) läuft automatisch bei Push auf `main`.
   Live-URL: `https://markus-froehlich.github.io/sf1-bogen/`. Falls die

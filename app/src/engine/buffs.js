@@ -7,11 +7,15 @@ export const BUFF_FIELDS = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH', 'attack', 'eac',
 
 export function computeBuffTotals(activeBuffs = []) {
   const totals = Object.fromEntries(BUFF_FIELDS.map(f => [f, 0]))
+  const sources = Object.fromEntries(BUFF_FIELDS.map(f => [f, []]))
   for (const buff of activeBuffs) {
     if (buff.active === false) continue
     for (const field of BUFF_FIELDS) {
-      totals[field] += Number(buff[field]) || 0
+      const value = Number(buff[field]) || 0
+      if (value === 0) continue
+      totals[field] += value
+      sources[field].push({ name: buff.name, value })
     }
   }
-  return totals
+  return { totals, sources }
 }

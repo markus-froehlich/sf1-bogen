@@ -132,6 +132,21 @@ Copyright, bleibt nur lokal.
 - Charakterdaten lokal (localStorage), optionales GitHub-Gist-Backup.
 - Export/Import: Charakter als JSON-Datei.
 
+## Commit & Push — automatisch, ohne Rückfrage (seit 2026-07-09)
+Nutzer-Freigabe, wortwörtlich erteilt: „ja auto commit und push". Das gilt
+**nur für dieses Repo** (rein privat, dedizierter SSH-Key, siehe unten) und
+überschreibt für dieses Projekt die sonst geltende Grundregel „nie ohne
+explizite Freigabe pushen":
+- Nach abgeschlossener, getesteter Arbeit (Build grün, im Preview verifiziert)
+  selbstständig committen UND pushen — keine Rückfrage pro Commit/Push nötig.
+- Gilt NICHT für die in „Git / Account-Trennung" unten weiterhin strikt
+  geltenden Ausnahmen: niemals Account wechseln, niemals `gh auth switch`,
+  niemals selbstständig einen neuen SSH-Key hinterlegen. Diese drei bleiben
+  IMMER explizite-Freigabe-pflichtig, unabhängig von dieser Auto-Push-Regel.
+- Bei destruktiven Git-Operationen (`push --force`, `reset --hard` auf schon
+  gepushte Commits etc.) weiterhin vorher fragen — die Auto-Freigabe deckt
+  nur den normalen „commit + push nach main"-Fall ab.
+
 ## Git / Account-Trennung (Pflicht, keine Ausnahme)
 Dieses Repo ist **strikt privat** — niemals mit dem Lotuscrafts-Account
 verbinden. Es nutzt denselben dedizierten SSH-Key/Host-Alias wie `pf1-bogen`:
