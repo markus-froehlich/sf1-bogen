@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 10: Magie und Zauber, vollstaendige alphabetische Zauberliste mit Statbloecken, S. 340-386",
+    "source": "SF1e-Regelwerk (dt., Ulisses-Spiele), Kapitel 10: Magie und Zauber, vollstaendige alphabetische Zauberliste mit Statbloecken, S. 340-386",
     "note": "Ergaenzt spells.json (Kurzlisten pro Klasse/Grad) um die vollen Statbloecke (Schule/Zeitaufwand/Reichweite/Ziele/Wirkungsdauer/Rettungswurf/Zauberresistenz) und Fliesstexte. Per 4 parallelen Sub-Agenten aus extraction/kapitel10_zauberbeschreibungen_raw.txt strukturiert (Zeilenbereiche mit Ueberlappung, dedupliziert). Verweiszauber (\"funktioniert wie X\") uebernehmen teils nur die Delta-Felder aus dem Original, fehlende Felder sind bewusst null statt geraten. Einzelne Eintraege mit unsicher:true markiert wo das zweispaltige PDF-Layout Zuordnungen erschwerte (teils durch direkte PDF-Nachextraktion ohne -layout gegengeprueft)."
   },
   "spells": [

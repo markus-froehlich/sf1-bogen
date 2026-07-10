@@ -1,7 +1,7 @@
-# Starfinder Web App
+# SF1e Web App
 
-Selbstrechnender Starfinder-Charakterbogen als PWA — Schwesterprojekt zum
-Pathfinder-1e-Charakterbogen (`pf1-bogen`), gleiche Bauweise, eigener Rechenkern.
+Selbstrechnender SF1e-Bogen als PWA — Schwesterprojekt zum
+Pathfinder-1e-Bogen (`pf1-bogen`), gleiche Bauweise, eigener Rechenkern.
 
 @AGENTS.md
 @STATUS.md

@@ -1,4 +1,4 @@
-// Quelle: Starfinder Grundregelwerk, Kapitel 7, "Ausrüstung" (S. 166-167).
+// Quelle: SF1e-Regelwerk, Kapitel 7, "Ausrüstung" (S. 166-167).
 
 // S. 167: Typische Ortschaft = Gegenstandsstufe bis Charakterstufe+1,
 // bedeutende Ortschaft = Charakterstufe+2 maximal verfügbar/erwerbbar.

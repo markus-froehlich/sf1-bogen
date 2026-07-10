@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 10: Magie und Zauber, S. 328-339 (Magie, Zauberliste des Aspiranten, Zauberliste des Technomagiers)",
+    "source": "SF1e-Regelwerk (dt., Ulisses-Spiele), Kapitel 10: Magie und Zauber, S. 328-339 (Magie, Zauberliste des Aspiranten, Zauberliste des Technomagiers)",
     "pdf_pages": "331-340",
     "note": "Nur die Zauberlisten (Name + Kurzbeschreibung pro Grad 0-6) wurden erfasst, NICHT die ausführlichen Zauberbeschreibungen (S. 340-386, ~46 Buchseiten) - das ist eine bewusste Scope-Entscheidung, siehe STATUS.md. 'special_marker: R' markiert einen im Buch mit hochgestelltem R gekennzeichneten Zauber (Bedeutung im extrahierten Textausschnitt nicht erklärt - vermutlich 'Ritual' o.ä., nicht spekulativ aufgelöst).",
     "technomancer_grad5_caveat": "Bei der Technomagier-Zauberliste war im pdftotext-Layout die Spaltenzuordnung zwischen 4. und 5. Grad an einer Stelle nicht eindeutig (8 Zauber könnten zu Grad 4 ODER Grad 5 gehören). Diese 8 wurden nur unter Grad 4 aufgeführt, um Doppelzählung zu vermeiden - Technomagier grad5 ist daher möglicherweise unvollständig. Bei Bedarf im Originaltext (S. 338-339) oder extraction/kapitel10_magie_zauberlisten_raw.txt nachprüfen."

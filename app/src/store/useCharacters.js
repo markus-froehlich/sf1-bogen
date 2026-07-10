@@ -60,7 +60,7 @@ export const DEFAULT_CHAR = {
   resources: [],
   nl_damage: 0,
   magic_slots: {},
-  // ── Starfinder-eigene Felder ──────────────────────────────────────────
+  // ── SF1e-eigene Felder ──────────────────────────────────────────
   credits: 1000,
   equipped: { armor_id: '', weapon_ids: [] },
   resources_current: { tp: null, ap: null, rp: null },

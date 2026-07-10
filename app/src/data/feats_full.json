@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 6: Talente, vollständige Einzelbeschreibungen, S. 150-164",
+    "source": "SF1e-Regelwerk (dt., Ulisses-Spiele), Kapitel 6: Talente, vollständige Einzelbeschreibungen, S. 150-164",
     "note": "Ergänzt feats.json (Tabellen-Kurzfassung) um die vollen Fließtexte inkl. Normal/Speziell-Absätze. Per Sub-Agent aus extraction/kapitel6_talente_raw.txt strukturiert. Zuordnung nach Name identisch zu feats.json (Verweis über 'name')."
   },
   "feats_full": [

@@ -1,5 +1,5 @@
 // Aggregiert Rassen-/Klassendaten + Attribute eines Charakters zu den
-// abgeleiteten Starfinder-Kennwerten (Modifikatoren, TP/AP/RP, EAC/KAC, BAB,
+// abgeleiteten SF1e-Kennwerten (Modifikatoren, TP/AP/RP, EAC/KAC, BAB,
 // Rettungswürfe). Zentrale Stelle, damit CharacterTab/CombatTab/GearTab nicht
 // jeweils eigene Kopien der Berechnung pflegen.
 

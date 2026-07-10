@@ -3,7 +3,7 @@
 _Stand: 2026-07-09_
 
 ## Wo wir stehen
-**Charakterbogen inhaltlich und funktional vollständig für den in AGENTS.md
+**Bogen inhaltlich und funktional vollständig für den in AGENTS.md
 definierten Kernumfang** (alles außer Raumschiffe, Kapitel 9, das bewusst
 zurückgestellt bleibt). Volk wählen → Klasse wählen → Attribute eintragen →
 TP/AP/RP, EAC/KAC, Fertigkeiten, Angriffsbonus, Zauberliste, Talente und
@@ -59,7 +59,7 @@ gerendert (HEADINGS/BODIES-Maps), jeder Abschnitt mit unabhängigem Klapp-Pfeil
 localStorage (`sf1_attr_order`/`sf1_attr_collapsed` bzw. `sf1_combat_order`/
 `sf1_combat_collapsed`).
 - **Charakter** (`CharacterTab.jsx`): Volk&Klasse, **Erfahrung**
-  (`XpTracker.jsx` — Starfinders eigene Tabelle 2-4, einzelne EP-Progression
+  (`XpTracker.jsx` — SF1es eigene Tabelle 2-4, einzelne EP-Progression
   1-20), Bio (`BioSection.jsx`), Attribute (inkl. Buff-/Zustands-Badge, siehe
   unten), **Talente** (`FeatsTab.jsx` — Budget-Anzeige nach Tabelle 2-4,
   Autocomplete-Suche, volle Beschreibung aus `feats_full.json`),
@@ -91,10 +91,10 @@ localStorage (`sf1_attr_order`/`sf1_attr_collapsed` bzw. `sf1_combat_order`/
 **Aufgeräumt (2026-07-07/08):** ursprünglich aus pf1-bogen kopierte
 `ConditionsPanel.jsx`, `InventoryTab.jsx` sowie die damaligen (Pathfinder-
 geprägten) `ResourcesPanel.jsx`/`XpTracker.jsx` gelöscht — komplett
-Pathfinder-spezifisch/falsch für Starfinder. `BioSection.jsx` war
+Pathfinder-spezifisch/falsch für SF1e. `BioSection.jsx` war
 spielsystem-neutral und wurde stattdessen eingebaut statt gelöscht.
 **`ResourcesPanel.jsx`/`XpTracker.jsx` gibt es seit 2026-07-09 wieder** —
-diesmal als eigenständige Starfinder-Neubauten (eigene EP-Tabelle bzw.
+diesmal als eigenständige SF1e-Neubauten (eigene EP-Tabelle bzw.
 generischer Ressourcen-Tracker ohne PF1e-Klassenformeln), nicht die alten
 Dateien.
 
@@ -127,7 +127,7 @@ Angriffs-Buff, beides nach Deaktivieren zurückgesetzt), mobiles Layout bei
 - **Homebrew-Kategorien** (classes/races/weapons/armor/shields, aus
   Pathfinder übernommen) — ob Augmentierungen/Cyberware als eigene Kategorie
   sinnvoll wären, ist noch offen.
-- **Deutsche Starfinder-SRD-Website** analog `prd.5footstep.de` für
+- **Deutsche SF1e-SRD-Website** analog `prd.5footstep.de` für
   Verweislinks — noch nicht geprüft, ob es sowas gibt.
 
 ## Erledigt seit letztem Stand (diese Session-Runde, 2026-07-07/08)
@@ -178,7 +178,7 @@ Breite) und mit pf1-bogen verglichen. 6 konkrete Abweichungen gefunden —
    horizontal scrollbare Button-Reihe, neue `NotesTab.jsx`) — nutzt die schon
    vorhandenen, bis dahin unbenutzten `setContacts`/`setSpecials` aus dem
    Store. „Gifte"/„Schablonen" aus pf1-bogen bewusst nicht übernommen, da kein
-   sauberes Starfinder-Äquivalent (Gifte sind in `equipment_extras.json`
+   sauberes SF1e-Äquivalent (Gifte sind in `equipment_extras.json`
    bereits als Ausrüstungsposten erfasst, keine eigene Verwaltungslogik nötig).
 
 ## Pf1-bogen-Parität + Buff-/Zustands-Badges (Session 2026-07-09, Runde 2)
@@ -197,13 +197,13 @@ durchgeführt, alle gefundenen Punkte umgesetzt:
   Spielername-Zeile getrennt. Bottom-Nav auf reine Icons ohne Label
   umgestellt, schlichte Akzentfarben-Hervorhebung (kein Grayscale-Filter/
   Akzent-Balken mehr), Einklapp-Handle + Restore-Buttons ergänzt.
-- **XP-Tracker** (`XpTracker.jsx`) neu gebaut mit Starfinders eigener
+- **XP-Tracker** (`XpTracker.jsx`) neu gebaut mit SF1es eigener
   Tabelle 2-4 (einzelne EP-Progression 1-20, aus Kapitel 2 Rohtext
   extrahiert — kein Schnell/Mittel/Langsam wie PF1e), als Sektion im
   Charakter-Tab reorder-/einklappbar.
 - **Ressourcen-Panel** (`ResourcesPanel.jsx`) generisch nachgebaut — ohne
   die PF1e-Klassenformeln-Vorschläge (Kampfrausch/Kanalisieren/etc. passen
-  nicht auf Starfinder-Klassen), sonst identisches Verhalten (Max/Aktuell,
+  nicht auf SF1e-Klassen), sonst identisches Verhalten (Max/Aktuell,
   Verbrauchen/Zurücksetzen, Alle-zurücksetzen).
 - **Kampf-Tab** auf das gleiche Reorder-/Einklapp-Muster wie der
   Charakter-Tab umgestellt (▶/▼ + ↑/↓ pro Sektion, `sf1_combat_order`/
@@ -251,8 +251,8 @@ sichtbar ist, analog pf1-bogen.
   aktiviert.
 
 ## Offene Fragen (für die nächste Session, nicht vorentschieden)
-- Gibt es eine deutsche Starfinder-SRD-Website analog zu `prd.5footstep.de`?
-- Homebrew-Kategorien — passen die 1:1 für Starfinder oder fehlt was?
+- Gibt es eine deutsche SF1e-SRD-Website analog zu `prd.5footstep.de`?
+- Homebrew-Kategorien — passen die 1:1 für SF1e oder fehlt was?
 - Sollen die in „Bekannte Lücken" genannten kleineren Extraktionslücken
   (Agent Stufe 20, Solarier Stufe 14, Technomagier 17/20, Größenkategorien-
   Tabelle, erster Zauber vor „Ausbessern") gezielt nachrecherchiert werden,
@@ -276,7 +276,7 @@ sichtbar ist, analog pf1-bogen.
   (`npm --prefix app run dev`, Port 5173).
 
 ## Hinweise
-- PDF liegt lokal im Projektordner (`Starfinder_Grundregelwerk_(PDF).pdf`,
+- PDF liegt lokal im Projektordner (`SF1e_Regelwerk_(PDF).pdf`,
   ~210 MB), gitignored.
 - Alle `extraction/kapitel*_raw.txt`-Dateien sind gitignored, bleiben aber
   auf der Platte — nützlich für gezielte Nachextraktion der oben genannten

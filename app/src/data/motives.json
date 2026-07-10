@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 2: Charaktererschaffung, Abschnitt Charaktermotive, S. 28-37",
+    "source": "SF1e-Regelwerk (dt., Ulisses-Spiele), Kapitel 2: Charaktererschaffung, Abschnitt Charaktermotive, S. 28-37",
     "note": "Per Sub-Agent aus extraction/kapitel2_charaktermotive_raw.txt (S. 29-37) strukturiert; die Sonderregel 'Motivlose Charaktere' (S. 28) wurde separat per pdftotext nachextrahiert und von Hand ergänzt, da sie im ursprünglichen Seitenbereich fehlte."
   },
   "motivlose_charaktere": {

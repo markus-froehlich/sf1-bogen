@@ -1,4 +1,4 @@
-// Quelle: Starfinder Grundregelwerk, Kapitel 8, "Kampfgrundlagen" (S. 240-245)
+// Quelle: SF1e-Regelwerk, Kapitel 8, "Kampfgrundlagen" (S. 240-245)
 // und "Verwundung und Tod" (S. 250-252).
 
 // S. 240: RK-Grundwert 10 + Rüstungsbonus (ERK oder KRK) + GE-Modifikator

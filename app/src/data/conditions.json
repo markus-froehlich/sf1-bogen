@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 8: Taktische Regeln, Abschnitt Zustände, Tabelle 8-2, S. 273-277",
+    "source": "SF1e-Regelwerk (dt., Ulisses-Spiele), Kapitel 8: Taktische Regeln, Abschnitt Zustände, Tabelle 8-2, S. 273-277",
     "pdf_pages": "275-278",
     "count": 35,
-    "note": "Diese Liste ist eigenständig für Starfinder erhoben, NICHT identisch mit Pathfinders 22 Zuständen aus components/ConditionsPanel.jsx (die 1:1 aus pf1-bogen übernommen wurde und noch die alten Pathfinder-Zustände hardcodiert hat, siehe AGENTS.md-Warnung). ConditionsPanel.jsx muss auf Basis dieser Datei neu gebaut werden (Teil von Task 8, App.jsx-Umbau)."
+    "note": "Diese Liste ist eigenständig für SF1e erhoben, NICHT identisch mit Pathfinders 22 Zuständen aus components/ConditionsPanel.jsx (die 1:1 aus pf1-bogen übernommen wurde und noch die alten Pathfinder-Zustände hardcodiert hat, siehe AGENTS.md-Warnung). ConditionsPanel.jsx muss auf Basis dieser Datei neu gebaut werden (Teil von Task 8, App.jsx-Umbau)."
   },
   "conditions": [
     {"name": "Abgelenkt", "description": "Du erleidest einen Malus von -2 auf Angriffswürfe.", "mods": {"attack": -2}},

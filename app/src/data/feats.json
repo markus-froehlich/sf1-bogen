@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 6: Talente, Tabelle 6-1, S. 150-164",
+    "source": "SF1e-Regelwerk (dt., Ulisses-Spiele), Kapitel 6: Talente, Tabelle 6-1, S. 150-164",
     "pdf_pages": "152-165",
     "count": 97,
     "note": "Aus Tabelle 6-1 (Name/Voraussetzungen/Vorteil) extrahiert - der kompakten Zusammenfassung aller Talente. Die ausführlichen Einzelbeschreibungen im Fließtext danach (mit Abschnitten Normal/Speziell) wurden NICHT zusätzlich übernommen, nur die Tabellenkurzfassung. is_combat_feat = true bedeutet: vom Soldaten als Bonustalent wählbar (im Buch mit '*' markiert), schließt aber Angehörige anderer Klassen nicht aus, das Talent zu wählen, sofern Voraussetzungen erfüllt sind."

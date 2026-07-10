@@ -15,9 +15,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
-        name: 'Starfinder Charakterbogen',
-        short_name: 'PF1 Bogen',
-        description: 'Starfinder Charakterbogen — deutsch/englisch',
+        name: 'SF1e Bogen',
+        short_name: 'SF1 Bogen',
+        description: 'SF1e Bogen — deutsch/englisch',
         theme_color: '#1a1a2e',
         background_color: '#1a1a2e',
         display: 'standalone',

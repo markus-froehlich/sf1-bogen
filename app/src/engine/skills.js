@@ -1,4 +1,4 @@
-// Quelle: Starfinder Grundregelwerk, Kapitel 5, "Fertigkeiten erlangen" und
+// Quelle: SF1e-Regelwerk, Kapitel 5, "Fertigkeiten erlangen" und
 // "Fertigkeitswürfe" (S. 132), Kapitel 2 "Schritt 7: Fertigkeitsränge und
 // Talente" (S. 15).
 

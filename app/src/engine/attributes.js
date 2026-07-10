@@ -1,4 +1,4 @@
-// Quelle: Starfinder Grundregelwerk, Kapitel 2, "Attributswerte" (S. 18-21)
+// Quelle: SF1e-Regelwerk, Kapitel 2, "Attributswerte" (S. 18-21)
 // und "Stufenaufstieg und Attributswerte" (S. 21, wiederholt S. 26).
 
 export const ABILITY_KEYS = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH'];

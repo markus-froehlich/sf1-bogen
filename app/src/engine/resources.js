@@ -1,7 +1,7 @@
-// Quelle: Starfinder Grundregelwerk, Kapitel 2, "Gesundheit und
+// Quelle: SF1e-Regelwerk, Kapitel 2, "Gesundheit und
 // Reservepunkte" (S. 22-23). Die drei Punktevorräte: Trefferpunkte (TP),
 // Ausdauerpunkte (AP), Reservepunkte (RP) - siehe AGENTS.md zur Einordnung
-// als Starfinder-Kernmechanik ohne Pathfinder-Äquivalent.
+// als SF1e-Kernmechanik ohne Pathfinder-Äquivalent.
 
 // S. 22, "Trefferpunkte berechnen": Volks-TP nur einmalig mit der 1. Stufe,
 // danach pro Stufe die in der Klasse festgelegte (stufenunabhängige) Anzahl.

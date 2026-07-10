@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { NumberField } from './NumberField.jsx'
 import './XpTracker.css'
 
-// Tabelle 2-4: Charakterverbesserung (Starfinder Grundregelwerk, S. 24) —
+// Tabelle 2-4: Charakterverbesserung (SF1e-Regelwerk, S. 24) —
 // einzelne, universelle EP-Progression (kein Schnell/Mittel/Langsam wie bei PF1e).
 const XP_THRESHOLDS = [0, 1300, 3300, 6000, 10000, 15000, 23000, 34000, 50000, 71000, 105000, 145000, 210000, 295000, 425000, 600000, 850000, 1200000, 1700000, 2400000]
 

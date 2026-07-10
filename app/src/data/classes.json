@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "source": "Starfinder Grundregelwerk (dt., Ulisses-Spiele), Kapitel 4: Klassen, S. 56-129",
+    "source": "SF1e-Regelwerk (dt., Ulisses-Spiele), Kapitel 4: Klassen, S. 56-129",
     "pdf_pages": "58-131 (Archetypen: 127-131)",
     "count": 7,
     "note": "Klassenfertigkeiten pro Klasse sind NICHT hier dupliziert - siehe app/src/data/skills.json, Feld class_skill_for (Klassenkürzel AGE/ASP/GES/MEC/SOL/SLD/TEC). save_ref/save_will/save_zah sind die Grundrettungswurfboni (Zähigkeit = Fortitude-Analog) aus der jeweiligen Klassentabelle. Erzeugt per paralleler Sub-Agenten-Extraktion aus je einer Rohtext-Datei pro Klasse (extraction/kapitel4_<klasse>_raw.txt), anschließend gegen Stichproben im Rohtext verifiziert (u.a. BAB-Progression: Solarier und Soldat volle BAB = Stufe, Agent/Gesandter/Mechaniker/Aspirant/Technomagier 3/4-BAB).",
