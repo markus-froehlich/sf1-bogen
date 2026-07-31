@@ -11,6 +11,7 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
   const resources = char.resources ?? []
   const [editId, setEditId] = useState(null)
   const [draft, setDraft] = useState(EMPTY)
+  const [confirmResetId, setConfirmResetId] = useState(null) // null | resource id | '__all__'
 
   function openNew() {
     setDraft({ ...EMPTY, id: genId() })
@@ -42,9 +43,14 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
     setResources(prev => prev.map(r =>
       r.id === id ? { ...r, current: 0 } : r
     ))
+    setConfirmResetId(null)
   }
   function restoreAll() {
     setResources(prev => prev.map(r => ({ ...r, current: 0 })))
+    setConfirmResetId(null)
+  }
+  function requestRestore(id) {
+    setConfirmResetId(prev => prev === id ? null : id)
   }
 
   const anyUsed = resources.some(r => r.current > 0)
@@ -53,10 +59,17 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
     <div className="res-panel">
       <div className="res-header">
         {!hideTitle && <h3 className="ct-heading">{L ? 'Ressourcen' : 'Resources'}</h3>}
-        {anyUsed && (
-          <button className="res-reset-all-btn" onClick={restoreAll}>
+        {anyUsed && confirmResetId !== '__all__' && (
+          <button className="res-reset-all-btn" onClick={() => requestRestore('__all__')}>
             ↺ {L ? 'Alle zurücksetzen' : 'Reset all'}
           </button>
+        )}
+        {confirmResetId === '__all__' && (
+          <div className="res-confirm">
+            <span className="res-confirm-label">{L ? 'Wirklich alle zurücksetzen?' : 'Really reset all?'}</span>
+            <button className="res-confirm-yes" onClick={restoreAll}>{L ? 'Ja' : 'Yes'}</button>
+            <button className="res-confirm-no" onClick={() => setConfirmResetId(null)}>{L ? 'Abbrechen' : 'Cancel'}</button>
+          </div>
         )}
       </div>
 
@@ -119,7 +132,7 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
                     style={{ color: pct > 0.5 ? 'var(--good)' : pct > 0 ? '#c9a96e' : '#c96e6e' }}>
                     {remaining}/{r.max}{r.unit ? ` ${r.unit}` : ''}
                   </span>
-                  <button className="res-restore-btn" onClick={() => restore(r.id)} disabled={r.current === 0}
+                  <button className="res-restore-btn" onClick={() => requestRestore(r.id)} disabled={r.current === 0}
                     title={L ? 'Zurücksetzen' : 'Reset'}>↺</button>
                 </div>
               </div>
@@ -128,6 +141,13 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
                   style={{ width: `${pct * 100}%`,
                     background: pct > 0.5 ? 'var(--good)' : pct > 0 ? '#c9a96e' : '#c96e6e' }} />
               </div>
+              {confirmResetId === r.id && (
+                <div className="res-confirm">
+                  <span className="res-confirm-label">{L ? 'Wirklich zurücksetzen?' : 'Really reset?'}</span>
+                  <button className="res-confirm-yes" onClick={() => restore(r.id)}>{L ? 'Ja' : 'Yes'}</button>
+                  <button className="res-confirm-no" onClick={() => setConfirmResetId(null)}>{L ? 'Abbrechen' : 'Cancel'}</button>
+                </div>
+              )}
             </div>
           )
         })}
