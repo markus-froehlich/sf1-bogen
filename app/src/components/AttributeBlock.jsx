@@ -1,4 +1,4 @@
-import { StatTag } from './StatTag.jsx'
+import { StatBadges } from './DetailTag.jsx'
 import { NumberField } from './NumberField.jsx'
 import './AttributeBlock.css'
 
@@ -8,7 +8,7 @@ const ATTR_LABELS = {
 }
 
 export function AttributeBlock({ attrKey, computed, onScoreChange, lang = 'de' }) {
-  const { score, mod, sources } = computed
+  const { score, mod, buffSources, condSources } = computed
   const label = ATTR_LABELS[lang]?.[attrKey] ?? attrKey
   const modStr = mod >= 0 ? `+${mod}` : `${mod}`
 
@@ -24,7 +24,7 @@ export function AttributeBlock({ attrKey, computed, onScoreChange, lang = 'de' }
         value={score}
         onCommit={v => onScoreChange(attrKey, v)}
       />
-      <StatTag sources={sources} />
+      <StatBadges buffSources={buffSources} condSources={condSources} />
       <div className={`attr-mod ${mod >= 0 ? 'pos' : 'neg'}`}>{modStr}</div>
     </div>
   )

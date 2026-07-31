@@ -13,12 +13,6 @@ import { armorClass } from './combat.js'
 import { computeBuffTotals } from './buffs.js'
 import { computeConditionTotals } from './conditions.js'
 
-// Kombiniert Buff- und Zustands-Quellen für ein Feld zu einer gemeinsamen
-// Liste, die die Badge-Komponente als Tooltip-Aufschlüsselung nutzt.
-function mergeSources(buffSources, condSources, field) {
-  return [...(buffSources[field] ?? []), ...(condSources[field] ?? [])]
-}
-
 export const ABILITY_KEYS = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH']
 
 // Zuordnung Attribut → das dazugehörige "effektiver Modifikator"-Feld in
@@ -128,24 +122,18 @@ export function computeCharacterStats(char) {
     otherModifiers: buffTotals.kac + condTotals.kac,
   })
 
-  // Kombinierte Buff+Zustand-Quellen je Wert, für Badges in der UI.
-  const statTags = {
-    eac: mergeSources(buffSources, condSources, 'eac'),
-    kac: mergeSources(buffSources, condSources, 'kac'),
-    attack: mergeSources(buffSources, condSources, 'attack'),
-    damage: mergeSources(buffSources, condSources, 'damage'),
-    saveRef: mergeSources(buffSources, condSources, 'saveRef'),
-    saveWill: mergeSources(buffSources, condSources, 'saveWill'),
-    saveZah: mergeSources(buffSources, condSources, 'saveZah'),
-    skills: mergeSources(buffSources, condSources, 'skills'),
-    perception: mergeSources(buffSources, condSources, 'perception'),
-  }
+  // Buff- und Zustands-Quellen getrennt je Wert, damit die UI sie als zwei
+  // optisch unterscheidbare Badges anzeigen kann (✦ Buff / ⚡ Zustand) statt
+  // einer einzigen vermischten Liste.
+  const TAG_FIELDS = ['eac', 'kac', 'attack', 'damage', 'saveRef', 'saveWill', 'saveZah', 'skills', 'perception']
+  const buffTags = Object.fromEntries(TAG_FIELDS.map(f => [f, buffSources[f] ?? []]))
+  const condTags = Object.fromEntries(TAG_FIELDS.map(f => [f, condSources[f] ?? []]))
   for (const k of ABILITY_KEYS) {
     const modField = ABILITY_MOD_FIELD[k]
-    statTags[k] = [...buffSources[k]]
-    if (condTotals[modField] !== 0) {
-      statTags[k].push(...condSources[modField].map(s => ({ name: `${s.name} (Mod)`, value: s.value })))
-    }
+    buffTags[k] = buffSources[k] ?? []
+    condTags[k] = condTotals[modField] !== 0
+      ? condSources[modField].map(s => ({ name: `${s.name} (Mod)`, value: s.value }))
+      : []
   }
 
   return {
@@ -166,6 +154,7 @@ export function computeCharacterStats(char) {
       skills: buffTotals.skills + condTotals.skills,
       perception: buffTotals.perception + condTotals.perception,
     },
-    statTags,
+    buffTags,
+    condTags,
   }
 }

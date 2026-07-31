@@ -6,7 +6,7 @@ import { meleeAttackBonus, rangedAttackBonus } from '../engine/combat.js'
 import { computeWeaponDamageModifier } from '../engine/weapons.js'
 import { BuffTracker } from './BuffTracker.jsx'
 import { ResourcesPanel } from './ResourcesPanel.jsx'
-import { StatTag } from './StatTag.jsx'
+import { StatBadges } from './DetailTag.jsx'
 import { NumberField } from './NumberField.jsx'
 import { useSectionOrder } from '../store/useSectionOrder.js'
 import './CombatTab.css'
@@ -55,7 +55,7 @@ function allWeapons() {
 export function CombatTab({ char, update, setConditions, setActiveBuffs, setResources, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, eac, kac, armor, buffTotals, statTags } = stats
+  const { abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, eac, kac, armor, buffTotals, buffTags, condTags } = stats
   const weapons = useMemo(allWeapons, [])
   const [weaponName, setWeaponName] = useState('')
 
@@ -112,9 +112,9 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
     kampfwerte: () => (
       <div className="sf-stat-row">
         <StatBox label={L ? 'GAB' : 'BAB'} value={bab >= 0 ? `+${bab}` : bab} />
-        <StatBox label={L ? 'Reflex' : 'Reflex'} value={saveRef >= 0 ? `+${saveRef}` : saveRef} sources={statTags.saveRef} />
-        <StatBox label={L ? 'Wille' : 'Will'} value={saveWill >= 0 ? `+${saveWill}` : saveWill} sources={statTags.saveWill} />
-        <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={saveZah >= 0 ? `+${saveZah}` : saveZah} sources={statTags.saveZah} />
+        <StatBox label={L ? 'Reflex' : 'Reflex'} value={saveRef >= 0 ? `+${saveRef}` : saveRef} buffSources={buffTags.saveRef} condSources={condTags.saveRef} />
+        <StatBox label={L ? 'Wille' : 'Will'} value={saveWill >= 0 ? `+${saveWill}` : saveWill} buffSources={buffTags.saveWill} condSources={condTags.saveWill} />
+        <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={saveZah >= 0 ? `+${saveZah}` : saveZah} buffSources={buffTags.saveZah} condSources={condTags.saveZah} />
       </div>
     ),
     ac: () => (
@@ -123,12 +123,12 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
           <div className="sf-stat-box big">
             <span className="sf-stat-value">{eac}</span>
             <span className="sf-stat-label">EAC</span>
-            <StatTag sources={statTags.eac} />
+            <StatBadges buffSources={buffTags.eac} condSources={condTags.eac} />
           </div>
           <div className="sf-stat-box big">
             <span className="sf-stat-value">{kac}</span>
             <span className="sf-stat-label">KAC</span>
-            <StatTag sources={statTags.kac} />
+            <StatBadges buffSources={buffTags.kac} condSources={condTags.kac} />
           </div>
         </div>
         <p className="char-hint">
@@ -149,11 +149,11 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
         </select>
         {weapon && (
           <div className="combat-weapon-card">
-            <div className="cwc-row"><span>{L ? 'Angriffsbonus' : 'Attack bonus'}</span><strong>{attackBonus >= 0 ? `+${attackBonus}` : attackBonus} <StatTag sources={statTags.attack} /></strong></div>
+            <div className="cwc-row"><span>{L ? 'Angriffsbonus' : 'Attack bonus'}</span><strong>{attackBonus >= 0 ? `+${attackBonus}` : attackBonus} <StatBadges buffSources={buffTags.attack} condSources={condTags.attack} /></strong></div>
             <div className="cwc-row">
               <span>{L ? 'Schaden' : 'Damage'}</span>
               <strong>
-                {weapon.schaden || '—'}{damageModifier !== 0 ? ` (${damageModifier >= 0 ? '+' : ''}${damageModifier})` : ''} <StatTag sources={statTags.damage} />
+                {weapon.schaden || '—'}{damageModifier !== 0 ? ` (${damageModifier >= 0 ? '+' : ''}${damageModifier})` : ''} <StatBadges buffSources={buffTags.damage} condSources={condTags.damage} />
               </strong>
             </div>
             {weapon.kritisch && <div className="cwc-row"><span>{L ? 'Kritisch' : 'Critical'}</span><strong>{weapon.kritisch}</strong></div>}
@@ -231,12 +231,12 @@ function ResourceBox({ label, full, max, current, onChange, onFill }) {
   )
 }
 
-function StatBox({ label, value, sources }) {
+function StatBox({ label, value, buffSources, condSources }) {
   return (
     <div className="sf-stat-box">
       <span className="sf-stat-value">{value}</span>
       <span className="sf-stat-label">{label}</span>
-      <StatTag sources={sources} />
+      <StatBadges buffSources={buffSources} condSources={condSources} />
     </div>
   )
 }

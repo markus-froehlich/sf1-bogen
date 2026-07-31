@@ -31,7 +31,7 @@ function useCollapsed(storageKey) {
 export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, setFeats, setXp, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { race, klass, level, abilityMods, statTags } = stats
+  const { race, klass, level, abilityMods, buffTags, condTags } = stats
 
   const [order, moveSection] = useSectionOrder('sf1_attr_order', CHAR_SECTIONS_DEFAULT)
   const [collapsed, toggleCollapsed] = useCollapsed('sf1_attr_collapsed')
@@ -102,7 +102,8 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
               computed={{
                 score: char.attributes?.[k] ?? 10,
                 mod: abilityMods[k],
-                sources: statTags[k],
+                buffSources: buffTags[k],
+                condSources: condTags[k],
               }}
               onScoreChange={(attr, v) => setAttr(attr, v)}
             />
