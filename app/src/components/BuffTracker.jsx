@@ -24,6 +24,7 @@ export function BuffTracker({ char, setActiveBuffs, lang, hideTitle = false }) {
   const L = lang === 'de'
   const buffs = char.active_buffs ?? []
   const [draft, setDraft] = useState(null)
+  const [confirmDelId, setConfirmDelId] = useState(null)
 
   function openNew() {
     setDraft({ ...EMPTY })
@@ -44,6 +45,10 @@ export function BuffTracker({ char, setActiveBuffs, lang, hideTitle = false }) {
   }
   function removeBuff(id) {
     setActiveBuffs(prev => prev.filter(b => b.id !== id))
+    setConfirmDelId(null)
+  }
+  function requestRemove(id) {
+    setConfirmDelId(prev => prev === id ? null : id)
   }
 
   return (
@@ -64,7 +69,15 @@ export function BuffTracker({ char, setActiveBuffs, lang, hideTitle = false }) {
               <span className="buff-name">{b.name}</span>
               <span className="buff-mods">{summarize(b, L)}</span>
             </div>
-            <button className="buff-del-btn" onClick={() => removeBuff(b.id)} title={L ? 'Löschen' : 'Delete'}>🗑</button>
+            {confirmDelId === b.id ? (
+              <div className="buff-confirm">
+                <span className="buff-confirm-label">{L ? 'Wirklich?' : 'Really?'}</span>
+                <button className="buff-confirm-yes" onClick={() => removeBuff(b.id)}>{L ? 'Ja' : 'Yes'}</button>
+                <button className="buff-confirm-no" onClick={() => setConfirmDelId(null)}>{L ? 'Abbrechen' : 'Cancel'}</button>
+              </div>
+            ) : (
+              <button className="buff-del-btn" onClick={() => requestRemove(b.id)} title={L ? 'Löschen' : 'Delete'}>🗑</button>
+            )}
           </div>
         ))}
       </div>

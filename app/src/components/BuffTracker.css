@@ -53,6 +53,39 @@
   flex-shrink: 0;
 }
 
+.buff-confirm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.buff-confirm-label {
+  font-size: 0.7rem;
+  color: #c96e6e;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.buff-confirm-yes {
+  background: #c96e6e;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.buff-confirm-no {
+  background: var(--surface3);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
 .buff-add-btn {
   align-self: flex-start;
   background: var(--surface3);

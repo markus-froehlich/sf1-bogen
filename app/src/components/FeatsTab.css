@@ -79,6 +79,39 @@
   flex-shrink: 0;
 }
 
+.feats-confirm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.feats-confirm-label {
+  font-size: 0.7rem;
+  color: #c96e6e;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.feats-confirm-yes {
+  background: #c96e6e;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.feats-confirm-no {
+  background: var(--surface3);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
 .feats-item-prereq {
   font-size: 0.72rem;
   color: var(--accent);

@@ -30,8 +30,22 @@ export function SkillsTab({ char, update, lang }) {
           const keyMod = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH'].includes(s.key_ability) ? abilityMods[s.key_ability] : 0
           const isPerception = s.id === 'wahrnehmung'
           const otherModifiers = buffTotals.skills + (isPerception ? buffTotals.perception : 0)
-          const buffSources = isPerception ? [...buffTags.skills, ...buffTags.perception] : buffTags.skills
-          const condSources = isPerception ? [...condTags.skills, ...condTags.perception] : condTags.skills
+          // Zusätzlich zu den flachen Fertigkeiten-/Wahrnehmungs-Mods auch die
+          // Badges des Schlüsselattributs mergen - ein Buff/Zustand, der nur
+          // den Attributsmodifikator ändert (z.B. Gelähmt: GE -5), rechnet
+          // sich schon korrekt in `keyMod`/den Bonus ein, taucht aber ohne
+          // diesen Merge bei keiner Fertigkeitszeile als Badge auf.
+          const keyAbility = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH'].includes(s.key_ability) ? s.key_ability : null
+          const buffSources = [
+            ...buffTags.skills,
+            ...(isPerception ? buffTags.perception : []),
+            ...(keyAbility ? buffTags[keyAbility] : []),
+          ]
+          const condSources = [
+            ...condTags.skills,
+            ...(isPerception ? condTags.perception : []),
+            ...(keyAbility ? condTags[keyAbility] : []),
+          ]
           const bonus = computeSkillBonus({ ranks, isClassSkill, keyAbilityModifier: keyMod, otherModifiers })
           const usable = s.untrained || ranks > 0
           return (

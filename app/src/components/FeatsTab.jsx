@@ -15,6 +15,7 @@ export function FeatsTab({ char, setFeats, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
   const [query, setQuery] = useState('')
+  const [confirmDelName, setConfirmDelName] = useState(null)
 
   const chosen = char.feats ?? []
   const budget = featBudget(stats.level)
@@ -35,6 +36,10 @@ export function FeatsTab({ char, setFeats, lang }) {
 
   function removeFeat(name) {
     setFeats(prev => prev.filter(n => n !== name))
+    setConfirmDelName(null)
+  }
+  function requestRemove(name) {
+    setConfirmDelName(prev => prev === name ? null : name)
   }
 
   return (
@@ -73,7 +78,15 @@ export function FeatsTab({ char, setFeats, lang }) {
               <div key={name} className="feats-item">
                 <div className="feats-item-head">
                   <span className="feats-item-name">{name}{short?.is_combat_feat ? ' [Kampf]' : ''}</span>
-                  <button className="feats-item-del" onClick={() => removeFeat(name)} title={L ? 'Löschen' : 'Delete'}>🗑</button>
+                  {confirmDelName === name ? (
+                    <div className="feats-confirm">
+                      <span className="feats-confirm-label">{L ? 'Wirklich?' : 'Really?'}</span>
+                      <button className="feats-confirm-yes" onClick={() => removeFeat(name)}>{L ? 'Ja' : 'Yes'}</button>
+                      <button className="feats-confirm-no" onClick={() => setConfirmDelName(null)}>{L ? 'Abbrechen' : 'Cancel'}</button>
+                    </div>
+                  ) : (
+                    <button className="feats-item-del" onClick={() => requestRemove(name)} title={L ? 'Löschen' : 'Delete'}>🗑</button>
+                  )}
                 </div>
                 {short?.prerequisites && (
                   <p className="feats-item-prereq">{L ? 'Voraussetzungen: ' : 'Prerequisites: '}{short.prerequisites}</p>

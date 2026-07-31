@@ -30,6 +30,7 @@ export function GearTab({ char, update, setInventory, lang }) {
   const armorList = useMemo(allArmor, [])
   const [armorPick, setArmorPick] = useState('')
   const [weaponPick, setWeaponPick] = useState('')
+  const [confirmDelId, setConfirmDelId] = useState(null)
 
   const items = char.inventory?.items ?? []
   const credits = char.credits ?? 0
@@ -48,6 +49,10 @@ export function GearTab({ char, update, setInventory, lang }) {
 
   function removeItem(id) {
     setInventory(prev => ({ ...prev, items: (prev.items ?? []).filter(it => it.id !== id) }))
+    setConfirmDelId(null)
+  }
+  function requestRemove(id) {
+    setConfirmDelId(prev => prev === id ? null : id)
   }
 
   function addArmorToInventory() {
@@ -135,15 +140,24 @@ export function GearTab({ char, update, setInventory, lang }) {
         {items.length === 0 && <p className="char-hint">{L ? 'Noch keine Gegenstände.' : 'No items yet.'}</p>}
         <div className="gear-item-list">
           {items.map(it => (
-            <div key={it.id} className="gear-item-row">
-              <span className="gear-item-name">{it.name}{it.qty > 1 ? ` ×${it.qty}` : ''}</span>
-              <span className="gear-item-meta">{it.category === 'armor' && (
-                <button className="gear-equip-btn" onClick={() => equipArmor(it.name)} disabled={equippedArmorId === it.name}>
-                  {equippedArmorId === it.name ? (L ? 'angelegt' : 'worn') : (L ? 'anlegen' : 'equip')}
-                </button>
-              )}</span>
-              <span className="gear-item-price">{it.price || 0}</span>
-              <button className="gear-item-del" onClick={() => removeItem(it.id)}>🗑</button>
+            <div key={it.id} className="gear-item-wrap">
+              <div className="gear-item-row">
+                <span className="gear-item-name">{it.name}{it.qty > 1 ? ` ×${it.qty}` : ''}</span>
+                <span className="gear-item-meta">{it.category === 'armor' && (
+                  <button className="gear-equip-btn" onClick={() => equipArmor(it.name)} disabled={equippedArmorId === it.name}>
+                    {equippedArmorId === it.name ? (L ? 'angelegt' : 'worn') : (L ? 'anlegen' : 'equip')}
+                  </button>
+                )}</span>
+                <span className="gear-item-price">{it.price || 0}</span>
+                <button className="gear-item-del" onClick={() => requestRemove(it.id)}>🗑</button>
+              </div>
+              {confirmDelId === it.id && (
+                <div className="gear-confirm">
+                  <span className="gear-confirm-label">{L ? 'Wirklich löschen?' : 'Really delete?'}</span>
+                  <button className="gear-confirm-yes" onClick={() => removeItem(it.id)}>{L ? 'Ja' : 'Yes'}</button>
+                  <button className="gear-confirm-no" onClick={() => setConfirmDelId(null)}>{L ? 'Abbrechen' : 'Cancel'}</button>
+                </div>
+              )}
             </div>
           ))}
         </div>

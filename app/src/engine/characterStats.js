@@ -134,6 +134,22 @@ export function computeCharacterStats(char) {
       ? condSources[modField].map(s => ({ name: `${s.name} (Mod)`, value: s.value }))
       : []
   }
+  // EAC/KAC und Rettungswürfe hängen von einem festen Attributsmodifikator ab
+  // (GE bzw. WE/KO, siehe Kapitel 8 S. 240f.). Ein Zustand/Buff, der nur über
+  // "Effektiver X-Modifikator" wirkt (z.B. Gelähmt: GE -5), rechnet sich zwar
+  // schon korrekt in den Zahlenwert ein (abilityMods.GE trägt die Änderung
+  // bereits), taucht aber ohne diesen Merge nirgends als Badge auf. Deshalb
+  // die jeweiligen Attribut-Badge-Quellen zusätzlich anhängen.
+  buffTags.eac = [...buffTags.eac, ...buffTags.GE]
+  buffTags.kac = [...buffTags.kac, ...buffTags.GE]
+  buffTags.saveRef = [...buffTags.saveRef, ...buffTags.GE]
+  buffTags.saveWill = [...buffTags.saveWill, ...buffTags.WE]
+  buffTags.saveZah = [...buffTags.saveZah, ...buffTags.KO]
+  condTags.eac = [...condTags.eac, ...condTags.GE]
+  condTags.kac = [...condTags.kac, ...condTags.GE]
+  condTags.saveRef = [...condTags.saveRef, ...condTags.GE]
+  condTags.saveWill = [...condTags.saveWill, ...condTags.WE]
+  condTags.saveZah = [...condTags.saveZah, ...condTags.KO]
 
   return {
     race, klass, level, classEntry,
@@ -142,9 +158,14 @@ export function computeCharacterStats(char) {
     tp, ap, rp,
     armor, eac, kac,
     bab: levelRow?.bab ?? 0,
-    saveRef: (levelRow?.save_ref ?? 0) + buffTotals.saveRef + condTotals.saveRef,
-    saveWill: (levelRow?.save_will ?? 0) + buffTotals.saveWill + condTotals.saveWill,
-    saveZah: (levelRow?.save_zah ?? 0) + buffTotals.saveZah + condTotals.saveZah,
+    // S. 240f.: "Addiere deinen Geschicklichkeitsmodifikator auf deine
+    // Reflexwürfe" / "...Weisheitsmodifikator auf deine Willenswürfe" /
+    // "...Konstitutionsmodifikator auf deine Zähigkeitswürfe" - der
+    // Attributsmodifikator fehlte hier bisher komplett (nur Klassen-
+    // Grundwert + Buffs/Zustände), echter Rechenfehler.
+    saveRef: (levelRow?.save_ref ?? 0) + abilityMods.GE + buffTotals.saveRef + condTotals.saveRef,
+    saveWill: (levelRow?.save_will ?? 0) + abilityMods.WE + buffTotals.saveWill + condTotals.saveWill,
+    saveZah: (levelRow?.save_zah ?? 0) + abilityMods.KO + buffTotals.saveZah + condTotals.saveZah,
     classAbbr: CLASS_ABBR[classEntry.id] || null,
     buffTotals: {
       ...buffTotals,

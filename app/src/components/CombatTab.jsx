@@ -96,6 +96,13 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
         ? rangedAttackBonus({ baseAttackBonus: bab, dexModifier: abilityMods.GE, otherModifiers: buffTotals.attack })
         : meleeAttackBonus({ baseAttackBonus: bab, strengthModifier: abilityMods.ST, otherModifiers: buffTotals.attack }))
     : null
+  // Angriffsbonus hängt je nach Waffe von ST (Nahkampf) oder GE (Fernkampf)
+  // ab - ein Buff/Zustand, der nur diesen Attributsmodifikator ändert (z.B.
+  // Gelähmt: GE -5), rechnet sich schon korrekt in attackBonus ein, taucht
+  // aber ohne diesen Merge nicht als Badge auf.
+  const attackAbilityKey = weapon ? (weapon._isRanged ? 'GE' : 'ST') : null
+  const attackBuffSources = attackAbilityKey ? [...buffTags.attack, ...buffTags[attackAbilityKey]] : buffTags.attack
+  const attackCondSources = attackAbilityKey ? [...condTags.attack, ...condTags[attackAbilityKey]] : condTags.attack
   const damageModifier = weapon
     ? computeWeaponDamageModifier({ isMelee: weapon._isMelee, isTwoHanded: weapon._isTwoHanded, strengthModifier: abilityMods.ST, otherModifiers: buffTotals.damage })
     : 0
@@ -163,7 +170,7 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
         </select>
         {weapon && (
           <div className="combat-weapon-card">
-            <div className="cwc-row"><span>{L ? 'Angriffsbonus' : 'Attack bonus'}</span><strong>{attackBonus >= 0 ? `+${attackBonus}` : attackBonus} <StatBadges buffSources={buffTags.attack} condSources={condTags.attack} /></strong></div>
+            <div className="cwc-row"><span>{L ? 'Angriffsbonus' : 'Attack bonus'}</span><strong>{attackBonus >= 0 ? `+${attackBonus}` : attackBonus} <StatBadges buffSources={attackBuffSources} condSources={attackCondSources} /></strong></div>
             <div className="cwc-row">
               <span>{L ? 'Schaden' : 'Damage'}</span>
               <strong>

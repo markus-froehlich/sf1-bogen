@@ -1,6 +1,45 @@
 # STATUS
 
-_Stand: 2026-07-31_
+_Stand: 2026-08-01_
+
+## Zweiter Code-Vergleich gegen pf1-bogen (Session 2026-08-01)
+Nach Abschluss des 13-Punkte-Backlogs (unten) wurde erneut gegen pf1-bogen
+verglichen. Ergebnis: **ein bis dahin unentdeckter echter Rechenfehler** plus
+drei Badge-Vollständigkeits-Lücken vom selben Muster wie das dort gefixte
+KMB/KMV-Problem, alle behoben und live verifiziert:
+
+1. **Rettungswürfe fehlte der Attributsmodifikator komplett.** `saveRef`/
+   `saveWill`/`saveZah` in `engine/characterStats.js` summierten bisher nur
+   Klassen-Grundwert + Buffs/Zustände — der Attributsmodifikator (GE/WE/KO)
+   fehlte ganz, obwohl Kapitel 8 (S. 240f.) das explizit vorschreibt
+   ("Addiere deinen Geschicklichkeitsmodifikator auf deine Reflexwürfe" etc.,
+   im Rohtext `kapitel8_kampfgrundlagen_raw.txt` Zeile 145 verifiziert,
+   analog für Willen/WE und Zähigkeit/KO). Betraf **jeden** Charakter, nicht
+   nur einen Randfall — nach dem Fix in `app/src/engine/characterStats.js`
+   live geprüft (Agent Stufe 1, GE 16/+3: Reflex 2+3=5 statt vorher 2).
+2. **EAC/KAC/Rettungswürfe zeigten keinen Zustands-/Buff-Badge**, wenn ein
+   Zustand/Buff nur über den Attributsmodifikator wirkt (z.B. Gelähmt:
+   "Effektiver GE-Modifikator -5") — der Zahlenwert war schon korrekt
+   (`abilityMods.GE` trug die Änderung bereits), aber `condTags.eac/kac/
+   saveRef/saveWill/saveZah` kannten nur die flachen `mods`-Felder aus
+   `conditions.json`. Fix: die jeweiligen Attribut-Badge-Quellen
+   (`condTags.GE`/`WE`/`KO`, bereits für die Attribut-Zeilen vorhanden)
+   zusätzlich mergen — sowohl für Buffs als auch Zustände.
+3. **Angriffsbonus-Badge** hatte dasselbe Problem, aber waffenabhängig
+   (Nahkampf=ST, Fernkampf=GE) — in `CombatTab.jsx` gelöst, da dort bereits
+   bekannt ist, welche Waffe gewählt ist.
+4. **Fertigkeiten-Zeilen-Badges** ebenso, je Fertigkeit abhängig vom
+   Schlüsselattribut (`SkillsTab.jsx`, inkl. Wahrnehmung/WE).
+5. **Löschen-Bestätigung** (optional, niedrige Priorität) für Buffs
+   (`BuffTracker.jsx`), Talente (`FeatsTab.jsx`) und Inventar-Gegenstände
+   (`GearTab.jsx`) ergänzt — gleiches `confirmXId`-Muster wie
+   `ResourcesPanel.jsx`/`CharacterDrawer.jsx`.
+
+Alle 5 Punkte live im Preview verifiziert (Gelähmt-Zustand mit GE 16→effektiv
+GE-Mod -2: Reflex 5→0 mit ⚡-5-Badge, EAC/KAC 13→8 mit Badge, Fernkampf-
+Angriffsbonus mit Badge, Nahkampf-Angriffsbonus ohne Badge, GE-Fertigkeiten
+mit Badge, ST-/WE-Fertigkeiten korrekt ohne Badge; alle drei Löschen-
+Bestätigungen einzeln durchgeklickt).
 
 ## Backlog aus Code-Vergleich gegen pf1-bogen (Session 2026-07-31)
 Ein per Hintergrund-Recherche erstellter 13-Punkte-Backlog (echte Rechenfehler-

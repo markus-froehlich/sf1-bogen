@@ -39,6 +39,11 @@
   flex-direction: column;
   gap: 3px;
 }
+.gear-item-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 .gear-item-row {
   display: grid;
   grid-template-columns: 1fr auto 3.5em auto;
@@ -47,6 +52,37 @@
   background: var(--surface3);
   border-radius: 6px;
   padding: 6px 8px;
+}
+.gear-confirm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+}
+.gear-confirm-label {
+  font-size: 0.7rem;
+  color: #c96e6e;
+  font-weight: 600;
+}
+.gear-confirm-yes {
+  background: #c96e6e;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.gear-confirm-no {
+  background: var(--surface3);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  cursor: pointer;
 }
 .gear-item-name { font-size: 0.8rem; color: var(--text); }
 .gear-item-price { font-size: 0.75rem; color: var(--accent); text-align: right; }
