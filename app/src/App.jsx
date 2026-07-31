@@ -296,7 +296,10 @@ export default function App() {
               <span className="fss-label">Aa</span>
               <button className="fss-btn" onClick={fontUp} disabled={fontScale === _SCALES[_SCALES.length - 1]}>+</button>
             </div>
-            <button className="lang-btn" onClick={toggleLang} title={lang === 'de' ? 'Sprache' : 'Language'}>{lang === 'de' ? 'EN' : 'DE'}</button>
+            <button className="lang-btn" onClick={toggleLang}
+              title={lang === 'de' ? 'Sprache' : 'Language (interface only — race/class/spell/feat/item text stays German, no official English source in this project)'}>
+              {lang === 'de' ? 'EN' : 'DE'}
+            </button>
             <span className="app-version" title="Build-Version">#{typeof __COMMIT__ !== 'undefined' ? __COMMIT__ : '—'}</span>
             <button className="topbar-icon-btn bar-collapse-btn" onClick={toggleTopbar} title={lang === 'de' ? 'Menü einklappen' : 'Collapse menu'}>−</button>
           </div>
@@ -313,6 +316,11 @@ export default function App() {
           value={char.meta?.player ?? ''}
           onChange={e => setMeta('player', e.target.value)}
         />
+        {lang === 'en' && (
+          <p className="lang-content-note">
+            Interface only — race/class/spell/feat/item text is still German (no official English source used in this project).
+          </p>
+        )}
       </header>
 
       <main className="main-scroll">

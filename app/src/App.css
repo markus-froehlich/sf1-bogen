@@ -75,6 +75,14 @@
 .player-name-input:focus { outline: none; border-bottom-color: var(--accent); color: var(--text); }
 .player-name-input::placeholder { color: color-mix(in srgb, var(--text-muted) 50%, transparent); font-style: italic; }
 
+.lang-content-note {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 4px 0 0;
+  line-height: 1.35;
+}
+
 .char-list-btn {
   position: relative;
   font-size: 1rem;
