@@ -137,6 +137,18 @@
       "description": "Wie beim Manipulieren des Codes, aus dem ein Computerprogramm besteht, kannst du die DNS des Ziels manipulieren, um die Lebensfunktionen des jeweiligen Ziels auf schmerzhafte Weise umzugestalten, so dass sie den kalten und starren Prozessen eines Roboters entsprechen. Das Ziel muss einen erfolgreichen Willenswurf ablegen, ansonsten werden alle seine Bewegungsraten halbiert und es erleidet in seinem Zug 3W6 Hiebschaden pro Runde, da seine inneren Organe sich verlagern und verwandeln, um sich mehr den internen Kompenten eines Roboters anzugleichen. Jede Runde kann das Ziel einen Zähigkeitswurf ablegen, um zu versuchen, den durch diesen Zauber verursachten Schaden zu halbieren.\n\nSolange dieser Zauber wirkt, wird der Körper des Ziels sichtlich roboterartiger: Seine Stimme wird metallisch und abgehackt, seine Bewegungen ruckartig und sein Gesicht wird bewegungs- und emotionslos. Das Ziel gilt als auf dem falschen Fuß erwischt und erleidet einen Malus von –2 auf alle Würfe auf Motiv erkennen sowie auf alle Fertigkeits- und Attributswürfe, die auf Charisma und Geschicklichkeit basieren."
     },
     {
+      "name": "Dunkelsicht",
+      "grad": 2,
+      "schule": "Verwandlung",
+      "zeitaufwand": "1 Standard-Aktion",
+      "reichweite": "Berührung",
+      "ziele_oder_wirkungsbereich": "Eine Kreatur oder eine Kamera",
+      "wirkungsdauer": "1 Stunde/Stufe",
+      "rettungswurf": "Willen, keine Wirkung (harmlos)",
+      "zauberresistenz": "Ja (harmlos)",
+      "description": "Das Ziel erhält die Fähigkeit, 18 m weit in absoluter Dunkelheit zu sehen. Dunkelsicht ist nur schwarz-weiß, abgesehen davon aber wie normale Sicht."
+    },
+    {
       "name": "Ebenenbarriere",
       "grad": 6,
       "schule": "Bannzauber",
@@ -1046,6 +1058,18 @@
       "rettungswurf": "Keiner",
       "zauberresistenz": "Nein",
       "description": "Magisches Verschließen einer Tür/eines Schlosses. Klopfen oder Magie bannen heben es auf. +5 SG zum gewaltsamen Öffnen/Hacken."
+    },
+    {
+      "name": "Plappernde Leiche",
+      "grad": 0,
+      "schule": "Nekromantie (Sprachabhängig)",
+      "zeitaufwand": "1 Minute",
+      "reichweite": "Berührung",
+      "ziele_oder_wirkungsbereich": "Eine tote Kreatur",
+      "wirkungsdauer": "1 Runde",
+      "rettungswurf": "Keiner",
+      "zauberresistenz": "Nein",
+      "description": "Du kannst eine berührte Leiche dazu zwingen, mit dir zu sprechen, aber du kannst ihr keine bestimmten Fragen stellen oder auf sonstige Weise mit ihr kommunizieren. Die Leiche gibt 1 Runde lang zufällige Sätze von sich, mit einer Chance von 10%, dass dir diese Informationen nützlich sind. Nützliche Informationen könnten Warnungen vor den Gefahren in einem Raumschiffswrack, das Passwort zu einem Computer oder den Namen einer übernatürlichen Kreatur, die dir oder deinen Verbündeten nachstellt, umfassen. Der SL führt den W%-Wurf verdeckt durch und entscheidet, welche Informationen die Leiche bei ihrer Brabbelei von sich gibt und ob sie nützlich ist oder nicht.\n\nSobald eine Leiche zum Ziel des Zaubers Plappernde Leiche irgendeines Zauberkundigen geworden ist, schlägt jeder weitere Versuch, Plappernde Leiche auf diesen Leichnam zu wirken, fehl. Eine Leiche muss über einen Mund oder sonstige Möglichkeiten zu sprechen verfügen, damit dieser Zauber wirken kann, und der Zauber betrifft keine Leiche, die in eine untote Kreatur verwandelt wurde."
     },
     {
       "name": "Privates Heiligtum",
@@ -2193,5 +2217,5 @@
       "description": "Wähle ein Hauptziel und bis zu 10 Nebenziele innerhalb von 9 m. Das Hauptziel muss elektrische Ausrüstung tragen. Der Zauber sorgt für eine Überspannung, die auf die Nebenziele überspringt und allen ausgewählten Zielen 13W12 Elektrizitätsschaden zufügt. Misslingt der Reflexwurf des Hauptziels, schließt der Zauber zusätzlich einen elektrischen Gegenstand des Hauptziels für 1 Runde kurz. Vereitelt das Hauptziel den Effekt vollständig, erleiden die Nebenziele ebenfalls keine Effekte."
     }
   ],
-  "notes": "Insgesamt 183 vollstaendige Zauberbeschreibungen erfasst (Grad 0-6, allgemeine alphabetische Liste - gilt fuer Aspirant und Technomagier gemeinsam, siehe spells.json fuer die Zuordnung welche Klasse welchen Zauber kennt). Bekannte Luecke: der allererste Zauber der Datei (vermutlich \"Auflösung\", alphabetisch vor \"Ausbessern\") beginnt bereits vor dem extrahierten Seitenbereich (S. 340) und wurde nicht erfasst, da sein Name/Statblock fehlt - nicht geraten. Die vollstaendigen Zauberbeschreibungen fuer Kapitel 10 S. 340-386 sind damit bis auf diesen einen Randfall vollstaendig."
+  "notes": "Insgesamt 185 vollstaendige Zauberbeschreibungen erfasst (Grad 0-6, allgemeine alphabetische Liste - gilt fuer Aspirant und Technomagier gemeinsam, siehe spells.json fuer die Zuordnung welche Klasse welchen Zauber kennt). Bekannte Luecke: mehrere Zauber, die alphabetisch vor \"Ausbessern\" liegen (Ablenkung, Anderen schützen, Arkaner Blick, Arkanes Auge, Auflösung), beginnen bereits vor dem extrahierten Seitenbereich (S. 340) und wurden nicht erfasst, da ihr Name/Statblock im Rohtext fehlt - nicht geraten (Session 2026-07-31: gezielt in extraction/kapitel10_zauberbeschreibungen_raw.txt gesucht, keiner dieser 5 Namen kommt dort als Kapitel-Überschrift vor). Nachtrag (Session 2026-07-31): \"Dunkelsicht\" und \"Plappernde Leiche\" ergänzt, beide fehlten trotz vollstaendigem Statblock im Rohtext (reine Erfassungsluecke der vorigen Session, keine Randfall-Ursache). Ausserdem wurde geklaert, dass mehrere in spells.json unter \"Basisname, Modifikator\" gelistete Zauber (z.B. \"Befehl, Mächtiger\", \"Resistente Rüstung, Schwächere\") hier bereits unter der Buch-eigenen Adjektiv-zuerst- bzw. zusammengeschriebenen Form vorliegen (\"Mächtiger Befehl\", \"Schwächere Resistente Rüstung\", \"Massen-Droidifikation\", \"Masseneinflüsterung\" usw.) - das ist eine Namenskonvention-Abweichung zwischen den beiden Dateien, keine fehlende Extraktion. Ebenso ist \"Gravitation kontrollieren\" (Name aus spells.json) inhaltlich identisch mit dem hier unter dem Buchtitel \"Schwerkraft kontrollieren\" erfassten Zauber (der Fließtext selbst verwendet \"Gravitation kontrollieren\"), und \"Daten einschleusen\" (spells.json, Kleinschreibung) ist derselbe Zauber wie \"Daten Einschleusen\" hier (Großschreibung) - beides keine echten Lücken."
 }

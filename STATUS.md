@@ -4,14 +4,70 @@ _Stand: 2026-07-31_
 
 ## Backlog aus Code-Vergleich gegen pf1-bogen (Session 2026-07-31)
 Ein per Hintergrund-Recherche erstellter 13-Punkte-Backlog (echte Rechenfehler-
-Risiken, Mobile/UX-Lücken, Feature-Vollständigkeit, Daten-Vollständigkeit) wird
-der Reihe nach abgearbeitet, jeweils mit Live-Test in der Vorschau. Stand:
-Punkte 1-9 erledigt (Waffenschaden-Engine, Fertigkeiten-Buffs/Zustände,
+Risiken, Mobile/UX-Lücken, Feature-Vollständigkeit, Daten-Vollständigkeit) wurde
+der Reihe nach abgearbeitet, jeweils mit Live-Test in der Vorschau. **Alle 13
+Punkte erledigt** (Waffenschaden-Engine, Fertigkeiten-Buffs/Zustände,
 6-Attribut-Effektiv-Mod, Zustands-Daten erweitert, Fertigkeits-/Wahrnehmungs-
 Malus, Mobile-Tap-Badges, Buff/Zustand optisch getrennt, Ressourcen-Reset-
-Bestätigung, **Homebrew-Registrierung in der Engine**). Offen: Sprachumschaltung
-(fehlende EN-Felder), Talente-/Zauber-Anzahl gegen Quelle verifizieren,
-PWA-Icons austauschen.
+Bestätigung, Homebrew-Registrierung in der Engine, Sprachumschaltung
+gekennzeichnet, Talente-/Zauber-Anzahl verifiziert, PWA-Icons ausgetauscht).
+
+### Punkt 10: Sprachumschaltung — EN als reine Interface-Übersetzung gekennzeichnet
+Alle Datendateien per grep nach `"en":`-Feldern geprüft — keine einzige enthält
+englische Übersetzungen für Völker/Klassen/Zauber/Talente/Ausrüstung, nur die
+UI-Chrome-Strings (Buttons/Labels) sind zweisprachig. Eine vollständige
+Übersetzung von ~350 Waffen/97 Talenten/183+ Zaubern ohne offizielle englische
+Quelle wäre reine Rateübersetzung (gleiches Risiko wie der zurückgestellte
+Precog-Fall). Stattdessen: Tooltip am Sprachbutton + kurzer Hinweistext bei
+aktivem EN, dass nur die Oberfläche übersetzt ist, Inhalte deutsch bleiben.
+
+### Punkt 11: Talente-Anzahl (97) verifiziert
+Gegen `extraction/kapitel6_talente_raw.txt` (Rohtext aus dem Buch, Tabelle 6-1,
+S. 152-163) geprüft: erster Tabelleneintrag ("Aalglatter Schütze") und letzter
+("Zusätzliche Reservepunkte") stimmen exakt mit `feats.json` überein, ebenso
+eine Stichprobe von Einträgen aus der Tabellenmitte — kein Hinweis auf eine
+Lücke. Der ursprüngliche Vergleich mit Pathfinders Talentanzahl war irreführend
+(Pathfinder zählt über Dutzende Sourcebooks, SF1e nur das Grundregelwerk) und
+kein reales Extraktionsproblem.
+
+### Punkt 12: Zauber-Anzahl (261) verifiziert + 2 fehlende Beschreibungen ergänzt
+Die Zahl 261 in `spells.json` ist die Summe der Zauber-Listeneinträge beider
+Zauberklassen (131 Aspirant + 130 Technomagier je Grad 0-6), nicht die Anzahl
+einzigartiger Zauber — analog zur Talente-Zahl ein Vergleich mit Pathfinders
+Gesamtkatalog über viele Bücher, kein echtes Extraktionsproblem. Beim Abgleich
+gegen `spell_descriptions.json` (volle Statblöcke) fielen aber 27 Zaubernamen
+aus den Listen auf, die dort namentlich nicht auftauchten. Genauere Prüfung
+(Sub-Agent, direkt im Rohtext `kapitel10_zauberbeschreibungen_raw.txt`
+nachgelesen statt geraten) ergab:
+- **2 echte Lücken gefunden und ergänzt**: „Dunkelsicht" (Grad 2) und
+  „Plappernde Leiche" (Grad 0) — beide Statblöcke im Rohtext gefunden und
+  übernommen. `spell_descriptions.json` jetzt **185** Einträge (vorher 183).
+- **13 waren keine echten Lücken**, sondern Namens-Abweichungen zwischen
+  `spells.json` (Schema „Basisname, Modifikator", z.B. „Befehl, Mächtiger")
+  und `spell_descriptions.json` (Schema „Modifikator Basisname", z.B.
+  „Mächtiger Befehl") — der Zauber existiert in beiden Dateien, nur unter
+  leicht unterschiedlicher Schreibweise. Betrifft alle Mächtiger-/Schwächere-/
+  Massen-Varianten sowie zwei Schreibweisen-Abweichungen („Daten einschleusen"
+  vs. „Daten Einschleusen", „Gravitation kontrollieren" vs. „Schwerkraft
+  kontrollieren" — Letzteres eine Inkonsistenz im Buch selbst zwischen
+  Kapitelüberschrift und Fließtext-Eigenbezeichnung). **Praktisch folgenlos**:
+  `SpellsTab.jsx`s „Bekannte Zauber"-Ansicht zeigt die Kurzbeschreibung direkt
+  aus `spells.json`, ohne Namensabgleich mit `spell_descriptions.json` — nur
+  die „Nachschlagen"-Volltextsuche könnte unter der abweichenden Schreibweise
+  nichts finden. Kein Code-Fix vorgenommen (Suche müsste fuzzy nach beiden
+  Namensmustern matchen — als kleine, unkritische UX-Lücke hier vermerkt statt
+  überstürzt gepatcht).
+- **5 Zauber bestätigt fehlend**: Ablenkung, Anderen schützen, Arkaner Blick,
+  Arkanes Auge, Auflösung — alle alphabetisch vor „Ausbessern" (dem ersten
+  Eintrag in `kapitel10_zauberbeschreibungen_raw.txt`), decken sich mit der
+  bereits bekannten Extraktionsgrenze (vorher war nur „Auflösung" als
+  Einzelfall dokumentiert, jetzt auf alle 5 betroffenen Namen erweitert).
+
+### Punkt 13: PWA-Icons ausgetauscht
+`pwa-192.png`/`pwa-512.png` zeigten noch ein mittelalterliches Schild-mit-
+Kreuz-Motiv, `favicon.svg` gekreuzte Schwerter — 1:1 aus pf1-bogen übernommen
+und inhaltlich falsch für ein Sci-Fi-Regelwerk. Ersetzt durch ein Raketen-Icon
+in den bestehenden Akzentfarben (Navy/Gold).
 
 ### Punkt 9: Homebrew-Inhalte in Engine registriert
 Vorher reine Karteikarten-Verwaltung ohne jede Wirkung. Jetzt:
@@ -175,12 +231,16 @@ Angriffs-Buff, beides nach Deaktivieren zurückgesetzt), mobiles Layout bei
   Reichweiten) wurde gesucht, aber in den extrahierten Rohtexten nicht
   gefunden (`tactical_rules_extra.json` `notes`) — müsste bei Bedarf gezielt
   nachrecherchiert werden.
-- **Zauber**: `spell_descriptions.json` hat 183 vollständige Beschreibungen;
-  der alphabetisch erste Zauber vor „Ausbessern" (vermutlich „Auflösung")
-  beginnt vor dem extrahierten Seitenbereich und fehlt komplett.
-- **PWA-Icons** noch die alten Pathfinder-Platzhalter (`public/icons/`).
-- **Homebrew-Kategorien** (classes/races/weapons/armor/shields, aus
-  Pathfinder übernommen) — ob Augmentierungen/Cyberware als eigene Kategorie
+- **Zauber**: `spell_descriptions.json` hat 185 vollständige Beschreibungen;
+  5 alphabetisch vor „Ausbessern" liegende Zauber (Ablenkung, Anderen
+  schützen, Arkaner Blick, Arkanes Auge, Auflösung) beginnen vor dem
+  extrahierten Seitenbereich und fehlen komplett — siehe „Punkt 12" oben für
+  Details und den Namensabgleich-Befund (13 vermeintliche Lücken waren nur
+  Schreibweisen-Abweichungen zwischen `spells.json` und
+  `spell_descriptions.json`, keine echten Lücken).
+- **Homebrew-Kategorien** (classes/races/weapons/armor, aus Pathfinder
+  übernommen; „Schilde" wurde entfernt, da SF1e keine Schilde als RK-Quelle
+  kennt) — ob Augmentierungen/Cyberware als eigene Kategorie
   sinnvoll wären, ist noch offen.
 - **Deutsche SF1e-SRD-Website** analog `prd.5footstep.de` für
   Verweislinks — noch nicht geprüft, ob es sowas gibt.
