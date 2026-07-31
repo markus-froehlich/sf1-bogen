@@ -3,6 +3,7 @@ import weaponsData from '../data/weapons.json'
 import conditionsData from '../data/conditions.json'
 import { computeCharacterStats } from '../engine/characterStats.js'
 import { meleeAttackBonus, rangedAttackBonus } from '../engine/combat.js'
+import { computeWeaponDamageModifier } from '../engine/weapons.js'
 import { BuffTracker } from './BuffTracker.jsx'
 import { ResourcesPanel } from './ResourcesPanel.jsx'
 import { StatTag } from './StatTag.jsx'
@@ -40,10 +41,15 @@ function useCollapsed(storageKey) {
   return [collapsed, toggle]
 }
 
+const MELEE_ONEHAND_KEYS = ['simple_melee_onehand', 'advanced_melee_onehand']
+const MELEE_TWOHAND_KEYS = ['simple_melee_twohand', 'advanced_melee_twohand']
+
 function allWeapons() {
-  return WEAPON_CATEGORIES.flatMap(([key, label]) =>
-    (weaponsData[key] || []).map(w => ({ ...w, _category: label, _isRanged: key !== 'simple_melee_onehand' && key !== 'simple_melee_twohand' && key !== 'advanced_melee_onehand' && key !== 'advanced_melee_twohand' }))
-  )
+  return WEAPON_CATEGORIES.flatMap(([key, label]) => {
+    const isMelee = MELEE_ONEHAND_KEYS.includes(key) || MELEE_TWOHAND_KEYS.includes(key)
+    const isTwoHanded = MELEE_TWOHAND_KEYS.includes(key)
+    return (weaponsData[key] || []).map(w => ({ ...w, _category: label, _isRanged: !isMelee, _isMelee: isMelee, _isTwoHanded: isTwoHanded }))
+  })
 }
 
 export function CombatTab({ char, update, setConditions, setActiveBuffs, setResources, lang }) {
@@ -81,6 +87,9 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
         ? rangedAttackBonus({ baseAttackBonus: bab, dexModifier: abilityMods.GE, otherModifiers: buffTotals.attack })
         : meleeAttackBonus({ baseAttackBonus: bab, strengthModifier: abilityMods.ST, otherModifiers: buffTotals.attack }))
     : null
+  const damageModifier = weapon
+    ? computeWeaponDamageModifier({ isMelee: weapon._isMelee, isTwoHanded: weapon._isTwoHanded, strengthModifier: abilityMods.ST, otherModifiers: buffTotals.damage })
+    : 0
 
   const HEADINGS = {
     tp: L ? 'Trefferpunkte, Ausdauer & Reserve' : 'Hit Points, Stamina & Resolve',
@@ -141,7 +150,12 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
         {weapon && (
           <div className="combat-weapon-card">
             <div className="cwc-row"><span>{L ? 'Angriffsbonus' : 'Attack bonus'}</span><strong>{attackBonus >= 0 ? `+${attackBonus}` : attackBonus} <StatTag sources={statTags.attack} /></strong></div>
-            <div className="cwc-row"><span>{L ? 'Schaden' : 'Damage'}</span><strong>{weapon.schaden || '—'}</strong></div>
+            <div className="cwc-row">
+              <span>{L ? 'Schaden' : 'Damage'}</span>
+              <strong>
+                {weapon.schaden || '—'}{damageModifier !== 0 ? ` (${damageModifier >= 0 ? '+' : ''}${damageModifier})` : ''} <StatTag sources={statTags.damage} />
+              </strong>
+            </div>
             {weapon.kritisch && <div className="cwc-row"><span>{L ? 'Kritisch' : 'Critical'}</span><strong>{weapon.kritisch}</strong></div>}
             {weapon.reichweite && <div className="cwc-row"><span>{L ? 'Reichweite' : 'Range'}</span><strong>{weapon.reichweite}</strong></div>}
             {weapon.sondereigenschaften && <p className="char-hint">{weapon.sondereigenschaften}</p>}

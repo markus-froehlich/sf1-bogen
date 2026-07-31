@@ -21,6 +21,10 @@ function mergeSources(buffSources, condSources, field) {
 
 export const ABILITY_KEYS = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH']
 
+// Zuordnung Attribut → das dazugehörige "effektiver Modifikator"-Feld in
+// conditions.json (z.B. Gelähmt/Hilflos: "Effektiver GE-Modifikator -5").
+const ABILITY_MOD_FIELD = { ST: 'stMod', GE: 'geMod', KO: 'koMod', IN: 'inMod', WE: 'weMod', CH: 'chMod' }
+
 // Klassen-ID → Kürzel aus Tabelle 5-1 / skills.json class_skill_for
 export const CLASS_ABBR = {
   agent: 'AGE',
@@ -86,9 +90,14 @@ export function computeCharacterStats(char) {
   for (const k of ABILITY_KEYS) {
     abilityMods[k] = abilityModifier((Number(char.attributes?.[k]) || 10) + buffTotals[k])
   }
-  // "Effektiver GE-Modifikator -X" (Gelähmt/Hilflos) wirkt direkt auf den
-  // fertigen Modifikator, nicht auf den Attributswert - siehe conditions.json.
-  abilityMods.GE += condTotals.geMod
+  // "Effektiver X-Modifikator -Y" (z.B. Gelähmt/Hilflos: GE -5) wirkt direkt
+  // auf den fertigen Modifikator, nicht auf den Attributswert - siehe
+  // conditions.json. Aktuell nutzt nur GE dieses Muster in den Zustandsdaten,
+  // die anderen fünf Felder sind Engine-seitig vorbereitet (gleiches Muster),
+  // falls ein Zustand mal ST/KO/IN/WE/CH direkt mindert.
+  for (const k of ABILITY_KEYS) {
+    abilityMods[k] += condTotals[ABILITY_MOD_FIELD[k]]
+  }
 
   const levelRow = findLevelRow(klass, level)
   const keyAbilityModifier = resolveKeyAbilityModifier(klass, abilityMods)
@@ -124,14 +133,18 @@ export function computeCharacterStats(char) {
     eac: mergeSources(buffSources, condSources, 'eac'),
     kac: mergeSources(buffSources, condSources, 'kac'),
     attack: mergeSources(buffSources, condSources, 'attack'),
+    damage: mergeSources(buffSources, condSources, 'damage'),
     saveRef: mergeSources(buffSources, condSources, 'saveRef'),
     saveWill: mergeSources(buffSources, condSources, 'saveWill'),
     saveZah: mergeSources(buffSources, condSources, 'saveZah'),
+    skills: mergeSources(buffSources, condSources, 'skills'),
+    perception: mergeSources(buffSources, condSources, 'perception'),
   }
   for (const k of ABILITY_KEYS) {
+    const modField = ABILITY_MOD_FIELD[k]
     statTags[k] = [...buffSources[k]]
-    if (k === 'GE' && condTotals.geMod !== 0) {
-      statTags.GE.push(...condSources.geMod.map(s => ({ name: `${s.name} (Mod)`, value: s.value })))
+    if (condTotals[modField] !== 0) {
+      statTags[k].push(...condSources[modField].map(s => ({ name: `${s.name} (Mod)`, value: s.value })))
     }
   }
 
@@ -146,7 +159,13 @@ export function computeCharacterStats(char) {
     saveWill: (levelRow?.save_will ?? 0) + buffTotals.saveWill + condTotals.saveWill,
     saveZah: (levelRow?.save_zah ?? 0) + buffTotals.saveZah + condTotals.saveZah,
     classAbbr: CLASS_ABBR[classEntry.id] || null,
-    buffTotals: { ...buffTotals, attack: buffTotals.attack + condTotals.attack },
+    buffTotals: {
+      ...buffTotals,
+      attack: buffTotals.attack + condTotals.attack,
+      damage: buffTotals.damage + condTotals.damage,
+      skills: buffTotals.skills + condTotals.skills,
+      perception: buffTotals.perception + condTotals.perception,
+    },
     statTags,
   }
 }

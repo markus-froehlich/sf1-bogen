@@ -3,12 +3,13 @@ import skillsData from '../data/skills.json'
 import { computeCharacterStats } from '../engine/characterStats.js'
 import { computeSkillBonus } from '../engine/skills.js'
 import { NumberField } from './NumberField.jsx'
+import { StatTag } from './StatTag.jsx'
 import './SkillsTab.css'
 
 export function SkillsTab({ char, update, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { klass, level, abilityMods, classAbbr } = stats
+  const { klass, level, abilityMods, classAbbr, buffTotals, statTags } = stats
   const intMod = abilityMods.IN
 
   function setSkillRanks(skillId, ranks) {
@@ -27,7 +28,10 @@ export function SkillsTab({ char, update, lang }) {
           const ranks = char.skills?.[s.id]?.ranks || 0
           const isClassSkill = classAbbr ? s.class_skill_for.includes(classAbbr) : false
           const keyMod = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH'].includes(s.key_ability) ? abilityMods[s.key_ability] : 0
-          const bonus = computeSkillBonus({ ranks, isClassSkill, keyAbilityModifier: keyMod })
+          const isPerception = s.id === 'wahrnehmung'
+          const otherModifiers = buffTotals.skills + (isPerception ? buffTotals.perception : 0)
+          const sources = isPerception ? [...statTags.skills, ...statTags.perception] : statTags.skills
+          const bonus = computeSkillBonus({ ranks, isClassSkill, keyAbilityModifier: keyMod, otherModifiers })
           const usable = s.untrained || ranks > 0
           return (
             <div key={s.id} className={`skill-row ${isClassSkill ? 'is-class' : ''}`}>
@@ -42,6 +46,7 @@ export function SkillsTab({ char, update, lang }) {
                 onCommit={v => setSkillRanks(s.id, v)}
               />
               <span className={`skill-bonus ${usable ? '' : 'disabled'}`}>{bonus >= 0 ? `+${bonus}` : bonus}</span>
+              <StatTag sources={sources} />
             </div>
           )
         })}

@@ -5,7 +5,7 @@
 }
 .skill-row {
   display: grid;
-  grid-template-columns: 1fr 2.2em 3.5em 3em;
+  grid-template-columns: 1fr 2.2em 3.5em 3em auto;
   align-items: center;
   gap: 6px;
   padding: 4px 6px;
