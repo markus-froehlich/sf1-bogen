@@ -8,6 +8,7 @@ import { CharacterDrawer } from './components/CharacterDrawer.jsx'
 import { GistSyncPanel } from './components/GistSyncPanel.jsx'
 import { HomebrewPanel } from './components/HomebrewPanel.jsx'
 import { PrintView } from './components/PrintView.jsx'
+import { registerHomebrew } from './engine/homebrew.js'
 import { CharacterTab } from './components/CharacterTab.jsx'
 import { CombatTab } from './components/CombatTab.jsx'
 import { SkillsTab } from './components/SkillsTab.jsx'
@@ -68,6 +69,16 @@ export default function App() {
   } = useCharacters(profile)
   const { hb, saveHBItem, deleteHB, reloadHB } = useHomebrew()
   const gistSync = useGistSync(profile)
+
+  // Homebrew-Inhalte im Rechenkern registrieren, damit selbst erstellte
+  // Klassen/Völker/Waffen/Rüstungen in Dropdowns auftauchen und in
+  // Berechnungen einfließen (nicht nur in der Homebrew-Karteikarte stehen).
+  // Bewusst synchron beim Rendern statt in useEffect: Kind-Komponenten wie
+  // CharacterTab lesen die registrierten Listen direkt beim Rendern (kein
+  // eigener React-State), ein useEffect käme erst NACH dem ersten Render -
+  // die Dropdowns wären dann beim Laden/nach jeder hb-Änderung einen Schritt
+  // hinterher, bis irgendein anderer State-Wechsel einen Re-Render auslöst.
+  registerHomebrew(hb)
   const charLevel = char.meta?.classes?.[0]?.id ? (char.meta.classes[0].level || 1) : 0
 
   // Profilspezifische localStorage-Keys (für die Sync-Effekte unten)

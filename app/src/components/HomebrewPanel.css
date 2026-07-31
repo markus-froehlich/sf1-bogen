@@ -143,6 +143,14 @@
 }
 .hbf-check input { cursor: pointer; accent-color: var(--accent); }
 
+.hb-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 2px 0 0;
+  line-height: 1.35;
+}
+
 .hb-form-actions {
   display: flex;
   gap: 6px;

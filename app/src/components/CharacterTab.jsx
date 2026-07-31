@@ -8,6 +8,7 @@ import { XpTracker } from './XpTracker.jsx'
 import { NumberField } from './NumberField.jsx'
 import { useSectionOrder } from '../store/useSectionOrder.js'
 import { computeCharacterStats } from '../engine/characterStats.js'
+import { getHBRaces, getHBClasses } from '../engine/homebrew.js'
 import './CharacterTab.css'
 
 const CHAR_SECTIONS_DEFAULT = ['volk_klasse', 'xp', 'bio', 'attribute', 'talente', 'volksmerkmale', 'klassenmerkmale']
@@ -59,6 +60,11 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
               {racesData.races.map(r => (
                 <option key={r.id} value={r.id}>{r.name.de}</option>
               ))}
+              {getHBRaces().length > 0 && (
+                <optgroup label="Homebrew">
+                  {getHBRaces().map(r => <option key={r.id} value={r.id}>{r.name?.de}</option>)}
+                </optgroup>
+              )}
             </select>
           </div>
           <div className="bio-field">
@@ -68,6 +74,11 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
               {classesData.classes.map(c => (
                 <option key={c.id} value={c.id}>{c.name.de}</option>
               ))}
+              {getHBClasses().length > 0 && (
+                <optgroup label="Homebrew">
+                  {getHBClasses().map(c => <option key={c.id} value={c.id}>{c.name?.de}</option>)}
+                </optgroup>
+              )}
             </select>
           </div>
         </div>
@@ -114,7 +125,7 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
     talente: () => <FeatsTab char={char} setFeats={setFeats} lang={lang} />,
     volksmerkmale: () => race && (
       <div className="feature-list">
-        {race.traits.map(t => (
+        {(race.traits ?? []).map(t => (
           <div key={t.name} className="feature-item">
             <span className="feature-name">{t.name}</span>
             <p className="feature-desc">{t.description}</p>

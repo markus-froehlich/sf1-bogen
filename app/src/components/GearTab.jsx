@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import weaponsData from '../data/weapons.json'
 import { allArmor } from '../engine/characterStats.js'
+import { getHBWeapons } from '../engine/homebrew.js'
 import { NumberField } from './NumberField.jsx'
 import './GearTab.css'
 
@@ -61,9 +62,12 @@ export function GearTab({ char, update, setInventory, lang }) {
       const w = (weaponsData[key] || []).find(w => w.name === weaponPick)
       if (w) {
         addItem({ id: genId(), name: w.name, category: 'weapon', qty: 1, last: w.last ?? 0, price: w.preis ?? 0 })
-        break
+        setWeaponPick('')
+        return
       }
     }
+    const hbw = getHBWeapons().find(w => w.name === weaponPick)
+    if (hbw) addItem({ id: genId(), name: hbw.name, category: 'weapon', qty: 1, last: hbw.last ?? 0, price: hbw.preis ?? 0 })
     setWeaponPick('')
   }
 
@@ -116,6 +120,11 @@ export function GearTab({ char, update, setInventory, lang }) {
                 {(weaponsData[key] || []).map(w => <option key={w.name} value={w.name}>{w.name}</option>)}
               </optgroup>
             ))}
+            {getHBWeapons().length > 0 && (
+              <optgroup label="Homebrew">
+                {getHBWeapons().map(w => <option key={w.name} value={w.name}>{w.name}</option>)}
+              </optgroup>
+            )}
           </select>
           <button className="gear-add-btn" onClick={addWeaponToInventory} disabled={!weaponPick}>+ {L ? 'Ins Inventar' : 'To inventory'}</button>
         </div>

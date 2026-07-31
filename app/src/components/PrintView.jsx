@@ -97,7 +97,7 @@ export function PrintView({ char, lang, onClose }) {
         {race && (
           <section className="pp-section">
             <h2>{L ? 'Volksmerkmale' : 'Racial traits'}</h2>
-            {race.traits.map(t => (
+            {(race.traits ?? []).map(t => (
               <p key={t.name} className="pp-feature"><strong>{t.name}:</strong> {t.description}</p>
             ))}
           </section>

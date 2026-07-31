@@ -1,31 +1,25 @@
 import { useState } from 'react'
 import './HomebrewPanel.css'
 
+// Schilde gibt es in SF1e nicht als eigene RK-Quelle (anders als in
+// Pathfinder 1e, wo diese Kategorie herkommt) - deshalb hier bewusst nicht
+// mit aufgeführt statt eine Wirkung vorzutäuschen, die die Engine gar nicht
+// berechnen könnte.
 const TYPES = [
   { id: 'classes',  de: 'Klassen',   en: 'Classes'  },
   { id: 'races',    de: 'Völker',    en: 'Races'    },
   { id: 'weapons',  de: 'Waffen',    en: 'Weapons'  },
   { id: 'armor',    de: 'Rüstungen', en: 'Armor'    },
-  { id: 'shields',  de: 'Schilde',   en: 'Shields'  },
 ]
 
 const EMPTY = {
-  classes: { name: { de: '', en: '' }, hit_die: 8, skill_points_per_level: 2, bab_type: 'full', good_saves: ['fort'] },
-  races:   { name: { de: '', en: '' }, size: { de: 'Mittelgroß', en: 'Medium' }, size_key: 'mittelgross', speed_m: { unarmored: 9, armored: 9 }, extra_skill_points_per_level: 0, ability_mods_text: { de: '', en: '' } },
-  weapons: { name: { de: '', en: '' }, damage: '1W6', crit_range: 20, crit_mult: 2, type: 'S', range_m: 0, properties: '' },
-  armor:   { name: { de: '', en: '' }, type: 'L', bonus: 0, max_dex: 8, check_penalty: 0, arcane_failure: 0, speed_m: { unarmored: 9, armored: 9 } },
-  shields: { name: { de: '', en: '' }, bonus: 0, check_penalty: 0, arcane_failure: 0 },
+  classes: { name: { de: '' }, key_ability: 'ST', hp_per_level: 6, ap_base_per_level: 4, skill_ranks_per_level_formula: 'IN-Modifikator + 4', bab_type: '3/4', good_saves: ['ref'] },
+  races:   { name: { de: '' }, size: 'Mittelgroß', speed_m: 9, hp_bonus: 0, ability_mods_text: '' },
+  weapons: { name: { de: '' }, schaden: '1W6', kritisch: '', stufe: 1, preis: 0, last: '1', sondereigenschaften: '', is_melee: true, is_two_handed: false },
+  armor:   { name: { de: '' }, category: 'light', stufe: 1, preis: 0, erk_bonus: 0, krk_bonus: 0, max_ge_bonus: 8, ruestungsmalus: 0 },
 }
 
-const SIZE_OPTIONS = [
-  { de: 'Winzig',     en: 'Tiny',    key: 'winzig'     },
-  { de: 'Klein',      en: 'Small',   key: 'klein'      },
-  { de: 'Mittelgroß', en: 'Medium',  key: 'mittelgross'},
-  { de: 'Groß',       en: 'Large',   key: 'gross'      },
-  { de: 'Riesig',     en: 'Huge',    key: 'riesig'     },
-  { de: 'Gigantisch', en: 'Garg.',   key: 'gigantisch' },
-  { de: 'Kolossal',   en: 'Colossal',key: 'kolossal'   },
-]
+const SIZE_OPTIONS = ['Winzig', 'Klein', 'Mittelgroß', 'Groß', 'Riesig', 'Gigantisch', 'Kolossal']
 
 export function HomebrewPanel({ hb, saveHBItem, deleteHB, onClose, lang }) {
   const L = lang === 'de'
@@ -92,7 +86,6 @@ export function HomebrewPanel({ hb, saveHBItem, deleteHB, onClose, lang }) {
             {type === 'races'    && <RaceForm   draft={draft} setDraft={setDraft} L={L} />}
             {type === 'weapons'  && <WeaponForm draft={draft} setDraft={setDraft} L={L} />}
             {type === 'armor'    && <ArmorForm  draft={draft} setDraft={setDraft} L={L} />}
-            {type === 'shields'  && <ShieldForm draft={draft} setDraft={setDraft} L={L} />}
             <div className="hb-form-actions">
               {editId !== '__new__' && (
                 <button className="hb-del-btn" onClick={handleDelete} title={L ? 'Löschen' : 'Delete'}>🗑</button>
@@ -134,11 +127,10 @@ export function HomebrewPanel({ hb, saveHBItem, deleteHB, onClose, lang }) {
 }
 
 function itemMeta(type, item, L) {
-  if (type === 'classes') return `W${item.hit_die} · ${item.bab_type} GAB · ${item.skill_points_per_level} FP`
-  if (type === 'races')   return `${item.size?.de} · ${item.speed_m?.unarmored}m`
-  if (type === 'weapons') return `${item.damage} · ${item.crit_range}-20/×${item.crit_mult}${item.range_m ? ` · ${item.range_m}m` : ''}`
-  if (type === 'armor')   return `+${item.bonus} · ${item.type}`
-  if (type === 'shields') return `+${item.bonus}`
+  if (type === 'classes') return `${item.key_ability} · ${item.bab_type} GAB · TP${item.hp_per_level}/AP${item.ap_base_per_level}`
+  if (type === 'races')   return `${item.size} · ${item.speed_m}m · +${item.hp_bonus || 0} TP`
+  if (type === 'weapons') return `${item.schaden}${item.kritisch ? ` · ${item.kritisch}` : ''} · ${item.is_melee ? (L ? 'Nahkampf' : 'Melee') : (L ? 'Fernkampf' : 'Ranged')}`
+  if (type === 'armor')   return `ERK+${item.erk_bonus || 0} / KRK+${item.krk_bonus || 0} · ${item.category}`
   return ''
 }
 
@@ -153,9 +145,11 @@ function Row({ label, children }) {
   )
 }
 
+const ABILITY_OPTIONS = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH']
+
 function ClassForm({ draft, setDraft, L }) {
   const set = (k, v) => setDraft(d => ({ ...d, [k]: v }))
-  const setName = v => setDraft(d => ({ ...d, name: { ...d.name, de: v } }))
+  const setName = v => setDraft(d => ({ ...d, name: { de: v } }))
   const toggleSave = s => setDraft(d => {
     const gs = d.good_saves ?? []
     return { ...d, good_saves: gs.includes(s) ? gs.filter(x => x !== s) : [...gs, s] }
@@ -165,13 +159,19 @@ function ClassForm({ draft, setDraft, L }) {
       <Row label={L ? 'Name' : 'Name'}>
         <input className="hbf-input" value={draft.name?.de ?? ''} onChange={e => setName(e.target.value)} autoFocus />
       </Row>
-      <Row label={L ? 'Trefferwürfel' : 'Hit Die'}>
-        <select className="hbf-select" value={draft.hit_die} onChange={e => set('hit_die', Number(e.target.value))}>
-          {[4,6,8,10,12].map(d => <option key={d} value={d}>W{d}</option>)}
+      <Row label={L ? 'Schlüsselattribut' : 'Key ability'}>
+        <select className="hbf-select" value={draft.key_ability} onChange={e => set('key_ability', e.target.value)}>
+          {ABILITY_OPTIONS.map(a => <option key={a} value={a}>{a}</option>)}
         </select>
       </Row>
-      <Row label={L ? 'FP/Stufe' : 'SP/level'}>
-        <input className="hbf-input hbf-short" type="number" min={1} max={8} value={draft.skill_points_per_level} onChange={e => set('skill_points_per_level', Number(e.target.value))} />
+      <Row label={L ? 'TP/Stufe' : 'HP/level'}>
+        <input className="hbf-input hbf-short" type="number" min={1} max={10} value={draft.hp_per_level} onChange={e => set('hp_per_level', Number(e.target.value))} />
+      </Row>
+      <Row label={L ? 'AP-Basis/Stufe' : 'SP base/level'}>
+        <input className="hbf-input hbf-short" type="number" min={1} max={10} value={draft.ap_base_per_level} onChange={e => set('ap_base_per_level', Number(e.target.value))} />
+      </Row>
+      <Row label={L ? 'FP-Formel' : 'Skill rank formula'}>
+        <input className="hbf-input" placeholder="IN-Modifikator + 4" value={draft.skill_ranks_per_level_formula ?? ''} onChange={e => set('skill_ranks_per_level_formula', e.target.value)} />
       </Row>
       <Row label="GAB">
         <select className="hbf-select" value={draft.bab_type} onChange={e => set('bab_type', e.target.value)}>
@@ -182,57 +182,57 @@ function ClassForm({ draft, setDraft, L }) {
       </Row>
       <Row label={L ? 'Gute RWs' : 'Good saves'}>
         <div className="hbf-checks">
-          {['fort', 'ref', 'will'].map(s => (
+          {['ref', 'will', 'zah'].map(s => (
             <label key={s} className="hbf-check">
               <input type="checkbox" checked={(draft.good_saves ?? []).includes(s)}
                 onChange={() => toggleSave(s)} />
-              {s === 'fort' ? 'Zäh' : s === 'ref' ? 'Ref' : 'Wil'}
+              {s === 'ref' ? 'Ref' : s === 'will' ? 'Wil' : 'Zäh'}
             </label>
           ))}
         </div>
       </Row>
+      <p className="hb-note">{L
+        ? 'GAB/Rettungswürfe werden aus diesen Angaben für alle 20 Stufen berechnet (gleiches Muster wie die 7 Kernklassen). Klassenmerkmale je Stufe können hier nicht erfasst werden.'
+        : 'BAB/saves are generated for all 20 levels from these values. Per-level class features cannot be entered here.'}</p>
     </>
   )
 }
 
 function RaceForm({ draft, setDraft, L }) {
-  const setName = v => setDraft(d => ({ ...d, name: { ...d.name, de: v } }))
-  const setSize = de => {
-    const opt = SIZE_OPTIONS.find(s => s.de === de)
-    setDraft(d => ({ ...d, size: { de: opt?.de ?? de, en: opt?.en ?? de }, size_key: opt?.key ?? 'mittelgross' }))
-  }
-  const setSpeed = v => setDraft(d => ({ ...d, speed_m: { unarmored: Number(v), armored: Number(v) } }))
-  const setMods = v => setDraft(d => ({ ...d, ability_mods_text: { ...d.ability_mods_text, de: v } }))
+  const setName = v => setDraft(d => ({ ...d, name: { de: v } }))
+  const set = (k, v) => setDraft(d => ({ ...d, [k]: v }))
   return (
     <>
       <Row label={L ? 'Name' : 'Name'}>
         <input className="hbf-input" value={draft.name?.de ?? ''} onChange={e => setName(e.target.value)} autoFocus />
       </Row>
       <Row label={L ? 'Größe' : 'Size'}>
-        <select className="hbf-select" value={draft.size?.de ?? 'Mittelgroß'} onChange={e => setSize(e.target.value)}>
-          {SIZE_OPTIONS.map(s => <option key={s.key} value={s.de}>{s.de}</option>)}
+        <select className="hbf-select" value={draft.size ?? 'Mittelgroß'} onChange={e => set('size', e.target.value)}>
+          {SIZE_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
       </Row>
       <Row label={L ? 'Bewegung (m)' : 'Speed (m)'}>
         <input className="hbf-input hbf-short" type="number" min={3} max={18} step={3}
-          value={draft.speed_m?.unarmored ?? 9} onChange={e => setSpeed(e.target.value)} />
+          value={draft.speed_m ?? 9} onChange={e => set('speed_m', Number(e.target.value))} />
       </Row>
-      <Row label={L ? 'Extra FP/Stufe' : 'Bonus SP/lv'}>
-        <input className="hbf-input hbf-short" type="number" min={0} max={4}
-          value={draft.extra_skill_points_per_level ?? 0}
-          onChange={e => setDraft(d => ({ ...d, extra_skill_points_per_level: Number(e.target.value) }))} />
+      <Row label={L ? 'TP-Bonus' : 'HP bonus'}>
+        <input className="hbf-input hbf-short" type="number" min={0} max={8}
+          value={draft.hp_bonus ?? 0} onChange={e => set('hp_bonus', Number(e.target.value))} />
       </Row>
       <Row label={L ? 'Attributboni' : 'Ability mods'}>
         <input className="hbf-input" placeholder="z.B. ST+2, KO−2"
-          value={draft.ability_mods_text?.de ?? ''}
-          onChange={e => setMods(e.target.value)} />
+          value={draft.ability_mods_text ?? ''}
+          onChange={e => set('ability_mods_text', e.target.value)} />
       </Row>
+      <p className="hb-note">{L
+        ? 'Attributboni sind reiner Hinweistext — trage den fertigen Attributswert weiterhin selbst im Charakter-Tab ein (wie bei den Kernvölkern).'
+        : 'Ability mods are display-only text — enter the final ability score yourself in the Character tab (same as core races).'}</p>
     </>
   )
 }
 
 function WeaponForm({ draft, setDraft, L }) {
-  const setName = v => setDraft(d => ({ ...d, name: { ...d.name, de: v } }))
+  const setName = v => setDraft(d => ({ ...d, name: { de: v } }))
   const set = (k, v) => setDraft(d => ({ ...d, [k]: v }))
   return (
     <>
@@ -240,89 +240,71 @@ function WeaponForm({ draft, setDraft, L }) {
         <input className="hbf-input" value={draft.name?.de ?? ''} onChange={e => setName(e.target.value)} autoFocus />
       </Row>
       <Row label={L ? 'Schaden' : 'Damage'}>
-        <input className="hbf-input hbf-short" placeholder="1W8" value={draft.damage ?? ''} onChange={e => set('damage', e.target.value)} />
+        <input className="hbf-input hbf-short" placeholder="1W8 K" value={draft.schaden ?? ''} onChange={e => set('schaden', e.target.value)} />
       </Row>
-      <Row label={L ? 'Krit-Bereich' : 'Crit range'}>
-        <select className="hbf-select" value={draft.crit_range ?? 20} onChange={e => set('crit_range', Number(e.target.value))}>
-          <option value={20}>20</option>
-          <option value={19}>19–20</option>
-          <option value={18}>18–20</option>
-          <option value={17}>17–20</option>
-        </select>
+      <Row label={L ? 'Kritisch' : 'Critical'}>
+        <input className="hbf-input hbf-short" placeholder="z.B. Entzünden" value={draft.kritisch ?? ''} onChange={e => set('kritisch', e.target.value)} />
       </Row>
-      <Row label={L ? 'Krit-Faktor' : 'Crit mult'}>
-        <select className="hbf-select" value={draft.crit_mult ?? 2} onChange={e => set('crit_mult', Number(e.target.value))}>
-          <option value={2}>×2</option>
-          <option value={3}>×3</option>
-          <option value={4}>×4</option>
-        </select>
+      <Row label={L ? 'Art' : 'Type'}>
+        <div className="hbf-checks">
+          <label className="hbf-check">
+            <input type="checkbox" checked={!!draft.is_melee} onChange={e => set('is_melee', e.target.checked)} />
+            {L ? 'Nahkampf' : 'Melee'}
+          </label>
+          <label className="hbf-check">
+            <input type="checkbox" checked={!!draft.is_two_handed} onChange={e => set('is_two_handed', e.target.checked)} />
+            {L ? 'Zweihändig' : 'Two-handed'}
+          </label>
+        </div>
       </Row>
-      <Row label={L ? 'Typ' : 'Type'}>
-        <input className="hbf-input hbf-short" placeholder="S/P/H" value={draft.type ?? ''} onChange={e => set('type', e.target.value)} />
+      <Row label={L ? 'Gegenstandsstufe' : 'Item level'}>
+        <input className="hbf-input hbf-short" type="number" min={1} max={20} value={draft.stufe ?? 1} onChange={e => set('stufe', Number(e.target.value))} />
       </Row>
-      <Row label={L ? 'Reichweite (m)' : 'Range (m)'}>
-        <input className="hbf-input hbf-short" type="number" min={0} value={draft.range_m ?? 0} onChange={e => set('range_m', Number(e.target.value))} />
+      <Row label={L ? 'Preis (Credits)' : 'Price (credits)'}>
+        <input className="hbf-input hbf-short" type="number" min={0} value={draft.preis ?? 0} onChange={e => set('preis', Number(e.target.value))} />
       </Row>
+      <Row label={L ? 'Sondereigenschaften' : 'Special properties'}>
+        <input className="hbf-input" value={draft.sondereigenschaften ?? ''} onChange={e => set('sondereigenschaften', e.target.value)} />
+      </Row>
+      <p className="hb-note">{L
+        ? '"Nahkampf"/"Zweihändig" steuern, ob der Stärkemodifikator (1x bzw. 1,5x) zum Schaden addiert wird.'
+        : '"Melee"/"Two-handed" control whether the strength modifier (1x or 1.5x) is added to damage.'}</p>
     </>
   )
 }
 
 function ArmorForm({ draft, setDraft, L }) {
-  const setName = v => setDraft(d => ({ ...d, name: { ...d.name, de: v } }))
+  const setName = v => setDraft(d => ({ ...d, name: { de: v } }))
   const set = (k, v) => setDraft(d => ({ ...d, [k]: v }))
   return (
     <>
       <Row label={L ? 'Name' : 'Name'}>
         <input className="hbf-input" value={draft.name?.de ?? ''} onChange={e => setName(e.target.value)} autoFocus />
       </Row>
-      <Row label={L ? 'Typ' : 'Type'}>
-        <select className="hbf-select" value={draft.type ?? 'L'} onChange={e => set('type', e.target.value)}>
-          <option value="L">{L ? 'Leicht' : 'Light'}</option>
-          <option value="M">{L ? 'Mittel' : 'Medium'}</option>
-          <option value="S">{L ? 'Schwer' : 'Heavy'}</option>
+      <Row label={L ? 'Kategorie' : 'Category'}>
+        <select className="hbf-select" value={draft.category ?? 'light'} onChange={e => set('category', e.target.value)}>
+          <option value="light">{L ? 'Leicht' : 'Light'}</option>
+          <option value="heavy">{L ? 'Schwer' : 'Heavy'}</option>
+          <option value="power">{L ? 'Servorüstung' : 'Powered'}</option>
         </select>
       </Row>
-      <Row label={L ? 'RK-Bonus' : 'AC bonus'}>
-        <input className="hbf-input hbf-short" type="number" min={0} max={15} value={draft.bonus ?? 0} onChange={e => set('bonus', Number(e.target.value))} />
+      <Row label="ERK-Bonus">
+        <input className="hbf-input hbf-short" type="number" min={0} max={15} value={draft.erk_bonus ?? 0} onChange={e => set('erk_bonus', Number(e.target.value))} />
       </Row>
-      <Row label={L ? 'Max GE-Mod' : 'Max Dex'}>
-        <input className="hbf-input hbf-short" type="number" min={0} max={8} value={draft.max_dex ?? 8} onChange={e => set('max_dex', Number(e.target.value))} />
+      <Row label="KRK-Bonus">
+        <input className="hbf-input hbf-short" type="number" min={0} max={15} value={draft.krk_bonus ?? 0} onChange={e => set('krk_bonus', Number(e.target.value))} />
       </Row>
-      <Row label={L ? 'Rüstungsmalus' : 'Check pen.'}>
-        <input className="hbf-input hbf-short" type="number" max={0} value={draft.check_penalty ?? 0} onChange={e => set('check_penalty', Number(e.target.value))} />
+      <Row label={L ? 'Max GE-Bonus' : 'Max Dex bonus'}>
+        <input className="hbf-input hbf-short" type="number" min={0} max={12} value={draft.max_ge_bonus ?? 8} onChange={e => set('max_ge_bonus', Number(e.target.value))} />
       </Row>
-      <Row label={L ? 'Zauberversagen %' : 'Arcane fail %'}>
-        <input className="hbf-input hbf-short" type="number" min={0} max={100} step={5}
-          value={Math.round((draft.arcane_failure ?? 0) * 100)}
-          onChange={e => set('arcane_failure', Number(e.target.value) / 100)} />
+      <Row label={L ? 'Rüstungsmalus' : 'Armor check penalty'}>
+        <input className="hbf-input hbf-short" type="number" max={0} value={draft.ruestungsmalus ?? 0} onChange={e => set('ruestungsmalus', Number(e.target.value))} />
       </Row>
-      <Row label={L ? 'Bew. gerüstet (m)' : 'Armored spd'}>
-        <input className="hbf-input hbf-short" type="number" min={0}
-          value={draft.speed_m?.armored ?? 9}
-          onChange={e => setDraft(d => ({ ...d, speed_m: { ...d.speed_m, armored: Number(e.target.value) } }))} />
+      <Row label={L ? 'Gegenstandsstufe' : 'Item level'}>
+        <input className="hbf-input hbf-short" type="number" min={1} max={20} value={draft.stufe ?? 1} onChange={e => set('stufe', Number(e.target.value))} />
       </Row>
-    </>
-  )
-}
-
-function ShieldForm({ draft, setDraft, L }) {
-  const setName = v => setDraft(d => ({ ...d, name: { ...d.name, de: v } }))
-  const set = (k, v) => setDraft(d => ({ ...d, [k]: v }))
-  return (
-    <>
-      <Row label={L ? 'Name' : 'Name'}>
-        <input className="hbf-input" value={draft.name?.de ?? ''} onChange={e => setName(e.target.value)} autoFocus />
-      </Row>
-      <Row label={L ? 'Schild-Bonus' : 'Shield bonus'}>
-        <input className="hbf-input hbf-short" type="number" min={0} max={10} value={draft.bonus ?? 0} onChange={e => set('bonus', Number(e.target.value))} />
-      </Row>
-      <Row label={L ? 'Rüstungsmalus' : 'Check pen.'}>
-        <input className="hbf-input hbf-short" type="number" max={0} value={draft.check_penalty ?? 0} onChange={e => set('check_penalty', Number(e.target.value))} />
-      </Row>
-      <Row label={L ? 'Zauberversagen %' : 'Arcane fail %'}>
-        <input className="hbf-input hbf-short" type="number" min={0} max={100} step={5}
-          value={Math.round((draft.arcane_failure ?? 0) * 100)}
-          onChange={e => set('arcane_failure', Number(e.target.value) / 100)} />
+      <Row label={L ? 'Preis (Credits)' : 'Price (credits)'}>
+        <input className="hbf-input hbf-short" type="number" min={0} value={draft.preis ?? 0} onChange={e => set('preis', Number(e.target.value))} />
       </Row>
     </>
   )

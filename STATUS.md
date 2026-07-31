@@ -1,6 +1,61 @@
 # STATUS
 
-_Stand: 2026-07-09_
+_Stand: 2026-07-31_
+
+## Backlog aus Code-Vergleich gegen pf1-bogen (Session 2026-07-31)
+Ein per Hintergrund-Recherche erstellter 13-Punkte-Backlog (echte Rechenfehler-
+Risiken, Mobile/UX-Lücken, Feature-Vollständigkeit, Daten-Vollständigkeit) wird
+der Reihe nach abgearbeitet, jeweils mit Live-Test in der Vorschau. Stand:
+Punkte 1-9 erledigt (Waffenschaden-Engine, Fertigkeiten-Buffs/Zustände,
+6-Attribut-Effektiv-Mod, Zustands-Daten erweitert, Fertigkeits-/Wahrnehmungs-
+Malus, Mobile-Tap-Badges, Buff/Zustand optisch getrennt, Ressourcen-Reset-
+Bestätigung, **Homebrew-Registrierung in der Engine**). Offen: Sprachumschaltung
+(fehlende EN-Felder), Talente-/Zauber-Anzahl gegen Quelle verifizieren,
+PWA-Icons austauschen.
+
+### Punkt 9: Homebrew-Inhalte in Engine registriert
+Vorher reine Karteikarten-Verwaltung ohne jede Wirkung. Jetzt:
+- Neue `engine/homebrew.js`: `registerHomebrew(hb)` speichert Klassen/Völker/
+  Waffen/Rüstungen aus dem Homebrew-Store modulintern; `getHBRaces/Classes/
+  Weapons/Armor()` als Getter. `generateClassProgression()` erzeugt GAB/
+  Rettungswürfe für alle 20 Stufen aus nur `bab_type` + `good_saves` — nach
+  numerischer Verifikation, dass alle 7 Kernklassen exakt zwei GAB-Muster
+  (voll/¾) und ein Gut/Schlecht-Rettungswurf-Muster (`2+⌊Stufe/2⌋` bzw.
+  `⌊Stufe/3⌋`) folgen. Formel ist aus den Tabellen abgeleitet, kein
+  Buchzitat — für Homebrew ausreichend, im Code so kommentiert.
+- `characterStats.js`: `getRace/getClass/getArmor/allArmor` fallen auf
+  Homebrew zurück, wenn nicht in den Kern-Daten gefunden.
+- `App.jsx`: `registerHomebrew(hb)` läuft **synchron beim Rendern** (nicht in
+  `useEffect`) — sonst lesen Kind-Komponenten beim ersten Render/nach jeder
+  Änderung veraltete (leere) Listen, bis irgendein unabhängiger State-Wechsel
+  einen weiteren Re-Render auslöst.
+- `CharacterTab.jsx`: Volk-/Klassen-Dropdown zeigen zusätzlich eine
+  „Homebrew"-Optgroup. `CombatTab.jsx`/`GearTab.jsx`: Waffen-Dropdowns
+  ebenso; `GearTab.jsx`s Rüstungs-Dropdown bekommt Homebrew-Rüstungen
+  automatisch über `allArmor()`.
+- **Homebrew-Panel komplett auf SF1e-Schema umgebaut** (vorher 1:1 PF1e-
+  Felder, die gar nicht zu SF1e passten): Klassen jetzt mit `key_ability`/
+  `hp_per_level`/`ap_base_per_level`/`skill_ranks_per_level_formula`/
+  `bab_type`/`good_saves` (ref/will/zah statt fort/ref/will); Rüstungen mit
+  `erk_bonus`/`krk_bonus`/`max_ge_bonus`/`ruestungsmalus`/Kategorie
+  leicht/schwer/Servo statt PF1e-RK-Einzelwert; Waffen mit `schaden`/
+  `kritisch`/`stufe`/`preis` plus zwei Checkboxen „Nahkampf"/„Zweihändig"
+  (steuern den Stärkemodifikator im Schaden, da SF1e keine Waffentyp-
+  Kennung dafür hat wie PF1e).
+- **„Schilde" als Homebrew-Kategorie entfernt** — SF1e hat (anders als
+  Pathfinder 1e) keine Schilde als eigene RK-Quelle; eine Wirkung zu bauen
+  wäre erfundene Regel gewesen statt Extraktion.
+- End-to-End im Preview verifiziert: Testklasse (voll-GAB, Ref gut) → GAB +1
+  und Rettungswürfe (Ref +2, Wille/Zähigkeit +0) exakt nach Formel; Testvolk
+  (+5 TP) → TP korrekt aufaddiert; Testschwert (Nahkampf, zweihändig) →
+  Schadensmodifikator korrekt (⌊ST-Mod×1,5⌋); Testrüstung (ERK+3/KRK+5) →
+  EAC/KAC korrekt erhöht.
+- **Nebenbei echten Absturz gefunden und behoben**: `CharacterTab.jsx` und
+  `PrintView.jsx` riefen `race.traits.map(...)` ohne Absicherung auf — jede
+  Homebrew-Rasse ohne `traits`-Feld (das Homebrew-Formular bietet dafür kein
+  Eingabefeld) brachte die komplette App zum Absturz (schwarzer Bildschirm),
+  sobald diese Rasse im Charakter-Tab ausgewählt wurde. Gefixt via
+  `(race.traits ?? []).map(...)` an beiden Stellen.
 
 ## Wo wir stehen
 **Bogen inhaltlich und funktional vollständig für den in AGENTS.md

@@ -4,6 +4,7 @@ import conditionsData from '../data/conditions.json'
 import { computeCharacterStats } from '../engine/characterStats.js'
 import { meleeAttackBonus, rangedAttackBonus } from '../engine/combat.js'
 import { computeWeaponDamageModifier } from '../engine/weapons.js'
+import { getHBWeapons } from '../engine/homebrew.js'
 import { BuffTracker } from './BuffTracker.jsx'
 import { ResourcesPanel } from './ResourcesPanel.jsx'
 import { StatBadges } from './DetailTag.jsx'
@@ -45,11 +46,19 @@ const MELEE_ONEHAND_KEYS = ['simple_melee_onehand', 'advanced_melee_onehand']
 const MELEE_TWOHAND_KEYS = ['simple_melee_twohand', 'advanced_melee_twohand']
 
 function allWeapons() {
-  return WEAPON_CATEGORIES.flatMap(([key, label]) => {
+  const core = WEAPON_CATEGORIES.flatMap(([key, label]) => {
     const isMelee = MELEE_ONEHAND_KEYS.includes(key) || MELEE_TWOHAND_KEYS.includes(key)
     const isTwoHanded = MELEE_TWOHAND_KEYS.includes(key)
     return (weaponsData[key] || []).map(w => ({ ...w, _category: label, _isRanged: !isMelee, _isMelee: isMelee, _isTwoHanded: isTwoHanded }))
   })
+  const homebrew = getHBWeapons().map(w => ({
+    ...w,
+    _category: 'Homebrew',
+    _isRanged: !w.is_melee,
+    _isMelee: !!w.is_melee,
+    _isTwoHanded: !!w.is_two_handed,
+  }))
+  return [...core, ...homebrew]
 }
 
 export function CombatTab({ char, update, setConditions, setActiveBuffs, setResources, lang }) {
@@ -146,6 +155,11 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
               {(weaponsData[key] || []).map(w => <option key={w.name} value={w.name}>{w.name}</option>)}
             </optgroup>
           ))}
+          {getHBWeapons().length > 0 && (
+            <optgroup label="Homebrew">
+              {getHBWeapons().map(w => <option key={w.name} value={w.name}>{w.name}</option>)}
+            </optgroup>
+          )}
         </select>
         {weapon && (
           <div className="combat-weapon-card">

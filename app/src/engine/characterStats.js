@@ -12,6 +12,7 @@ import { totalHitPoints, totalStaminaPoints, totalResolvePoints } from './resour
 import { armorClass } from './combat.js'
 import { computeBuffTotals } from './buffs.js'
 import { computeConditionTotals } from './conditions.js'
+import { getHBRaces, getHBClasses, getHBArmor } from './homebrew.js'
 
 export const ABILITY_KEYS = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH']
 
@@ -31,21 +32,18 @@ export const CLASS_ABBR = {
 }
 
 export function getRace(raceId) {
-  return racesData.races.find(r => r.id === raceId) || null
+  if (!raceId) return null
+  return racesData.races.find(r => r.id === raceId) || getHBRaces().find(r => r.id === raceId) || null
 }
 
 export function getClass(classId) {
-  return classesData.classes.find(c => c.id === classId) || null
+  if (!classId) return null
+  return classesData.classes.find(c => c.id === classId) || getHBClasses().find(c => c.id === classId) || null
 }
 
 export function getArmor(armorId) {
   if (!armorId) return null
-  const all = [
-    ...armorData.light_armor.map(a => ({ ...a, category: 'light' })),
-    ...armorData.heavy_armor.map(a => ({ ...a, category: 'heavy' })),
-    ...armorData.power_armor.map(a => ({ ...a, category: 'power' })),
-  ]
-  return all.find(a => a.name === armorId) || null
+  return allArmor().find(a => a.name === armorId) || null
 }
 
 export function allArmor() {
@@ -53,6 +51,7 @@ export function allArmor() {
     ...armorData.light_armor.map(a => ({ ...a, category: 'light' })),
     ...armorData.heavy_armor.map(a => ({ ...a, category: 'heavy' })),
     ...armorData.power_armor.map(a => ({ ...a, category: 'power' })),
+    ...getHBArmor().map(a => ({ ...a, category: a.category || 'light', is_homebrew: true })),
   ]
 }
 
