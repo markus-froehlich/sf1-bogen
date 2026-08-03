@@ -17,6 +17,19 @@ export function SkillsTab({ char, update, lang }) {
     update({ skills: { [skillId]: { ranks: clamped } } })
   }
 
+  function addProfession() {
+    const id = Math.random().toString(36).slice(2, 9)
+    update({ professions: [...(char.professions ?? []), { id, name: '', ability: 'WE', ranks: 0 }] })
+  }
+
+  function updateProfession(id, patch) {
+    update({ professions: (char.professions ?? []).map(p => p.id === id ? { ...p, ...patch } : p) })
+  }
+
+  function removeProfession(id) {
+    update({ professions: (char.professions ?? []).filter(p => p.id !== id) })
+  }
+
   return (
     <div className="section skills-tab">
       <p className="attr-note">
@@ -24,7 +37,7 @@ export function SkillsTab({ char, update, lang }) {
            : `Skill ranks per level: ${klass?.skill_ranks_per_level_formula || '—'}`}
       </p>
       <div className="skill-table">
-        {skillsData.skills.map(s => {
+        {skillsData.skills.filter(s => s.id !== 'beruf').map(s => {
           const ranks = char.skills?.[s.id]?.ranks || 0
           const isClassSkill = classAbbr ? s.class_skill_for.includes(classAbbr) : false
           const keyMod = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH'].includes(s.key_ability) ? abilityMods[s.key_ability] : 0
@@ -65,6 +78,49 @@ export function SkillsTab({ char, update, lang }) {
             </div>
           )
         })}
+        <div className="profession-group">
+          <div className="profession-heading">
+            <span>{L ? 'Beruf' : 'Profession'}</span>
+            <span>{L ? 'jeweils eigene Fertigkeit' : 'each is a separate skill'}</span>
+          </div>
+          {(char.professions ?? []).map(p => {
+            const ranks = Math.max(0, Math.min(level, Number(p.ranks) || 0))
+            const keyAbility = ['CH', 'IN', 'WE'].includes(p.ability) ? p.ability : 'WE'
+            const isClassSkill = classAbbr ? skillsData.skills.find(s => s.id === 'beruf').class_skill_for.includes(classAbbr) : false
+            const bonus = computeSkillBonus({
+              ranks,
+              isClassSkill,
+              keyAbilityModifier: abilityMods[keyAbility],
+              otherModifiers: buffTotals.skills,
+            })
+            return (
+              <div key={p.id} className={`skill-row profession-row ${isClassSkill ? 'is-class' : ''}`}>
+                <input
+                  className="profession-name"
+                  value={p.name ?? ''}
+                  placeholder={L ? 'Beruf (z.B. Pilot)' : 'Profession (e.g. pilot)'}
+                  onChange={e => updateProfession(p.id, { name: e.target.value })}
+                />
+                <select className="profession-ability" value={keyAbility}
+                  aria-label={L ? 'Schlüsselattribut' : 'Key ability'}
+                  onChange={e => updateProfession(p.id, { ability: e.target.value })}>
+                  <option value="CH">CH</option>
+                  <option value="IN">IN</option>
+                  <option value="WE">WE</option>
+                </select>
+                <NumberField
+                  className="skill-ranks-input"
+                  min={0} max={level}
+                  value={ranks}
+                  onCommit={v => updateProfession(p.id, { ranks: Math.max(0, Math.min(level, Number(v) || 0)) })}
+                />
+                <span className={`skill-bonus ${ranks > 0 ? '' : 'disabled'}`}>{bonus >= 0 ? `+${bonus}` : bonus}</span>
+                <button className="profession-delete" onClick={() => removeProfession(p.id)} title={L ? 'Beruf entfernen' : 'Remove profession'}>×</button>
+              </div>
+            )
+          })}
+          <button className="profession-add" onClick={addProfession}>+ {L ? 'Beruf hinzufügen' : 'Add profession'}</button>
+        </div>
       </div>
       <p className="attr-note">{L ? '• = Klassenfertigkeit, 🔒 = nur geübt nutzbar (mind. 1 Rang nötig)' : '• = class skill, 🔒 = trained only'}</p>
     </div>

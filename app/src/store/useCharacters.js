@@ -45,6 +45,7 @@ export const DEFAULT_CHAR = {
   combat_misc: {},
   gear: { armor_id: '', armor_enh: 0, shield_id: '', shield_enh: 0 },
   skills: {},
+  professions: [],
   hp: { max: 0, current: 0, temp: 0 },
   weapons: [],
   notes: '',
