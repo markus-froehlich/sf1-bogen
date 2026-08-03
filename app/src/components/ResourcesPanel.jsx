@@ -39,6 +39,21 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
       r.id === id ? { ...r, current: Math.min(r.max, r.current + 1) } : r
     ))
   }
+  function replenish(id) {
+    setResources(prev => prev.map(r =>
+      r.id === id ? { ...r, current: Math.max(0, r.current - 1) } : r
+    ))
+  }
+  function move(id, direction) {
+    setResources(prev => {
+      const index = prev.findIndex(r => r.id === id)
+      const target = index + direction
+      if (index < 0 || target < 0 || target >= prev.length) return prev
+      const next = [...prev]
+      ;[next[index], next[target]] = [next[target], next[index]]
+      return next
+    })
+  }
   function restore(id) {
     setResources(prev => prev.map(r =>
       r.id === id ? { ...r, current: 0 } : r
@@ -118,7 +133,7 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
       )}
 
       <div className="res-list">
-        {resources.map(r => {
+        {resources.map((r, index) => {
           const remaining = r.max - r.current
           const pct = r.max > 0 ? remaining / r.max : 1
           return (
@@ -132,8 +147,16 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
                     style={{ color: pct > 0.5 ? 'var(--good)' : pct > 0 ? '#c9a96e' : '#c96e6e' }}>
                     {remaining}/{r.max}{r.unit ? ` ${r.unit}` : ''}
                   </span>
+                  <button className="res-replenish-btn" onClick={() => replenish(r.id)} disabled={r.current <= 0}
+                    title={L ? 'Einen Punkt wiederherstellen' : 'Restore one point'}>+</button>
                   <button className="res-restore-btn" onClick={() => requestRestore(r.id)} disabled={r.current === 0}
                     title={L ? 'Zurücksetzen' : 'Reset'}>↺</button>
+                  <div className="res-order-controls" aria-label={L ? 'Reihenfolge' : 'Order'}>
+                    <button onClick={() => move(r.id, -1)} disabled={index === 0}
+                      title={L ? 'Nach oben' : 'Move up'}>↑</button>
+                    <button onClick={() => move(r.id, 1)} disabled={index === resources.length - 1}
+                      title={L ? 'Nach unten' : 'Move down'}>↓</button>
+                  </div>
                 </div>
               </div>
               <div className="res-bar-wrap">

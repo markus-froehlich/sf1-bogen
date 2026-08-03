@@ -151,7 +151,7 @@
   align-items: center;
   gap: 6px;
 }
-.res-use-btn, .res-restore-btn {
+.res-use-btn, .res-replenish-btn, .res-restore-btn, .res-order-controls button {
   background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: 5px;
@@ -166,8 +166,21 @@
   justify-content: center;
 }
 .res-use-btn:not(:disabled):hover    { color: #c96e6e; border-color: #c96e6e; }
+.res-replenish-btn:not(:disabled):hover { color: var(--good); border-color: var(--good); }
 .res-restore-btn:not(:disabled):hover { color: var(--accent); border-color: var(--accent); }
-.res-use-btn:disabled, .res-restore-btn:disabled { opacity: 0.3; cursor: default; }
+.res-use-btn:disabled, .res-replenish-btn:disabled, .res-restore-btn:disabled, .res-order-controls button:disabled { opacity: 0.3; cursor: default; }
+
+.res-order-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.res-order-controls button {
+  width: 18px;
+  height: 13px;
+  font-size: 0.68rem;
+  line-height: 1;
+}
 
 .res-counter {
   font-size: 1rem;
