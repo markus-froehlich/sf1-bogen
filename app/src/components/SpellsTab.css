@@ -64,6 +64,46 @@
 .spell-slot-grade { font-size: 0.6rem; color: var(--text-muted); }
 .spell-slot-count { font-size: 0.95rem; font-weight: 700; color: var(--accent); }
 
+.ct-heading-row-plain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.spell-reset-all-btn {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+.spell-reset-all-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+.spell-slot-used-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 2px;
+}
+.spell-slot-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.spell-slot-btn:disabled { opacity: 0.3; cursor: default; }
+.spell-slot-btn:not(:disabled):hover { color: var(--accent); border-color: var(--accent); }
+.spell-slot-remaining { font-size: 0.68rem; color: var(--text); min-width: 1.2em; text-align: center; }
+.spell-slot-remaining.zero { color: #c96e6e; font-weight: 700; }
+
 .spell-grade-tabs {
   display: flex;
   gap: 4px;

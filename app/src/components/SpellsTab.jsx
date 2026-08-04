@@ -106,19 +106,58 @@ export function SpellsTab({ char, update, lang }) {
     update({ spells_known: { [classEntry.id]: { [grade]: next } } })
   }
 
+  // Zauberplatz-Verbrauch: Aspirant/Technomagier casten spontan aus einem
+  // Zauberplatz-Pool je Grad (Kapitel 4, "Zauber pro Tag" - "Zauberplätze
+  // ... die du am Tag wirken kannst", "verbraucht" bei jedem Wirken), kein
+  // Vancian-Vorbereiten wie in Pathfinder. Grad 0 ist unbegrenzt wirkbar
+  // (siehe Regelwerk-Beispiel-Tabellen: Grad 0 hat keinen Zauberplatz-Limit,
+  // daher hier ohne Verbrauchs-Tracking).
+  const used = char.spells_used?.[classEntry.id] || {}
+  function spend(grade) {
+    const max = perDay[grade] ?? 0
+    const cur = used[grade] || 0
+    if (cur >= max) return
+    update({ spells_used: { [classEntry.id]: { [grade]: cur + 1 } } })
+  }
+  function restore(grade) {
+    const cur = used[grade] || 0
+    if (cur <= 0) return
+    update({ spells_used: { [classEntry.id]: { [grade]: cur - 1 } } })
+  }
+  function resetAllSlots() {
+    const cleared = Object.fromEntries(GRADES.filter(g => g !== 'grad0').map(g => [g, 0]))
+    update({ spells_used: { [classEntry.id]: cleared } })
+  }
+  const anySlotsUsed = GRADES.some(g => g !== 'grad0' && (used[g] || 0) > 0)
+
   return (
     <div className="section spells-tab">
       {modeToggle}
       <section>
-        <h3 className="section-title">{L ? 'Zauberplätze pro Tag' : 'Spells per day'}</h3>
+        <div className="ct-heading-row-plain">
+          <h3 className="section-title">{L ? 'Zauberplätze pro Tag' : 'Spells per day'}</h3>
+          {anySlotsUsed && (
+            <button className="spell-reset-all-btn" onClick={resetAllSlots}>↺ {L ? 'Alle zurücksetzen' : 'Reset all'}</button>
+          )}
+        </div>
         <div className="spell-slots-row">
           {GRADES.map((g, i) => {
             const val = g === 'grad0' ? perDay.grad0 : perDay[g]
             if (val == null && i > 0) return null
+            const isTracked = i > 0 && val != null
+            const usedCount = used[g] || 0
+            const remaining = isTracked ? val - usedCount : null
             return (
               <div key={g} className="spell-slot-box">
                 <span className="spell-slot-grade">{i}</span>
                 <span className="spell-slot-count">{val ?? (i === 0 ? '∞' : '—')}</span>
+                {isTracked && (
+                  <div className="spell-slot-used-row">
+                    <button className="spell-slot-btn" onClick={() => restore(g)} disabled={usedCount <= 0} title={L ? 'Zurückerlangen' : 'Restore'}>+</button>
+                    <span className={`spell-slot-remaining ${remaining <= 0 ? 'zero' : ''}`}>{remaining}</span>
+                    <button className="spell-slot-btn" onClick={() => spend(g)} disabled={usedCount >= val} title={L ? 'Wirken (verbrauchen)' : 'Cast (spend)'}>−</button>
+                  </div>
+                )}
               </div>
             )
           })}
