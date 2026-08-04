@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import weaponsData from '../data/weapons.json'
 import conditionsData from '../data/conditions.json'
-import { computeCharacterStats } from '../engine/characterStats.js'
+import { computeCharacterStats, allArmor } from '../engine/characterStats.js'
 import { meleeAttackBonus, rangedAttackBonus } from '../engine/combat.js'
 import { computeWeaponDamageModifier } from '../engine/weapons.js'
 import { getHBWeapons } from '../engine/homebrew.js'
@@ -97,6 +97,44 @@ function WeaponSearch({ allWeapons, onSelect, onCancel, lang }) {
   )
 }
 
+// Sucheingabe für Rüstung direkt in der Rüstungsklassen-Sektion (wie
+// pf1-bogens GearSelector) - ohne Verzauberungs-Eingabe, da SF1e-Rüstungen
+// ihre Boni fest im Gegenstand tragen statt über einen Bonus zu stapeln.
+function ArmorSearch({ allArmors, onSelect, onCancel, lang }) {
+  const L = lang === 'de'
+  const [query, setQuery] = useState('')
+  const suggestions = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return []
+    return allArmors.filter(a => a.name.toLowerCase().includes(q)).slice(0, 10)
+  }, [query, allArmors])
+
+  return (
+    <div className="ws-search-wrap">
+      <input
+        className="ws-search-input"
+        placeholder={L ? 'Rüstung suchen…' : 'Search armor…'}
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+        onKeyDown={e => { if (e.key === 'Escape') onCancel() }}
+        autoFocus
+      />
+      {query.length > 0 && (
+        <div className="ws-suggestions">
+          {suggestions.length > 0 ? suggestions.map(a => (
+            <div key={a.name} className="ws-suggestion-item" onMouseDown={() => onSelect(a.name)}>
+              <span className="ws-sug-name">{a.name}</span>
+              <span className="ws-sug-cat">{a._category}</span>
+            </div>
+          )) : (
+            <div className="ws-sug-empty">{L ? 'Keine Treffer' : 'No results'}</div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function CombatTab({ char, update, setConditions, setActiveBuffs, setResources, setCombatMisc, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
@@ -104,6 +142,19 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
   const weapons = useMemo(allWeapons, [])
   const [isAddingWeapon, setIsAddingWeapon] = useState(false)
   const [editingWeaponIdx, setEditingWeaponIdx] = useState(null)
+  const [isEditingArmor, setIsEditingArmor] = useState(false)
+  const armors = useMemo(() => allArmor().map(a => ({
+    ...a,
+    _category: a.category === 'light' ? (L ? 'Leicht' : 'Light') : a.category === 'heavy' ? (L ? 'Schwer' : 'Heavy') : (L ? 'Servo' : 'Powered'),
+  })), [L])
+
+  function equipArmor(name) {
+    update({ equipped: { armor_id: name } })
+    setIsEditingArmor(false)
+  }
+  function unequipArmor() {
+    update({ equipped: { armor_id: '' } })
+  }
 
   const [order, moveSection] = useSectionOrder('sf1_combat_order', COMBAT_SECTIONS_DEFAULT)
   const [collapsed, toggleCollapsed] = useCollapsed('sf1_combat_collapsed')
@@ -236,10 +287,25 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
             <StatBadges buffSources={buffTags.kac} condSources={condTags.kac} />
           </div>
         </div>
-        <p className="char-hint">
-          {armor ? `${L ? 'Angelegt' : 'Worn'}: ${armor.name} (ERK +${armor.erk_bonus}, KRK +${armor.krk_bonus}${armor.max_ge_bonus != null ? `, max. GE-Bonus +${armor.max_ge_bonus}` : ''})`
-                 : (L ? 'Keine Rüstung angelegt (in Tab „Ausrüstung" ausrüsten).' : 'No armor worn (equip in "Gear" tab).')}
-        </p>
+        <div className="weapon-slot">
+          <div className="ws-select-row">
+            {isEditingArmor ? (
+              <ArmorSearch allArmors={armors} lang={lang} onSelect={equipArmor} onCancel={() => setIsEditingArmor(false)} />
+            ) : (
+              <button className="ws-name-btn" onClick={() => setIsEditingArmor(true)} title={L ? 'Rüstung wechseln' : 'Change armor'}>
+                {armor ? armor.name : (L ? 'Keine Rüstung angelegt' : 'No armor worn')}
+              </button>
+            )}
+            {armor && !isEditingArmor && (
+              <button className="ws-clear-btn" onClick={unequipArmor} title={L ? 'Ablegen' : 'Unequip'}>×</button>
+            )}
+          </div>
+          {armor && (
+            <p className="char-hint">
+              ERK +{armor.erk_bonus}, KRK +{armor.krk_bonus}{armor.max_ge_bonus != null ? `, max. GE-Bonus +${armor.max_ge_bonus}` : ''}{armor.ruestungsmalus ? `, Malus ${armor.ruestungsmalus}` : ''}
+            </p>
+          )}
+        </div>
       </>
     ),
     attack: () => (
