@@ -31,12 +31,25 @@ function useCollapsed(storageKey) {
 export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, setXp, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { race, klass, level, abilityMods, buffTags, condTags } = stats
+  const { race, klass, level, abilityMods, buffTags, condTags, classEntries, classContribs, isMulticlass } = stats
 
   const [order, moveSection] = useSectionOrder('sf1_attr_order', CHAR_SECTIONS_DEFAULT)
   const [collapsed, toggleCollapsed] = useCollapsed('sf1_attr_collapsed')
 
   const classEntry = char.meta?.classes?.[0] || { id: '', level: 1 }
+
+  // Multiclassing (Kapitel 2, S. 27): mehrere Klasse+Stufe-Einträge statt
+  // einem - Notation wie im Regelwerk-Beispiel "Soldat 5/Technomagier 1".
+  function addClassEntry() {
+    update({ meta: { classes: [...classEntries, { id: '', level: 1 }] } })
+  }
+  function removeClassEntry(idx) {
+    update({ meta: { classes: classEntries.filter((_, i) => i !== idx) } })
+  }
+
+  const classSummary = classContribs.length > 0
+    ? classContribs.map(c => `${c.klass.name.de} ${c.level}`).join('/')
+    : null
 
   const HEADINGS = {
     volk_klasse: L ? 'Volk & Klasse' : 'Race & Class',
@@ -51,56 +64,69 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
   // Überschrift (wie pf1-bogen). Volk & Klasse sind in SF1e eine
   // gemeinsame Sektion, daher hier zusammengefasst statt zwei Zeilen.
   const SUMMARIES = {
-    volk_klasse: [race?.name?.de, klass?.name?.de ? `${klass.name.de} ${level}` : null].filter(Boolean).join(' · '),
+    volk_klasse: [race?.name?.de, classSummary].filter(Boolean).join(' · '),
     xp: `${char.xp?.current ?? 0} EP`,
   }
 
   const BODIES = {
     volk_klasse: () => (
       <>
-        <div className="bio-row-2">
-          <div className="bio-field">
-            <label className="bio-label">{L ? 'Volk' : 'Race'}</label>
-            <select className="bio-select" value={char.meta?.race || ''} onChange={e => setMeta('race', e.target.value)}>
-              <option value="">—</option>
-              {racesData.races.map(r => (
-                <option key={r.id} value={r.id}>{r.name.de}</option>
-              ))}
-              {getHBRaces().length > 0 && (
-                <optgroup label="Homebrew">
-                  {getHBRaces().map(r => <option key={r.id} value={r.id}>{r.name?.de}</option>)}
-                </optgroup>
-              )}
-            </select>
-          </div>
-          <div className="bio-field">
-            <label className="bio-label">{L ? 'Klasse' : 'Class'}</label>
-            <select className="bio-select" value={classEntry.id} onChange={e => setClass(0, 'id', e.target.value)}>
-              <option value="">—</option>
-              {classesData.classes.map(c => (
-                <option key={c.id} value={c.id}>{c.name.de}</option>
-              ))}
-              {getHBClasses().length > 0 && (
-                <optgroup label="Homebrew">
-                  {getHBClasses().map(c => <option key={c.id} value={c.id}>{c.name?.de}</option>)}
-                </optgroup>
-              )}
-            </select>
-          </div>
+        <div className="bio-field">
+          <label className="bio-label">{L ? 'Volk' : 'Race'}</label>
+          <select className="bio-select" value={char.meta?.race || ''} onChange={e => setMeta('race', e.target.value)}>
+            <option value="">—</option>
+            {racesData.races.map(r => (
+              <option key={r.id} value={r.id}>{r.name.de}</option>
+            ))}
+            {getHBRaces().length > 0 && (
+              <optgroup label="Homebrew">
+                {getHBRaces().map(r => <option key={r.id} value={r.id}>{r.name?.de}</option>)}
+              </optgroup>
+            )}
+          </select>
         </div>
-        <div className="bio-row-2">
-          <div className="bio-field">
-            <label className="bio-label">{L ? 'Charakterstufe' : 'Character level'}</label>
-            <NumberField className="bio-input bio-input-num" min={1} max={20}
-              value={classEntry.level} onCommit={v => setClass(0, 'level', v)} />
-          </div>
-          <div className="bio-field">
-            <label className="bio-label">{L ? 'Schlüsselattribut' : 'Key ability'}</label>
-            <input className="bio-input" readOnly value={klass?.key_ability || '—'} />
-          </div>
-        </div>
+
+        {classEntries.map((entry, idx) => {
+          const entryClass = classesData.classes.find(c => c.id === entry.id) || getHBClasses().find(c => c.id === entry.id) || null
+          return (
+            <div key={idx} className="class-entry-row">
+              <div className="class-entry-fields">
+                <div className="bio-field">
+                  <label className="bio-label">{idx === 0 ? (L ? 'Klasse' : 'Class') : (L ? `Klasse ${idx + 1}` : `Class ${idx + 1}`)}</label>
+                  <select className="bio-select" value={entry.id} onChange={e => setClass(idx, 'id', e.target.value)}>
+                    <option value="">—</option>
+                    {classesData.classes.map(c => (
+                      <option key={c.id} value={c.id}>{c.name.de}</option>
+                    ))}
+                    {getHBClasses().length > 0 && (
+                      <optgroup label="Homebrew">
+                        {getHBClasses().map(c => <option key={c.id} value={c.id}>{c.name?.de}</option>)}
+                      </optgroup>
+                    )}
+                  </select>
+                </div>
+                <div className="bio-field class-entry-level">
+                  <label className="bio-label">{L ? 'Stufe' : 'Level'}</label>
+                  <NumberField className="bio-input bio-input-num" min={1} max={20}
+                    value={entry.level} onCommit={v => setClass(idx, 'level', v)} />
+                </div>
+                {classEntries.length > 1 && (
+                  <button className="class-entry-remove" onClick={() => removeClassEntry(idx)} title={L ? 'Klasse entfernen' : 'Remove class'}>×</button>
+                )}
+              </div>
+              {entryClass && idx === 0 && <p className="char-hint">{L ? 'Schlüsselattribut' : 'Key ability'}: {entryClass.key_ability} — {entryClass.key_ability_note}</p>}
+            </div>
+          )
+        })}
+        <button className="class-entry-add" onClick={addClassEntry}>+ {L ? 'Zusätzliche Klasse (Multiclassing)' : 'Additional class (multiclassing)'}</button>
+
         {race && <p className="char-hint">{race.ability_mods_text} · {race.hp_bonus} TP · {race.size} · {race.creature_type}</p>}
-        {klass && <p className="char-hint">{klass.key_ability_note}</p>}
+        {isMulticlass && (
+          <p className="char-hint">
+            {L ? `Charakterstufe ${level} (${classSummary}). GAB/Rettungswürfe/TP/AP addieren sich aus den Stufen jeder Klasse; Reservepunkte nutzen das Schlüsselattribut der ersten Klasse.`
+               : `Character level ${level} (${classSummary}). BAB/saves/HP/SP sum across each class's own level; Resolve Points use the first class's key ability.`}
+          </p>
+        )}
       </>
     ),
     xp: () => <XpTracker char={char} setXp={setXp} totalLevel={level} lang={lang} />,
@@ -140,15 +166,18 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
     ),
     klassenmerkmale: () => klass && (
       <>
-        <div className="feature-list">
-          {klass.features.filter(f => f.level_gained <= level).map(f => (
-            <div key={f.name} className="feature-item">
-              <span className="feature-name">{f.name} <span className="feature-level">({L ? 'Stufe' : 'Level'} {f.level_gained})</span></span>
-              <p className="feature-desc">{f.description}</p>
-            </div>
-          ))}
-        </div>
-        {klass.notes && <p className="char-hint">{klass.notes}</p>}
+        {classContribs.map(c => (
+          <div key={c.klass.id} className="feature-list">
+            {isMulticlass && <h4 className="feature-class-heading">{c.klass.name.de}</h4>}
+            {c.klass.features.filter(f => f.level_gained <= c.level).map(f => (
+              <div key={f.name} className="feature-item">
+                <span className="feature-name">{f.name} <span className="feature-level">({L ? 'Stufe' : 'Level'} {f.level_gained})</span></span>
+                <p className="feature-desc">{f.description}</p>
+              </div>
+            ))}
+            {c.klass.notes && <p className="char-hint">{c.klass.notes}</p>}
+          </div>
+        ))}
       </>
     ),
   }

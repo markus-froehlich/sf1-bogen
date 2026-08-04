@@ -73,9 +73,20 @@ export function findLevelRow(klass, level) {
 
 export function computeCharacterStats(char) {
   const race = getRace(char.meta?.race)
-  const classEntry = char.meta?.classes?.[0] || { id: '', level: 1 }
+  const classEntries = (char.meta?.classes?.length ? char.meta.classes : [{ id: '', level: 1 }])
+  const classEntry = classEntries[0] || { id: '', level: 1 }
   const klass = getClass(classEntry.id)
-  const level = Math.max(1, Number(classEntry.level) || 1)
+  // Charakterstufe = Summe der Stufen aller Klassen (Multiclassing, Kapitel 2
+  // "Stufen in mehreren Klassen", S. 27): jede Klasse trägt GAB/Rettungswürfe/
+  // TP/AP gemäß ihrer EIGENEN Stufe bei, nicht der Gesamtstufe - siehe unten
+  // "classContribs". `level` bleibt hier die Gesamtcharakterstufe.
+  const classContribs = classEntries
+    .filter(e => e.id)
+    .map(e => ({ klass: getClass(e.id), level: Math.max(1, Number(e.level) || 1) }))
+    .filter(c => c.klass)
+  const level = classContribs.length > 0
+    ? classContribs.reduce((sum, c) => sum + c.level, 0)
+    : Math.max(1, Number(classEntry.level) || 1)
 
   const { totals: buffTotals, sources: buffSources } = computeBuffTotals(char.active_buffs)
   const { totals: condTotals, sources: condSources } = computeConditionTotals(char.conditions, conditionsData.conditions)
@@ -93,19 +104,45 @@ export function computeCharacterStats(char) {
     abilityMods[k] += condTotals[ABILITY_MOD_FIELD[k]]
   }
 
+  // Multiclassing (Kapitel 2, S. 27): jede Klasse trägt GAB/Rettungswürfe/TP/AP
+  // gemäß IHRER EIGENEN Stufe bei (nicht der Gesamtcharakterstufe) und wird
+  // aufaddiert - Beispiel im Regelwerk: "Soldat 5/Technomagier 1" addiert die
+  // Werte der 5. Stufe als Soldat auf die der 1. Stufe als Technomagier.
+  // Reservepunkte nutzen weiterhin die Gesamtcharakterstufe (halbe Stufe,
+  // S. 23) + Schlüsselattributsmodifikator der ERSTEN (primären) Klasse -
+  // das Regelwerk regelt RP bei Multiclassing nicht explizit anders, daher
+  // hier als Vereinfachung dokumentiert statt geraten.
   const levelRow = findLevelRow(klass, level)
   const keyAbilityModifier = resolveKeyAbilityModifier(klass, abilityMods)
+  const isMulticlass = classContribs.length > 1
 
-  const tp = totalHitPoints({
-    raceHpBonus: race?.hp_bonus || 0,
-    classHpPerLevel: klass?.hp_per_level || 0,
-    level,
-  })
-  const ap = totalStaminaPoints({
-    classApPerLevel: klass?.ap_base_per_level || 0,
-    conModifier: abilityMods.KO,
-    level,
-  })
+  let tp, ap, bab, saveRefBase, saveWillBase, saveZahBase
+
+  if (isMulticlass) {
+    tp = race?.hp_bonus || 0
+    ap = 0
+    bab = 0
+    saveRefBase = 0
+    saveWillBase = 0
+    saveZahBase = 0
+    for (const c of classContribs) {
+      const row = findLevelRow(c.klass, c.level)
+      tp += totalHitPoints({ raceHpBonus: 0, classHpPerLevel: c.klass?.hp_per_level || 0, level: c.level })
+      ap += totalStaminaPoints({ classApPerLevel: c.klass?.ap_base_per_level || 0, conModifier: abilityMods.KO, level: c.level })
+      bab += row?.bab ?? 0
+      saveRefBase += row?.save_ref ?? 0
+      saveWillBase += row?.save_will ?? 0
+      saveZahBase += row?.save_zah ?? 0
+    }
+  } else {
+    tp = totalHitPoints({ raceHpBonus: race?.hp_bonus || 0, classHpPerLevel: klass?.hp_per_level || 0, level })
+    ap = totalStaminaPoints({ classApPerLevel: klass?.ap_base_per_level || 0, conModifier: abilityMods.KO, level })
+    bab = levelRow?.bab ?? 0
+    saveRefBase = levelRow?.save_ref ?? 0
+    saveWillBase = levelRow?.save_will ?? 0
+    saveZahBase = levelRow?.save_zah ?? 0
+  }
+
   const rp = totalResolvePoints({ level, keyAbilityModifier })
 
   // S. 29 (Kapitel 2): "Der Modifikator entspricht seinem Geschicklichkeits-
@@ -170,20 +207,20 @@ export function computeCharacterStats(char) {
   condTags.initiative = [...condTags.initiative, ...condTags.GE]
 
   return {
-    race, klass, level, classEntry,
+    race, klass, level, classEntry, classEntries, classContribs, isMulticlass,
     abilityMods, keyAbilityModifier,
     levelRow,
     tp, ap, rp,
     armor, eac, kac, speed, initiative, hasImprovedInitiative, initiativeFeatBonus,
-    bab: levelRow?.bab ?? 0,
+    bab,
     // S. 240f.: "Addiere deinen Geschicklichkeitsmodifikator auf deine
     // Reflexwürfe" / "...Weisheitsmodifikator auf deine Willenswürfe" /
     // "...Konstitutionsmodifikator auf deine Zähigkeitswürfe" - der
     // Attributsmodifikator fehlte hier bisher komplett (nur Klassen-
     // Grundwert + Buffs/Zustände), echter Rechenfehler.
-    saveRef: (levelRow?.save_ref ?? 0) + abilityMods.GE + buffTotals.saveRef + condTotals.saveRef,
-    saveWill: (levelRow?.save_will ?? 0) + abilityMods.WE + buffTotals.saveWill + condTotals.saveWill,
-    saveZah: (levelRow?.save_zah ?? 0) + abilityMods.KO + buffTotals.saveZah + condTotals.saveZah,
+    saveRef: saveRefBase + abilityMods.GE + buffTotals.saveRef + condTotals.saveRef,
+    saveWill: saveWillBase + abilityMods.WE + buffTotals.saveWill + condTotals.saveWill,
+    saveZah: saveZahBase + abilityMods.KO + buffTotals.saveZah + condTotals.saveZah,
     classAbbr: CLASS_ABBR[classEntry.id] || null,
     buffTotals: {
       ...buffTotals,
