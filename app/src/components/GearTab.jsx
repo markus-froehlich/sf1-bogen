@@ -92,6 +92,18 @@ export function GearTab({ char, update, setInventory, lang }) {
   const totalLoad = items.reduce((sum, it) => sum + loadValueToNumber(it.last) * (it.qty || 1), 0)
   const totalSpent = items.reduce((sum, it) => sum + (Number(it.price) || 0) * (it.qty || 1), 0)
 
+  // Traglast (Kapitel 7, S. 166f., "Tragkapazität"): bis ST/2 uneingeschränkt,
+  // bis ST der Zustand Beladen, darüber Überladen (nur unfreiwillig möglich).
+  // Anders als Pathfinders kg-Tabellen ist das hier direkt der ST-Attributs-
+  // wert selbst, keine gesonderte Formel/Tabelle. Zeigt nur die Einstufung an
+  // - die Zustandseffekte (Bewegung/GE-Bonus-Deckel/Fertigkeitsmalus) laufen
+  // wie bei allen anderen Zuständen über den manuellen Toggle im Kampf-Tab
+  // (Beladen/Überladen existieren dort bereits als Zustände).
+  const stScore = Number(char.attributes?.ST) || 10
+  const carryLight = Math.floor(stScore / 2)
+  const carryMax = stScore
+  const carryTier = totalLoad <= carryLight ? 'light' : totalLoad <= carryMax ? 'beladen' : 'ueberladen'
+
   function setCredits(value) {
     update({ credits: Math.max(0, value) })
   }
@@ -161,9 +173,31 @@ export function GearTab({ char, update, setInventory, lang }) {
           <NumberField className="bio-input bio-input-num" min={0} value={credits} onCommit={setCredits} />
         </div>
         <p className="char-hint">
-          {L ? `Ausgegeben laut Inventar: ${totalSpent} Credits · Gesamtlast: ${Math.round(totalLoad * 10) / 10}`
-             : `Spent per inventory: ${totalSpent} credits · Total load: ${Math.round(totalLoad * 10) / 10}`}
+          {L ? `Ausgegeben laut Inventar: ${totalSpent} Credits`
+             : `Spent per inventory: ${totalSpent} credits`}
         </p>
+        <div className="carry-row">
+          <span className="carry-label">{L ? 'Traglast' : 'Carry'}</span>
+          <span className={`carry-tier carry-light ${carryTier === 'light' ? 'carry-active' : ''}`}>
+            <span className="ct-tag">{L ? 'Frei' : 'Light'}</span>
+            <span className="ct-val">≤{carryLight}</span>
+          </span>
+          <span className={`carry-tier carry-beladen ${carryTier === 'beladen' ? 'carry-active' : ''}`}>
+            <span className="ct-tag">{L ? 'Beladen' : 'Encumbered'}</span>
+            <span className="ct-val">≤{carryMax}</span>
+          </span>
+          <span className={`carry-tier carry-ueberladen ${carryTier === 'ueberladen' ? 'carry-active' : ''}`}>
+            <span className="ct-tag">{L ? 'Überladen' : 'Overloaded'}</span>
+            <span className="ct-val">&gt;{carryMax}</span>
+          </span>
+          <span className={`carry-current carry-current-${carryTier}`}>{Math.round(totalLoad * 10) / 10}</span>
+        </div>
+        {carryTier !== 'light' && (
+          <p className="char-hint">
+            {L ? `Zustand „${carryTier === 'beladen' ? 'Beladen' : 'Überladen'}" gilt nach ST-basierter Traglast (Kapitel 7, S. 166f.) - im Kampf-Tab unter Zuständen manuell aktivieren, Effekte laufen nicht automatisch ein.`
+               : `Condition "${carryTier === 'beladen' ? 'Encumbered' : 'Overloaded'}" applies per STR-based carry capacity (Chapter 7) - toggle it manually under Conditions in the Combat tab; effects aren't applied automatically.`}
+          </p>
+        )}
       </section>
 
       <section>

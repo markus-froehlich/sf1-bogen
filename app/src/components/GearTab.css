@@ -105,6 +105,38 @@
 }
 .gear-equip-btn:disabled { color: var(--accent); border-color: var(--accent); opacity: 1; cursor: default; }
 
+/* Traglast (Kapitel 7, "Tragkapazität") */
+.carry-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.carry-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; margin-right: 4px; }
+.carry-tier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  opacity: 0.55;
+}
+.carry-tier.carry-active { opacity: 1; border-color: var(--accent); }
+.ct-tag { font-size: 0.6rem; font-weight: 700; color: var(--text); }
+.ct-val { font-size: 0.6rem; color: var(--text-muted); }
+.carry-tier.carry-beladen.carry-active { border-color: #c9a96e; }
+.carry-tier.carry-ueberladen.carry-active { border-color: #c96e6e; }
+.carry-current {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-left: auto;
+}
+.carry-current-beladen { color: #c9a96e; }
+.carry-current-ueberladen { color: #c96e6e; }
+
 /* Sucheingabe für Waffen/Rüstung, Konsistenz zum Kampf-Tab-Muster */
 .ws-search-wrap { flex: 1; position: relative; min-width: 0; }
 .ws-search-input {
