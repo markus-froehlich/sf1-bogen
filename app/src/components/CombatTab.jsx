@@ -350,6 +350,15 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
             </p>
           )}
         </div>
+        <label className="resist-field">
+          <span className="resist-label">{L ? 'Resistenzen / Immunität' : 'Resistances / Immunity'}</span>
+          <textarea
+            className="resist-textarea"
+            placeholder={L ? 'z.B. Feuerresistenz 5, Immunität gegen Gift…' : 'e.g. Fire resistance 5, immune to poison…'}
+            value={combatMisc.resistances_notes || ''}
+            onChange={e => setCombatMisc('resistances_notes', e.target.value)}
+          />
+        </label>
       </>
     ),
     attack: () => (

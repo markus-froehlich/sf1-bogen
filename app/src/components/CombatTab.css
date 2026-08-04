@@ -68,6 +68,25 @@
 .extra-speed-field input { width: 3.5em; text-align: center; }
 .extra-speed-unit { font-size: 0.65rem; }
 
+.resist-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.resist-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; }
+.resist-textarea {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 6px 8px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  min-height: 44px;
+  resize: vertical;
+}
+.resist-textarea::placeholder { color: var(--text-muted); font-style: italic; }
+
 .combat-weapon-card {
   display: flex;
   flex-direction: column;
