@@ -14,6 +14,7 @@ import { CombatTab } from './components/CombatTab.jsx'
 import { SkillsTab } from './components/SkillsTab.jsx'
 import { GearTab } from './components/GearTab.jsx'
 import { SpellsTab } from './components/SpellsTab.jsx'
+import { FeatsTab } from './components/FeatsTab.jsx'
 import { NotesTab } from './components/NotesTab.jsx'
 import './App.css'
 
@@ -23,6 +24,7 @@ const TABS = [
   { id: 'skills',  icon: '🔨', label: 'Fertigkeiten' },
   { id: 'gear',    icon: '🔫', label: 'Ausrüstung' },
   { id: 'spells',  icon: '✨', label: 'Zauber' },
+  { id: 'feats',   icon: '🎖', label: 'Talente' },
   { id: 'ship',    icon: '🚀', label: 'Raumschiff' },
   { id: 'notes',   icon: '📜', label: 'Notizen' },
 ]
@@ -339,6 +341,7 @@ export default function App() {
         {tab === 'skills' && <SkillsTab char={char} update={update} lang={lang} />}
         {tab === 'gear'   && <GearTab char={char} update={update} setInventory={setInventory} lang={lang} />}
         {tab === 'spells' && <SpellsTab char={char} update={update} lang={lang} />}
+        {tab === 'feats'  && <FeatsTab char={char} setFeats={setFeats} lang={lang} />}
         {tab === 'ship'   && <PlaceholderTab label="Raumschiff (spätere Phase, siehe STATUS.md)" />}
         {tab === 'notes'  && <NotesTab char={char} setNotes={setNotes} setContacts={setContacts} setSpecials={setSpecials} lang={lang} />}
       </main>

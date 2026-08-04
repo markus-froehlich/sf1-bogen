@@ -3,7 +3,6 @@ import racesData from '../data/races.json'
 import classesData from '../data/classes.json'
 import { AttributeBlock } from './AttributeBlock.jsx'
 import { BioSection } from './BioSection.jsx'
-import { FeatsTab } from './FeatsTab.jsx'
 import { XpTracker } from './XpTracker.jsx'
 import { NumberField } from './NumberField.jsx'
 import { useSectionOrder } from '../store/useSectionOrder.js'
@@ -11,7 +10,7 @@ import { computeCharacterStats } from '../engine/characterStats.js'
 import { getHBRaces, getHBClasses } from '../engine/homebrew.js'
 import './CharacterTab.css'
 
-const CHAR_SECTIONS_DEFAULT = ['volk_klasse', 'xp', 'bio', 'attribute', 'talente', 'volksmerkmale', 'klassenmerkmale']
+const CHAR_SECTIONS_DEFAULT = ['volk_klasse', 'xp', 'bio', 'attribute', 'volksmerkmale', 'klassenmerkmale']
 
 function useCollapsed(storageKey) {
   const [collapsed, setCollapsed] = useState(() => {
@@ -29,7 +28,7 @@ function useCollapsed(storageKey) {
   return [collapsed, toggle]
 }
 
-export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, setFeats, setXp, lang }) {
+export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio, setXp, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
   const { race, klass, level, abilityMods, buffTags, condTags } = stats
@@ -44,7 +43,6 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
     xp: L ? 'Erfahrung' : 'Experience',
     bio: L ? 'Bio' : 'Bio',
     attribute: L ? 'Attribute' : 'Attributes',
-    talente: L ? 'Talente' : 'Feats',
     volksmerkmale: L ? 'Volksmerkmale' : 'Racial traits',
     klassenmerkmale: L ? 'Klassenmerkmale' : 'Class features',
   }
@@ -52,12 +50,9 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
   // Eingeklappte Abschnitte zeigen die Kernwerte statt einer leeren
   // Überschrift (wie pf1-bogen). Volk & Klasse sind in SF1e eine
   // gemeinsame Sektion, daher hier zusammengefasst statt zwei Zeilen.
-  const featBudget = Math.ceil((level || 1) / 2)
-  const chosenFeats = char.feats ?? []
   const SUMMARIES = {
     volk_klasse: [race?.name?.de, klass?.name?.de ? `${klass.name.de} ${level}` : null].filter(Boolean).join(' · '),
     xp: `${char.xp?.current ?? 0} EP`,
-    talente: `${chosenFeats.length}/${featBudget}`,
   }
 
   const BODIES = {
@@ -133,7 +128,6 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
         </div>
       </>
     ),
-    talente: () => <FeatsTab char={char} setFeats={setFeats} lang={lang} />,
     volksmerkmale: () => race && (
       <div className="feature-list">
         {(race.traits ?? []).map(t => (
@@ -159,8 +153,11 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
     ),
   }
 
-  // Abschnitte, die ohne Volk/Klasse nichts anzuzeigen hätten, werden übersprungen
+  // Abschnitte, die ohne Volk/Klasse nichts anzuzeigen hätten, werden
+  // übersprungen; "talente" ist aus gespeicherter Reihenfolge älterer
+  // Charaktere entfernt (jetzt eigener Bottom-Nav-Tab, siehe App.jsx).
   const visibleOrder = order.filter(id => {
+    if (!(id in BODIES)) return false
     if (id === 'volksmerkmale') return !!race
     if (id === 'klassenmerkmale') return !!klass
     return true
