@@ -61,17 +61,53 @@ function allWeapons() {
   return [...core, ...homebrew]
 }
 
+// Sucheingabe statt riesigem <select> mit 350+ Einträgen (wie pf1-bogen).
+function WeaponSearch({ allWeapons, onSelect, onCancel, lang }) {
+  const L = lang === 'de'
+  const [query, setQuery] = useState('')
+  const suggestions = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return []
+    return allWeapons.filter(w => w.name.toLowerCase().includes(q)).slice(0, 10)
+  }, [query, allWeapons])
+
+  return (
+    <div className="ws-search-wrap">
+      <input
+        className="ws-search-input"
+        placeholder={L ? 'Waffe suchen…' : 'Search weapon…'}
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+        onKeyDown={e => { if (e.key === 'Escape') onCancel() }}
+        autoFocus
+      />
+      {query.length > 0 && (
+        <div className="ws-suggestions">
+          {suggestions.length > 0 ? suggestions.map(w => (
+            <div key={w.name} className="ws-suggestion-item" onMouseDown={() => onSelect(w.name)}>
+              <span className="ws-sug-name">{w.name}</span>
+              <span className="ws-sug-cat">{w._category}</span>
+            </div>
+          )) : (
+            <div className="ws-sug-empty">{L ? 'Keine Treffer' : 'No results'}</div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function CombatTab({ char, update, setConditions, setActiveBuffs, setResources, setCombatMisc, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, eac, kac, armor, speed, initiative, hasImprovedInitiative, initiativeFeatBonus, initiativeMisc, buffTotals, buffTags, condTags } = stats
+  const { abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, eac, kac, armor, speed, initiative, hasImprovedInitiative, initiativeFeatBonus, buffTotals, buffTags, condTags } = stats
   const weapons = useMemo(allWeapons, [])
-  const [weaponName, setWeaponName] = useState('')
+  const [isAddingWeapon, setIsAddingWeapon] = useState(false)
+  const [editingWeaponIdx, setEditingWeaponIdx] = useState(null)
 
   const [order, moveSection] = useSectionOrder('sf1_combat_order', COMBAT_SECTIONS_DEFAULT)
   const [collapsed, toggleCollapsed] = useCollapsed('sf1_combat_collapsed')
 
-  const weapon = weapons.find(w => w.name === weaponName) || null
   const activeConditions = new Set(char.conditions ?? [])
   const current = char.resources_current ?? { tp: null, ap: null, rp: null }
 
@@ -91,28 +127,43 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
     })
   }
 
-  const attackBonus = weapon
-    ? (weapon._isRanged
-        ? rangedAttackBonus({ baseAttackBonus: bab, dexModifier: abilityMods.GE, otherModifiers: buffTotals.attack })
-        : meleeAttackBonus({ baseAttackBonus: bab, strengthModifier: abilityMods.ST, otherModifiers: buffTotals.attack }))
-    : null
-  // Angriffsbonus hängt je nach Waffe von ST (Nahkampf) oder GE (Fernkampf)
-  // ab - ein Buff/Zustand, der nur diesen Attributsmodifikator ändert (z.B.
-  // Gelähmt: GE -5), rechnet sich schon korrekt in attackBonus ein, taucht
-  // aber ohne diesen Merge nicht als Badge auf.
-  const attackAbilityKey = weapon ? (weapon._isRanged ? 'GE' : 'ST') : null
-  const attackBuffSources = attackAbilityKey ? [...buffTags.attack, ...buffTags[attackAbilityKey]] : buffTags.attack
-  const attackCondSources = attackAbilityKey ? [...condTags.attack, ...condTags[attackAbilityKey]] : condTags.attack
-  const damageModifier = weapon
-    ? computeWeaponDamageModifier({ isMelee: weapon._isMelee, isTwoHanded: weapon._isTwoHanded, strengthModifier: abilityMods.ST, otherModifiers: buffTotals.damage })
-    : 0
+  // Mehrere gleichzeitig geführte Waffen statt einer einzigen Auswahl (wie
+  // pf1-bogen) - Namen statt IDs, da weapons.json keine IDs hat.
+  const equippedWeaponNames = char.equipped?.weapon_ids ?? []
+  function addWeapon(name) {
+    update({ equipped: { weapon_ids: [...equippedWeaponNames, name] } })
+    setIsAddingWeapon(false)
+  }
+  function removeWeapon(idx) {
+    update({ equipped: { weapon_ids: equippedWeaponNames.filter((_, i) => i !== idx) } })
+  }
+  function changeWeapon(idx, name) {
+    update({ equipped: { weapon_ids: equippedWeaponNames.map((n, i) => i === idx ? name : n) } })
+    setEditingWeaponIdx(null)
+  }
+
+  function computeWeaponAttack(weapon) {
+    if (!weapon) return null
+    const attackBonus = weapon._isRanged
+      ? rangedAttackBonus({ baseAttackBonus: bab, dexModifier: abilityMods.GE, otherModifiers: buffTotals.attack })
+      : meleeAttackBonus({ baseAttackBonus: bab, strengthModifier: abilityMods.ST, otherModifiers: buffTotals.attack })
+    // Angriffsbonus hängt je nach Waffe von ST (Nahkampf) oder GE (Fernkampf)
+    // ab - ein Buff/Zustand, der nur diesen Attributsmodifikator ändert (z.B.
+    // Gelähmt: GE -5), rechnet sich schon korrekt in attackBonus ein, taucht
+    // aber ohne diesen Merge nicht als Badge auf.
+    const attackAbilityKey = weapon._isRanged ? 'GE' : 'ST'
+    const attackBuffSources = [...buffTags.attack, ...buffTags[attackAbilityKey]]
+    const attackCondSources = [...condTags.attack, ...condTags[attackAbilityKey]]
+    const damageModifier = computeWeaponDamageModifier({ isMelee: weapon._isMelee, isTwoHanded: weapon._isTwoHanded, strengthModifier: abilityMods.ST, otherModifiers: buffTotals.damage })
+    return { attackBonus, attackBuffSources, attackCondSources, damageModifier }
+  }
 
   const HEADINGS = {
     tp: L ? 'Trefferpunkte, Ausdauer & Reserve' : 'Hit Points, Stamina & Resolve',
     kampfwerte: L ? 'Kampfwerte' : 'Combat stats',
     speed: L ? 'Bewegung' : 'Movement',
     ac: L ? 'Rüstungsklassen' : 'Armor Class',
-    attack: L ? 'Angriffsrechner' : 'Attack calculator',
+    attack: L ? 'Waffen' : 'Weapons',
     conditions: L ? 'Zustände' : 'Conditions',
     buffs: L ? 'Buffs' : 'Buffs',
     resources: L ? 'Ressourcen' : 'Resources',
@@ -134,7 +185,7 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
     kampfwerte: `${L ? 'GAB' : 'BAB'} ${bab >= 0 ? '+' : ''}${bab} · Init ${initiative >= 0 ? '+' : ''}${initiative} · Ref ${saveRef >= 0 ? '+' : ''}${saveRef}/Wil ${saveWill >= 0 ? '+' : ''}${saveWill}/Zäh ${saveZah >= 0 ? '+' : ''}${saveZah}`,
     speed: `${L ? 'Zu Fuß' : 'Walk'} ${speed} m`,
     ac: `EAC ${eac} · KAC ${kac}`,
-    attack: weapon ? `${weapon.name}: ${attackBonus >= 0 ? '+' : ''}${attackBonus}` : '',
+    attack: equippedWeaponNames.length > 0 ? equippedWeaponNames.join(' · ') : '',
     conditions: activeConditions.size > 0 ? `${activeConditions.size} ${L ? 'aktiv' : 'active'}` : '',
     buffs: activeBuffCount > 0 ? `${activeBuffCount} ${L ? 'aktiv' : 'active'}` : '',
     resources: (char.resources ?? []).length > 0 ? `${(char.resources ?? []).length}` : '',
@@ -193,32 +244,54 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
     ),
     attack: () => (
       <>
-        <select className="bio-select" value={weaponName} onChange={e => setWeaponName(e.target.value)}>
-          <option value="">{L ? '— Waffe wählen —' : '— choose weapon —'}</option>
-          {WEAPON_CATEGORIES.map(([key, label]) => (
-            <optgroup key={key} label={label}>
-              {(weaponsData[key] || []).map(w => <option key={w.name} value={w.name}>{w.name}</option>)}
-            </optgroup>
-          ))}
-          {getHBWeapons().length > 0 && (
-            <optgroup label="Homebrew">
-              {getHBWeapons().map(w => <option key={w.name} value={w.name}>{w.name}</option>)}
-            </optgroup>
-          )}
-        </select>
-        {weapon && (
-          <div className="combat-weapon-card">
-            <div className="cwc-row"><span>{L ? 'Angriffsbonus' : 'Attack bonus'}</span><strong>{attackBonus >= 0 ? `+${attackBonus}` : attackBonus} <StatBadges buffSources={attackBuffSources} condSources={attackCondSources} /></strong></div>
-            <div className="cwc-row">
-              <span>{L ? 'Schaden' : 'Damage'}</span>
-              <strong>
-                {weapon.schaden || '—'}{damageModifier !== 0 ? ` (${damageModifier >= 0 ? '+' : ''}${damageModifier})` : ''} <StatBadges buffSources={buffTags.damage} condSources={condTags.damage} />
-              </strong>
+        {equippedWeaponNames.map((name, idx) => {
+          const weapon = weapons.find(w => w.name === name) || null
+          const comp = computeWeaponAttack(weapon)
+          return (
+            <div key={idx} className="weapon-slot">
+              <div className="ws-select-row">
+                <span className="ws-num">{idx + 1}</span>
+                {editingWeaponIdx === idx ? (
+                  <WeaponSearch
+                    allWeapons={weapons}
+                    lang={lang}
+                    onSelect={n => changeWeapon(idx, n)}
+                    onCancel={() => setEditingWeaponIdx(null)}
+                  />
+                ) : (
+                  <button className="ws-name-btn" onClick={() => setEditingWeaponIdx(idx)} title={L ? 'Waffe wechseln' : 'Change weapon'}>
+                    {name}
+                  </button>
+                )}
+                <button className="ws-clear-btn" onClick={() => removeWeapon(idx)} title={L ? 'Entfernen' : 'Remove'}>×</button>
+              </div>
+              {weapon && comp && (
+                <div className="combat-weapon-card">
+                  <div className="cwc-row"><span>{L ? 'Angriffsbonus' : 'Attack bonus'}</span><strong>{comp.attackBonus >= 0 ? `+${comp.attackBonus}` : comp.attackBonus} <StatBadges buffSources={comp.attackBuffSources} condSources={comp.attackCondSources} /></strong></div>
+                  <div className="cwc-row">
+                    <span>{L ? 'Schaden' : 'Damage'}</span>
+                    <strong>
+                      {weapon.schaden || '—'}{comp.damageModifier !== 0 ? ` (${comp.damageModifier >= 0 ? '+' : ''}${comp.damageModifier})` : ''} <StatBadges buffSources={buffTags.damage} condSources={condTags.damage} />
+                    </strong>
+                  </div>
+                  {weapon.kritisch && <div className="cwc-row"><span>{L ? 'Kritisch' : 'Critical'}</span><strong>{weapon.kritisch}</strong></div>}
+                  {weapon.reichweite && <div className="cwc-row"><span>{L ? 'Reichweite' : 'Range'}</span><strong>{weapon.reichweite}</strong></div>}
+                  {weapon.sondereigenschaften && <p className="char-hint">{weapon.sondereigenschaften}</p>}
+                </div>
+              )}
             </div>
-            {weapon.kritisch && <div className="cwc-row"><span>{L ? 'Kritisch' : 'Critical'}</span><strong>{weapon.kritisch}</strong></div>}
-            {weapon.reichweite && <div className="cwc-row"><span>{L ? 'Reichweite' : 'Range'}</span><strong>{weapon.reichweite}</strong></div>}
-            {weapon.sondereigenschaften && <p className="char-hint">{weapon.sondereigenschaften}</p>}
+          )
+        })}
+
+        {isAddingWeapon ? (
+          <div className="weapon-slot ws-adding">
+            <div className="ws-select-row">
+              <WeaponSearch allWeapons={weapons} lang={lang} onSelect={addWeapon} onCancel={() => setIsAddingWeapon(false)} />
+              <button className="ws-clear-btn" onClick={() => setIsAddingWeapon(false)} title={L ? 'Abbrechen' : 'Cancel'}>×</button>
+            </div>
           </div>
+        ) : (
+          <button className="ws-add-btn" onClick={() => setIsAddingWeapon(true)}>+ {L ? 'Neue Waffe' : 'Add weapon'}</button>
         )}
       </>
     ),
