@@ -19,6 +19,55 @@
   .sf-stat-row.five { grid-template-columns: repeat(3, 1fr); }
 }
 
+.save-misc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.save-misc-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px;
+}
+.save-misc-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.save-misc-input { width: 100%; box-sizing: border-box; }
+.save-misc-note {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  font-size: 0.7rem;
+  padding: 3px 5px;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+.save-misc-note::placeholder { color: var(--text-muted); font-style: italic; }
+
+.extra-speed-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.extra-speed-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.extra-speed-field input { width: 3.5em; text-align: center; }
+.extra-speed-unit { font-size: 0.65rem; }
+
 .combat-weapon-card {
   display: flex;
   flex-direction: column;

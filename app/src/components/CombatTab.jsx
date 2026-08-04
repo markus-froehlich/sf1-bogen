@@ -161,12 +161,17 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
 
   const activeConditions = new Set(char.conditions ?? [])
   const current = char.resources_current ?? { tp: null, ap: null, rp: null }
+  const combatMisc = char.combat_misc ?? {}
 
   function setResourceCurrent(key, value) {
     update({ resources_current: { [key]: Number(value) } })
   }
   function fillResource(key, max) {
     update({ resources_current: { [key]: max } })
+  }
+  function quickAdjust(key, current_, max, delta) {
+    const base = current_ ?? max
+    setResourceCurrent(key, base + delta)
   }
 
   function toggleCondition(name) {
@@ -244,20 +249,46 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
 
   const BODIES = {
     tp: () => (
-      <div className="sf-resource-row">
-        <ResourceBox label="TP" full={L ? 'Trefferpunkte' : 'Hit Points'} max={tp} current={current.tp} onChange={v => setResourceCurrent('tp', v)} onFill={() => fillResource('tp', tp)} />
-        <ResourceBox label="AP" full={L ? 'Ausdauerpunkte' : 'Stamina Points'} max={ap} current={current.ap} onChange={v => setResourceCurrent('ap', v)} onFill={() => fillResource('ap', ap)} />
-        <ResourceBox label="RP" full={L ? 'Reservepunkte' : 'Resolve Points'} max={rp} current={current.rp} onChange={v => setResourceCurrent('rp', v)} onFill={() => fillResource('rp', rp)} />
-      </div>
+      <>
+        <div className="sf-resource-row">
+          <ResourceBox label="TP" full={L ? 'Trefferpunkte' : 'Hit Points'} max={tp} current={current.tp} onChange={v => setResourceCurrent('tp', v)} onFill={() => fillResource('tp', tp)} onQuick={d => quickAdjust('tp', current.tp, tp, d)} />
+          <ResourceBox label="AP" full={L ? 'Ausdauerpunkte' : 'Stamina Points'} max={ap} current={current.ap} onChange={v => setResourceCurrent('ap', v)} onFill={() => fillResource('ap', ap)} onQuick={d => quickAdjust('ap', current.ap, ap, d)} />
+          <ResourceBox label="RP" full={L ? 'Reservepunkte' : 'Resolve Points'} max={rp} current={current.rp} onChange={v => setResourceCurrent('rp', v)} onFill={() => fillResource('rp', rp)} onQuick={d => quickAdjust('rp', current.rp, rp, d)} />
+        </div>
+        <label className="tp-temp-field">
+          <span>{L ? 'Temporäre TP' : 'Temp HP'}</span>
+          <NumberField min={0} value={combatMisc.tp_temp || 0} onCommit={v => setCombatMisc('tp_temp', v)} />
+        </label>
+      </>
     ),
     kampfwerte: () => (
-      <div className="sf-stat-row five">
-        <StatBox label={L ? 'GAB' : 'BAB'} value={bab >= 0 ? `+${bab}` : bab} />
-        <StatBox label={L ? 'Init' : 'Init'} value={initiative >= 0 ? `+${initiative}` : initiative} buffSources={buffTags.initiative} condSources={condTags.initiative} />
-        <StatBox label={L ? 'Reflex' : 'Reflex'} value={saveRef >= 0 ? `+${saveRef}` : saveRef} buffSources={buffTags.saveRef} condSources={condTags.saveRef} />
-        <StatBox label={L ? 'Wille' : 'Will'} value={saveWill >= 0 ? `+${saveWill}` : saveWill} buffSources={buffTags.saveWill} condSources={condTags.saveWill} />
-        <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={saveZah >= 0 ? `+${saveZah}` : saveZah} buffSources={buffTags.saveZah} condSources={condTags.saveZah} />
-      </div>
+      <>
+        <div className="sf-stat-row five">
+          <StatBox label={L ? 'GAB' : 'BAB'} value={bab >= 0 ? `+${bab}` : bab} />
+          <StatBox label={L ? 'Init' : 'Init'} value={initiative >= 0 ? `+${initiative}` : initiative} buffSources={buffTags.initiative} condSources={condTags.initiative} />
+          <StatBox label={L ? 'Reflex' : 'Reflex'} value={(saveRef + (Number(combatMisc.save_ref_misc) || 0)) >= 0 ? `+${saveRef + (Number(combatMisc.save_ref_misc) || 0)}` : saveRef + (Number(combatMisc.save_ref_misc) || 0)} buffSources={buffTags.saveRef} condSources={condTags.saveRef} />
+          <StatBox label={L ? 'Wille' : 'Will'} value={(saveWill + (Number(combatMisc.save_will_misc) || 0)) >= 0 ? `+${saveWill + (Number(combatMisc.save_will_misc) || 0)}` : saveWill + (Number(combatMisc.save_will_misc) || 0)} buffSources={buffTags.saveWill} condSources={condTags.saveWill} />
+          <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={(saveZah + (Number(combatMisc.save_zah_misc) || 0)) >= 0 ? `+${saveZah + (Number(combatMisc.save_zah_misc) || 0)}` : saveZah + (Number(combatMisc.save_zah_misc) || 0)} buffSources={buffTags.saveZah} condSources={condTags.saveZah} />
+        </div>
+        <div className="save-misc-grid">
+          {[
+            ['save_ref', L ? 'Reflex' : 'Reflex'],
+            ['save_will', L ? 'Wille' : 'Will'],
+            ['save_zah', L ? 'Zähigkeit' : 'Fortitude'],
+          ].map(([key, label]) => (
+            <div key={key} className="save-misc-cell">
+              <span className="save-misc-label">{label}</span>
+              <NumberField className="save-misc-input" value={combatMisc[`${key}_misc`] || 0} onCommit={v => setCombatMisc(`${key}_misc`, v)} />
+              <input
+                className="save-misc-note"
+                placeholder={L ? 'Notiz (z.B. Gegenstand)' : 'Note (e.g. item)'}
+                value={combatMisc[`${key}_note`] || ''}
+                onChange={e => setCombatMisc(`${key}_note`, e.target.value)}
+              />
+            </div>
+          ))}
+        </div>
+      </>
     ),
     speed: () => (
       <>
@@ -271,6 +302,19 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
               ? (L ? `Rüstung passt die Bewegungsrate an (${armor.bewegungsrateanpassung}).` : `Armor adjusts movement speed (${armor.bewegungsrateanpassung}).`)
               : (L ? 'Volksbewegungsrate, keine Rüstungsanpassung.' : 'Race speed, no armor adjustment.')}
         </p>
+        <div className="extra-speed-grid">
+          {[
+            ['speed_fly', L ? 'Flug' : 'Fly'],
+            ['speed_swim', L ? 'Schwimmen' : 'Swim'],
+            ['speed_climb', L ? 'Klettern' : 'Climb'],
+          ].map(([key, label]) => (
+            <label key={key} className="extra-speed-field">
+              <span>{label}</span>
+              <NumberField min={0} value={combatMisc[key] || 0} onCommit={v => setCombatMisc(key, v)} />
+              <span className="extra-speed-unit">m</span>
+            </label>
+          ))}
+        </div>
       </>
     ),
     ac: () => (
@@ -420,7 +464,7 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
   )
 }
 
-function ResourceBox({ label, full, max, current, onChange, onFill }) {
+function ResourceBox({ label, full, max, current, onChange, onFill, onQuick }) {
   const value = current ?? max
   return (
     <div className="sf-resource-box" title={full}>
@@ -429,7 +473,11 @@ function ResourceBox({ label, full, max, current, onChange, onFill }) {
         <NumberField className="sf-resource-input" min={0} value={value} onCommit={onChange} />
         <span className="sf-resource-max">/ {max}</span>
       </div>
-      <button className="sf-resource-fill" onClick={onFill}>↺</button>
+      <div className="sf-resource-quick-row">
+        <button className="sf-resource-quick" onClick={() => onQuick?.(-1)} title="−1">−1</button>
+        <button className="sf-resource-quick" onClick={() => onQuick?.(1)} title="+1">+1</button>
+        <button className="sf-resource-fill" onClick={onFill}>↺</button>
+      </div>
     </div>
   )
 }

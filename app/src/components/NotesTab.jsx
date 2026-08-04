@@ -9,11 +9,16 @@ const MODES = [
 
 function genId() { return 'e_' + Math.random().toString(36).slice(2, 9) }
 
-function EntryList({ items, setItems, lang, placeholderName, placeholderNotes }) {
+const RELATION_DE = ['Verbündeter', 'Feind', 'Neutral', 'Händler', 'Auftraggeber', 'Familie', 'Bekannt']
+const RELATION_EN = ['Ally', 'Enemy', 'Neutral', 'Merchant', 'Employer', 'Family', 'Acquaintance']
+
+function EntryList({ items, setItems, lang, placeholderName, placeholderNotes, withRelation = false }) {
   const L = lang === 'de'
+  const RELATIONS = L ? RELATION_DE : RELATION_EN
+  const relColor = { [RELATIONS[0]]: '#6ec96e', [RELATIONS[1]]: '#c96e6e', [RELATIONS[2]]: 'var(--text-muted)' }
   const [draft, setDraft] = useState(null)
 
-  function openNew() { setDraft({ name: '', notes: '' }) }
+  function openNew() { setDraft({ name: '', notes: '', source: '', relation: '' }) }
   function cancelDraft() { setDraft(null) }
   function saveDraft() {
     if (!draft?.name?.trim()) return
@@ -29,6 +34,10 @@ function EntryList({ items, setItems, lang, placeholderName, placeholderNotes })
         <div key={it.id} className="entry-row">
           <div className="entry-row-head">
             <span className="entry-name">{it.name}</span>
+            {withRelation && it.relation && (
+              <span className="entry-relation" style={{ color: relColor[it.relation] ?? 'var(--accent)' }}>{it.relation}</span>
+            )}
+            {withRelation && it.source && <span className="entry-source">{it.source}</span>}
             <button className="entry-del-btn" onClick={() => removeItem(it.id)} title={L ? 'Löschen' : 'Delete'}>🗑</button>
           </div>
           {it.notes && <p className="entry-notes">{it.notes}</p>}
@@ -44,6 +53,24 @@ function EntryList({ items, setItems, lang, placeholderName, placeholderNotes })
             onChange={e => setDraft(d => ({ ...d, name: e.target.value }))}
             autoFocus
           />
+          {withRelation && (
+            <div className="entry-form-row-2">
+              <input
+                className="bio-input"
+                placeholder={L ? 'Quelle / Volk (optional)' : 'Source / race (optional)'}
+                value={draft.source}
+                onChange={e => setDraft(d => ({ ...d, source: e.target.value }))}
+              />
+              <select
+                className="bio-select"
+                value={draft.relation}
+                onChange={e => setDraft(d => ({ ...d, relation: e.target.value }))}
+              >
+                <option value="">{L ? '— Verhältnis —' : '— Relation —'}</option>
+                {RELATIONS.map(r => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </div>
+          )}
           <textarea
             className="entry-notes-input"
             placeholder={placeholderNotes}
@@ -89,8 +116,9 @@ export function NotesTab({ char, setNotes, setContacts, setSpecials, lang }) {
           items={char.contacts ?? []}
           setItems={setContacts}
           lang={lang}
+          withRelation
           placeholderName={L ? 'Name des NSCs' : 'NPC name'}
-          placeholderNotes={L ? 'Rolle, Fundort, Beziehung …' : 'Role, whereabouts, relationship …'}
+          placeholderNotes={L ? 'Rolle, Fundort …' : 'Role, whereabouts …'}
         />
       )}
       {mode === 'specials' && (

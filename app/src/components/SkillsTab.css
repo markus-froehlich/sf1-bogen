@@ -5,7 +5,7 @@
 }
 .skill-row {
   display: grid;
-  grid-template-columns: 1fr 2.2em 3.5em 3em auto;
+  grid-template-columns: 1fr 2.2em 3.5em 3em 3em auto;
   align-items: center;
   gap: 6px;
   padding: 4px 6px;
@@ -27,8 +27,39 @@
 }
 .skill-ranks-input::-webkit-outer-spin-button,
 .skill-ranks-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.skill-misc-input {
+  width: 100%;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-muted);
+  text-align: center;
+  font-size: 0.78rem;
+  padding: 2px;
+  -moz-appearance: textfield;
+}
+.skill-misc-input::-webkit-outer-spin-button,
+.skill-misc-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .skill-bonus { font-size: 0.85rem; font-weight: 700; color: var(--accent); text-align: right; }
 .skill-bonus.disabled { color: var(--text-muted); opacity: 0.5; }
+
+.skill-budget {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  margin-bottom: 4px;
+}
+.skill-used { font-weight: 700; color: var(--text); }
+.skill-remain { margin-left: auto; }
+.skill-remain.neg { color: #c96e6e; font-weight: 700; }
+.skill-budget.over { border-color: #c96e6e; }
+.skill-budget.done { border-color: var(--accent); }
 
 .profession-group {
   margin: 5px 0;

@@ -44,7 +44,15 @@
   gap: 8px;
 }
 .entry-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+.entry-relation { font-size: 0.65rem; font-weight: 700; }
+.entry-source { font-size: 0.65rem; color: var(--text-muted); flex: 1; }
 .entry-notes { font-size: 0.78rem; color: var(--text-muted); margin: 0; line-height: 1.4; white-space: pre-wrap; }
+
+.entry-form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
 
 .entry-del-btn {
   background: none;

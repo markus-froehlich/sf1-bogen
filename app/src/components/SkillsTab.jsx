@@ -17,6 +17,26 @@ export function SkillsTab({ char, update, lang }) {
     update({ skills: { [skillId]: { ranks: clamped } } })
   }
 
+  function setSkillMisc(skillId, value) {
+    update({ skills: { [skillId]: { misc: Number(value) || 0 } } })
+  }
+
+  // Budget-Anzeige (verbraucht/gesamt/übrig) wie pf1-bogen - Formel ist
+  // "IN-Modifikator + N" (immer dieselbe Struktur bei allen 7 Klassen,
+  // gegen classes.json verifiziert), N per Regex aus dem Formeltext
+  // extrahiert statt hartcodiert. Vereinfachung: nutzt den AKTUELLEN
+  // IN-Mod für jede Stufe (SF1e-RAW würde den IN-Mod zum jeweiligen
+  // Levelaufstieg verwenden, wird hier aber nicht rückwirkend
+  // nachgehalten) - wie an anderen Stellen in dieser App als Annäherung
+  // gekennzeichnet.
+  const baseMatch = klass?.skill_ranks_per_level_formula?.match(/\+\s*(\d+)/)
+  const basePerLevel = baseMatch ? Number(baseMatch[1]) : null
+  const totalSkillPoints = basePerLevel != null ? Math.max(1, basePerLevel + intMod) * level : null
+  const usedSkillPoints = skillsData.skills.filter(s => s.id !== 'beruf')
+    .reduce((sum, s) => sum + (char.skills?.[s.id]?.ranks || 0), 0)
+    + (char.professions ?? []).reduce((sum, p) => sum + (Number(p.ranks) || 0), 0)
+  const remainingSkillPoints = totalSkillPoints != null ? totalSkillPoints - usedSkillPoints : null
+
   function addProfession() {
     const id = Math.random().toString(36).slice(2, 9)
     update({ professions: [...(char.professions ?? []), { id, name: '', ability: 'WE', ranks: 0 }] })
@@ -36,13 +56,25 @@ export function SkillsTab({ char, update, lang }) {
         {L ? `Fertigkeitsränge pro Stufe: ${klass?.skill_ranks_per_level_formula || '—'} (IN-Mod ${intMod >= 0 ? '+' + intMod : intMod})`
            : `Skill ranks per level: ${klass?.skill_ranks_per_level_formula || '—'}`}
       </p>
+      {totalSkillPoints != null && (
+        <div className={`skill-budget ${remainingSkillPoints < 0 ? 'over' : remainingSkillPoints === 0 ? 'done' : ''}`}>
+          <span>{L ? 'Fertigkeitspunkte' : 'Skill points'}</span>
+          <span className="skill-used">{usedSkillPoints}</span>
+          <span>/</span>
+          <span>{totalSkillPoints}</span>
+          <span className={`skill-remain ${remainingSkillPoints < 0 ? 'neg' : ''}`}>
+            ({remainingSkillPoints >= 0 ? '+' : ''}{remainingSkillPoints} {L ? 'frei' : 'free'})
+          </span>
+        </div>
+      )}
       <div className="skill-table">
         {skillsData.skills.filter(s => s.id !== 'beruf').map(s => {
           const ranks = char.skills?.[s.id]?.ranks || 0
           const isClassSkill = classAbbr ? s.class_skill_for.includes(classAbbr) : false
           const keyMod = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH'].includes(s.key_ability) ? abilityMods[s.key_ability] : 0
           const isPerception = s.id === 'wahrnehmung'
-          const otherModifiers = buffTotals.skills + (isPerception ? buffTotals.perception : 0)
+          const misc = Number(char.skills?.[s.id]?.misc) || 0
+          const otherModifiers = buffTotals.skills + (isPerception ? buffTotals.perception : 0) + misc
           // Zusätzlich zu den flachen Fertigkeiten-/Wahrnehmungs-Mods auch die
           // Badges des Schlüsselattributs mergen - ein Buff/Zustand, der nur
           // den Attributsmodifikator ändert (z.B. Gelähmt: GE -5), rechnet
@@ -72,6 +104,12 @@ export function SkillsTab({ char, update, lang }) {
                 min={0} max={level}
                 value={ranks}
                 onCommit={v => setSkillRanks(s.id, v)}
+              />
+              <NumberField
+                className="skill-misc-input"
+                title={L ? 'Sonstiger Bonus (Gegenstand etc.)' : 'Misc bonus (item etc.)'}
+                value={misc}
+                onCommit={v => setSkillMisc(s.id, v)}
               />
               <span className={`skill-bonus ${usable ? '' : 'disabled'}`}>{bonus >= 0 ? `+${bonus}` : bonus}</span>
               <StatBadges buffSources={buffSources} condSources={condSources} />

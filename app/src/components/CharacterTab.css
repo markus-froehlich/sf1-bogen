@@ -137,6 +137,26 @@
   cursor: pointer;
 }
 .sf-resource-fill:active { color: var(--accent); border-color: var(--accent); }
+.sf-resource-quick-row { display: flex; gap: 4px; }
+.sf-resource-quick {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  cursor: pointer;
+}
+.sf-resource-quick:active { color: var(--accent); border-color: var(--accent); }
+
+.tp-temp-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.tp-temp-field input { width: 3.5em; }
 
 /* ── Combat stat boxes ── */
 .sf-stat-row {
