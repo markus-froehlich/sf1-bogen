@@ -1,9 +1,69 @@
 {
   "_meta": {
     "source": "SF1e-Regelwerk (dt., Ulisses-Spiele), Kapitel 10: Magie und Zauber, vollstaendige alphabetische Zauberliste mit Statbloecken, S. 340-386",
-    "note": "Ergaenzt spells.json (Kurzlisten pro Klasse/Grad) um die vollen Statbloecke (Schule/Zeitaufwand/Reichweite/Ziele/Wirkungsdauer/Rettungswurf/Zauberresistenz) und Fliesstexte. Per 4 parallelen Sub-Agenten aus extraction/kapitel10_zauberbeschreibungen_raw.txt strukturiert (Zeilenbereiche mit Ueberlappung, dedupliziert). Verweiszauber (\"funktioniert wie X\") uebernehmen teils nur die Delta-Felder aus dem Original, fehlende Felder sind bewusst null statt geraten. Einzelne Eintraege mit unsicher:true markiert wo das zweispaltige PDF-Layout Zuordnungen erschwerte (teils durch direkte PDF-Nachextraktion ohne -layout gegengeprueft)."
+    "note": "Ergaenzt spells.json (Kurzlisten pro Klasse/Grad) um die vollen Statbloecke (Schule/Zeitaufwand/Reichweite/Ziele/Wirkungsdauer/Rettungswurf/Zauberresistenz) und Fliesstexte. Per 4 parallelen Sub-Agenten aus extraction/kapitel10_zauberbeschreibungen_raw.txt strukturiert (Zeilenbereiche mit Ueberlappung, dedupliziert). Verweiszauber (\"funktioniert wie X\") uebernehmen teils nur die Delta-Felder aus dem Original, fehlende Felder sind bewusst null statt geraten. Einzelne Eintraege mit unsicher:true markiert wo das zweispaltige PDF-Layout Zuordnungen erschwerte (teils durch direkte PDF-Nachextraktion ohne -layout gegengeprueft). Nachtrag (Session): die 5 zuvor fehlenden, alphabetisch vor \"Ausbessern\" liegenden Zauber (Ablenkung, Anderen schützen, Arkaner Blick, Arkanes Auge, Auflösung) wurden per direkter PDF-Volltextsuche nachgetragen - jetzt 190 statt 185 Einträge."
   },
   "spells": [
+    {
+      "name": "Ablenkung",
+      "grad": 5,
+      "schule": "Illusion",
+      "zeitaufwand": "1 Standard-Aktion",
+      "reichweite": "persönlich; siehe Text",
+      "ziele_oder_wirkungsbereich": "Ein illusionäres Duplikat",
+      "wirkungsdauer": "1 Runde/Stufe (A) und Konzentration + 3 Runden; siehe Text",
+      "rettungswurf": "Keiner oder Willen, anzweifeln, siehe Text",
+      "zauberresistenz": "Nein",
+      "description": "Du wirst unsichtbar (wie durch Mächtige Unsichtbarkeit), und zeitgleich entsteht ein illusionäres Abbild deiner selbst (wie durch eine Anwendung des 3. Grades von Holografisches Abbild). Der Doppelgänger erscheint innerhalb naher Reichweite (7,5 m + 1,5 m/2 Stufen), kann sich danach aber gemäß deinen Anweisungen bewegen (dafür musst du dich ab der ersten Runde, nachdem der Zauber gewirkt wurde, konzentrieren). Du kannst das Abbild auch perfekt über deinen eigenen Körper gelegt erscheinen lassen, so dass Beobachter nicht merken, dass es erscheint, während du unsichtbar wirst. Du und das Abbild können sich in unterschiedliche Richtungen bewegen. Der Doppelgänger bewegt sich mit deiner Bewegungsrate, kann sprechen und gestikulieren, als sei er echt. Er kann weder angreifen noch Zauber wirken, kann aber so tun als ob.\n\nDer illusionäre Doppelgänger existiert, solange du dich auf ihn konzentrierst, plus 3 zusätzliche Runden. Hörst du auf, dich zu konzentrieren, führt die Illusion solange ihre bisherige Tätigkeit weiter aus, bis die Wirkungsdauer endet. Die Unsichtbarkeit hält 1 Runde pro Stufe vor, egal ob du dich konzentrierst oder nicht."
+    },
+    {
+      "name": "Anderen schützen",
+      "grad": 2,
+      "schule": "Bannzauber",
+      "zeitaufwand": "1 Standard-Aktion",
+      "reichweite": "Nah (7,50 m + 1,50 m/2 Stufen)",
+      "ziele_oder_wirkungsbereich": "Eine Kreatur",
+      "wirkungsdauer": "1 Stunde/Stufe (A)",
+      "rettungswurf": "Willen, keine Wirkung (harmlos)",
+      "zauberresistenz": "Ja (harmlos)",
+      "description": "Dieser Zauber schützt das Ziel und erschafft ein mystisches Band zwischen dir und dem Ziel, so dass einige seiner Wunden auf dich übertragen werden. Um diesen Zauber zu wirken, musst du 1 Reservepunkt ausgeben. Das Ziel nimmt nur den halben Schaden durch Wunden und Angriffe (auch durch solche, die durch besondere Fähigkeiten verursacht werden), die Trefferpunktschaden verursachen. Die andere Hälfte des Schadens erleidest du. Nur Trefferpunktschaden wird auf diese Weise übertragen; die Ausdauerpunkte des Ziels erleiden ihren Schaden normal. Wenn du noch immer Ausdauerpunkte hast, erleidest du den Schaden zuerst gegen deine Ausdauerpunkte und dann erst gegen die Trefferpunkte, wie bei normalem Schaden.\n\nAndere schädliche Wirkungen, die keinen Trefferpunktverlust umfassen, wie etwa Bezauberungseffekte, temporärer Attributsschaden, Attributsentzug, permanente negative Stufen und Todeseffekte, sind nicht betroffen. Wenn der Zauber endet, wird darauf folgender Schaden nicht weiter zwischen dem Ziel und dir aufgeteilt, aber bereits aufgeteilter Schaden wird dem Ziel nicht wieder zugeteilt. Wenn du und das Ziel des Zaubers euch weiter voneinander entfernt, als die Reichweite des Zaubers beträgt, endet der Zauber."
+    },
+    {
+      "name": "Arkaner Blick",
+      "grad": 3,
+      "schule": "Erkenntnis",
+      "zeitaufwand": "1 Standard-Aktion",
+      "reichweite": "Persönlich",
+      "ziele_oder_wirkungsbereich": null,
+      "wirkungsdauer": "1 Minute/Stufe (A)",
+      "rettungswurf": null,
+      "zauberresistenz": null,
+      "description": "Dieser Zauber ermöglicht es dir, magische Quellen zu sehen, die sich maximal 36 m weit von dir entfernt befinden. Der Effekt ähnelt Magie entdecken, bei Arkaner Blick musst du dich aber nicht konzentrieren und kannst Informationen schneller erfahren.\n\nDu kannst den Standort und die Zauberstufe aller magischen Quellen innerhalb deines Sichtfelds erkennen. Wenn sich die magischen Quellen innerhalb deiner Sichtlinie befinden, kannst du einen Wurf auf Mystik (SG 28) durchführen, um die Schule der Magie zu erkennen, die jeder Quelle zu Grunde liegt.\n\nKonzentrierst du dich mit einer Standard-Aktion auf eine bestimmte Kreatur innerhalb von 36 m, kannst du herausfinden, ob sie zaubern kann oder zauberähnliche Fähigkeiten besitzt und was die Zauberstufe des mächtigsten Zaubers oder der mächtigsten zauberähnlichen Fähigkeit ist, welche der Kreatur gerade zur Verfügung stehen.\n\nDu kannst diesen Zauber wie Magie entdecken auch dazu einsetzen, um die Eigenschaften von magischen Gegenständen, nicht aber von Artefakten zu ermitteln."
+    },
+    {
+      "name": "Arkanes Auge",
+      "grad": 4,
+      "schule": "Erkenntnis (Ausspähung)",
+      "zeitaufwand": "10 Minuten",
+      "reichweite": "Planetarisch",
+      "ziele_oder_wirkungsbereich": "Magischer Sensor",
+      "wirkungsdauer": "1 Minute/Stufe (A)",
+      "rettungswurf": "Keiner",
+      "zauberresistenz": "Nein",
+      "description": "Du erschaffst einen unsichtbaren magischen Sensor, der dir visuelle Informationen senden kann. Der Sensor erscheint an einem beliebigen Punkt in Sichtlinie. Danach kann er sich ohne Einschränkungen aus deiner Sichtlinie herausbewegen. Ein Arkanes Auge bewegt sich mit einer Geschwindigkeit von 9 m pro Runde (90 m pro Minute), wenn es einfach nur nach vorne schaut, wie es ein Humanoide täte (primär auf den Boden schauend). Wenn es sich nicht nur den vor ihm liegenden Boden, sondern auch die Decke und die Wände anschauen soll, bewegt es sich mit 3 m pro Runde (30 m pro Minute). Das Arkane Auge sieht genau das, was du sehen würdest, wärst du selbst dort.\n\nDas Arkane Auge kann sich in jede Richtung bewegen, solange der Zauber wirkt. Solide Barrieren blockieren seinen Weg, es kann aber durch Löcher oder Ritzen fliegen, deren Durchmesser nicht kleiner ist als 2,50 cm. Das Arkane Auge kann nicht auf andere Ebenen wechseln, nicht einmal mittels Driftreisen oder anhand eines magischen Tors oder ähnlichen magischen Portals. Du musst dich konzentrieren, um ein Arkanes Auge zu nutzen. Konzentrierst du dich nicht, bleibt das Auge solange inaktiv, bis du dich wieder konzentrierst."
+    },
+    {
+      "name": "Auflösung",
+      "grad": 6,
+      "schule": "Verwandlung",
+      "zeitaufwand": "1 Standard-Aktion",
+      "reichweite": "Mittel (30 m + 3 m/Stufe)",
+      "ziele_oder_wirkungsbereich": "Eine Kreatur oder ein Gegenstand, oder nichtlebende Materie von der Größe eines Würfels mit 3 m Kantenlänge",
+      "wirkungsdauer": "Augenblicklich",
+      "rettungswurf": "Zähigkeit, teilweise (Gegenstand)",
+      "zauberresistenz": "Ja",
+      "description": "Deinem Finger entspringt immense Macht, die das Potenzial hat, ein Ziel an Ort und Stelle auszulöschen.\n\nWenn du diesen Zauber wirkst, entspringt deinem ausgestreckten Finger ein dünner, grüner Strahl. Du musst einen Fernkampfangriff gegen die ERK deines Ziels durchführen, aber du kannst statt deines Geschicklichkeitsmodifikators den Bonus deines Schlüsselattributs auf diesen Angriff addieren, falls dieser höher ist. Wenn du triffst, erleidet das Ziel 14W20 Schaden. Jede Kreatur, deren Trefferpunkte durch diesen Zauber auf 0 reduziert werden, wird vollständig aufgelöst, so dass nur ein wenig Staub von ihr übrig bleibt. Die Ausrüstung der aufgelösten Kreatur wird davon nicht betroffen. Nur ein Ziel kann pro Anwendung dieses Zaubers betroffen werden.\n\nBenutzt du den Strahl gegen einen Gegenstand, löst er nichtlebende Materie von bis zu einem Würfel mit 3 m Kantenlänge auf. Der Zauber kann also nur einen Teil eines sehr großen Gegenstands oder eines Gebäudes auflösen. Der Strahl wirkt sich sogar auf Dinge aus, die nur aus reiner Energie bestehen, nicht jedoch auf andere magische Effekte, die kein Gegenstand, keine Kreatur und kein Energieeffekt sind.\n\nEine Kreatur oder ein Gegenstand, der oder dem ein Zähigkeitswurf gelingt, wird teilweise betroffen und erleidet nur 4W20 Schadenspunkte. Sinken die Trefferpunkte der Kreatur oder des Gegenstands dadurch auf 0, wird das Ziel vollständig aufgelöst."
+    },
     {
       "name": "Ausbessern",
       "grad": 0,
