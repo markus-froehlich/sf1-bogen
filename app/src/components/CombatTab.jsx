@@ -117,6 +117,13 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
     resources: L ? 'Ressourcen' : 'Resources',
   }
 
+  // Nur auf Handys werden die längsten Überschriften gekürzt (wie
+  // pf1-bogen) - Tablet/Desktop zeigen weiterhin den vollen Titel.
+  const PHONE_HEADINGS = {
+    tp: 'TP/AP/RP',
+    ac: 'EAC/KAC',
+  }
+
   // Eingeklappte Abschnitte zeigen die Kernwerte statt einer leeren
   // Überschrift (wie pf1-bogen) - SF1e hat kein KMB/KMV, daher hier GAB +
   // Rettungswürfe zusammen (in SF1e eine gemeinsame Sektion).
@@ -238,7 +245,11 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
               <button className="ct-collapse-btn" onClick={() => toggleCollapsed(id)} title={isCollapsed ? (L ? 'Aufklappen' : 'Expand') : (L ? 'Zuklappen' : 'Collapse')}>
                 {isCollapsed ? '▶' : '▼'}
               </button>
-              <h3 className="section-title ct-heading-clk" onClick={() => toggleCollapsed(id)}>{HEADINGS[id]}</h3>
+              <h3 className="section-title ct-heading-clk" onClick={() => toggleCollapsed(id)}>
+                {PHONE_HEADINGS[id]
+                  ? <><span className="ct-heading-full">{HEADINGS[id]}</span><span className="ct-heading-phone">{PHONE_HEADINGS[id]}</span></>
+                  : HEADINGS[id]}
+              </h3>
               {isCollapsed && SUMMARIES[id] && <span className="ct-heading-summary">{SUMMARIES[id]}</span>}
               <div className="ct-move-btns">
                 <button className="ct-move-btn" disabled={idx === 0} onClick={() => moveSection(id, -1)} title={L ? 'Nach oben' : 'Move up'}>↑</button>

@@ -25,19 +25,30 @@
   line-height: 1;
 }
 .ct-heading-clk {
-  flex: 1;
-  min-width: 0;
+  flex: 0 0 auto;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .ct-heading-summary {
+  flex: 1 1 auto;
   color: var(--text);
   font-size: 0.78rem;
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex-shrink: 1;
   min-width: 0;
+  text-align: right;
+}
+
+.ct-heading-phone { display: none; }
+
+/* Nur auf Handys: Tablet/Desktop behalten die vollen Abschnittstitel. */
+@media (max-width: 600px) {
+  .ct-heading-full { display: none; }
+  .ct-heading-phone { display: inline; }
 }
 .ct-move-btns {
   display: flex;
