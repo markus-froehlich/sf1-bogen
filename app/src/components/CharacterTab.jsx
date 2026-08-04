@@ -49,6 +49,17 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
     klassenmerkmale: L ? 'Klassenmerkmale' : 'Class features',
   }
 
+  // Eingeklappte Abschnitte zeigen die Kernwerte statt einer leeren
+  // Überschrift (wie pf1-bogen). Volk & Klasse sind in SF1e eine
+  // gemeinsame Sektion, daher hier zusammengefasst statt zwei Zeilen.
+  const featBudget = Math.ceil((level || 1) / 2)
+  const chosenFeats = char.feats ?? []
+  const SUMMARIES = {
+    volk_klasse: [race?.name?.de, klass?.name?.de ? `${klass.name.de} ${level}` : null].filter(Boolean).join(' · '),
+    xp: `${char.xp?.current ?? 0} EP`,
+    talente: `${chosenFeats.length}/${featBudget}`,
+  }
+
   const BODIES = {
     volk_klasse: () => (
       <>
@@ -166,6 +177,7 @@ export function CharacterTab({ char, setMeta, setClass, setAttr, update, setBio,
                 {isCollapsed ? '▶' : '▼'}
               </button>
               <h3 className="section-title ct-heading-clk" onClick={() => toggleCollapsed(id)}>{HEADINGS[id]}</h3>
+              {isCollapsed && SUMMARIES[id] && <span className="ct-heading-summary">{SUMMARIES[id]}</span>}
               <div className="ct-move-btns">
                 <button className="ct-move-btn" disabled={idx === 0} onClick={() => moveSection(id, -1)} title={L ? 'Nach oben' : 'Move up'}>↑</button>
                 <button className="ct-move-btn" disabled={idx === visibleOrder.length - 1} onClick={() => moveSection(id, 1)} title={L ? 'Nach unten' : 'Move down'}>↓</button>

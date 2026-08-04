@@ -29,6 +29,16 @@
   min-width: 0;
   cursor: pointer;
 }
+.ct-heading-summary {
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 0;
+}
 .ct-move-btns {
   display: flex;
   gap: 4px;

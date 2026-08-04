@@ -117,6 +117,20 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
     resources: L ? 'Ressourcen' : 'Resources',
   }
 
+  // Eingeklappte Abschnitte zeigen die Kernwerte statt einer leeren
+  // Überschrift (wie pf1-bogen) - SF1e hat kein KMB/KMV, daher hier GAB +
+  // Rettungswürfe zusammen (in SF1e eine gemeinsame Sektion).
+  const activeBuffCount = (char.active_buffs ?? []).filter(b => b.active !== false).length
+  const SUMMARIES = {
+    tp: `TP ${current.tp ?? tp}/${tp} · AP ${current.ap ?? ap}/${ap} · RP ${current.rp ?? rp}/${rp}`,
+    kampfwerte: `${L ? 'GAB' : 'BAB'} ${bab >= 0 ? '+' : ''}${bab} · Ref ${saveRef >= 0 ? '+' : ''}${saveRef}/Wil ${saveWill >= 0 ? '+' : ''}${saveWill}/Zäh ${saveZah >= 0 ? '+' : ''}${saveZah}`,
+    ac: `EAC ${eac} · KAC ${kac}`,
+    attack: weapon ? `${weapon.name}: ${attackBonus >= 0 ? '+' : ''}${attackBonus}` : '',
+    conditions: activeConditions.size > 0 ? `${activeConditions.size} ${L ? 'aktiv' : 'active'}` : '',
+    buffs: activeBuffCount > 0 ? `${activeBuffCount} ${L ? 'aktiv' : 'active'}` : '',
+    resources: (char.resources ?? []).length > 0 ? `${(char.resources ?? []).length}` : '',
+  }
+
   const BODIES = {
     tp: () => (
       <div className="sf-resource-row">
@@ -225,6 +239,7 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
                 {isCollapsed ? '▶' : '▼'}
               </button>
               <h3 className="section-title ct-heading-clk" onClick={() => toggleCollapsed(id)}>{HEADINGS[id]}</h3>
+              {isCollapsed && SUMMARIES[id] && <span className="ct-heading-summary">{SUMMARIES[id]}</span>}
               <div className="ct-move-btns">
                 <button className="ct-move-btn" disabled={idx === 0} onClick={() => moveSection(id, -1)} title={L ? 'Nach oben' : 'Move up'}>↑</button>
                 <button className="ct-move-btn" disabled={idx === order.length - 1} onClick={() => moveSection(id, 1)} title={L ? 'Nach unten' : 'Move down'}>↓</button>
