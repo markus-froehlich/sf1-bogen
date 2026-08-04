@@ -208,10 +208,18 @@ export function useCharacters(profile = 'player') {
       const charData = data?.char ?? data
       const hbData   = data?.homebrew ?? null
       if (hbData) localStorage.setItem(HOMEBREW_KEY, JSON.stringify(hbData))
-      patchChar(() => deepMerge(DEFAULT_CHAR, charData))
+      const id = genId()
+      const imported = deepMerge(DEFAULT_CHAR, charData)
+      saveChar(id, imported)
+      setState(prev => {
+        const nextIndex = [...prev.index, indexEntry(id, imported)]
+        saveIndex(nextIndex)
+        localStorage.setItem(ACTIVE_KEY, id)
+        return { index: nextIndex, activeId: id, char: imported }
+      })
       return { ok: true, hasHomebrew: Boolean(hbData) }
     } catch { return { ok: false } }
-  }, [patchChar])
+  }, [saveChar, saveIndex, ACTIVE_KEY])
 
   // ── Multi-character management ────────────────────────────────────────────
   const newChar = useCallback(() => {

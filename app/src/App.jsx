@@ -235,8 +235,18 @@ export default function App() {
     if (!file) return
     const reader = new FileReader()
     reader.onload = () => {
-      try { importChar(JSON.parse(reader.result)) }
-      catch { alert('Datei konnte nicht gelesen werden.') }
+      try {
+        const result = importChar(JSON.parse(reader.result))
+        if (result?.ok) {
+          if (result.hasHomebrew) reloadHB()
+          alert(lang === 'de'
+            ? 'Als neuer Charakter importiert (bestehende Charaktere wurden nicht verändert).'
+            : 'Imported as a new character (existing characters were not changed).')
+        } else {
+          alert(lang === 'de' ? 'Ungültige JSON-Datei' : 'Invalid JSON file')
+        }
+      }
+      catch { alert(lang === 'de' ? 'Ungültige JSON-Datei' : 'Invalid JSON file') }
     }
     reader.readAsText(file)
     e.target.value = ''
@@ -271,7 +281,7 @@ export default function App() {
                   <div className="app-menu" onClick={e => e.stopPropagation()}>
                     <button className="app-menu-item" onClick={() => { exportChar(); setMenuOpen(false) }}>⬇ {lang === 'de' ? 'Exportieren' : 'Export'}</button>
                     <label className="app-menu-item app-menu-import">
-                      ⬆ {lang === 'de' ? 'Importieren' : 'Import'}
+                      ⬆ {lang === 'de' ? 'Als neuen Bogen importieren' : 'Import as new sheet'}
                       <input type="file" accept="application/json" onChange={e => { handleImportFile(e); setMenuOpen(false) }} hidden />
                     </label>
                     <button className="app-menu-item app-menu-print-btn" onClick={() => { setPrintOpen(true); setMenuOpen(false) }}>🖨 {lang === 'de' ? 'Drucken' : 'Print'}</button>
