@@ -1,6 +1,66 @@
 # STATUS
 
-_Stand: 2026-08-01_
+_Stand: 2026-08-04_
+
+## Pf1-bogen-Feature-Abgleich (Session 2026-08-04)
+Nutzer hat eine Liste kürzlich im Schwesterprojekt (pf1-bogen) gebauter
+Features geschickt mit der Bitte, zu prüfen was davon auf SF1e übertragbar
+ist, und es umzusetzen. Ergebnis, der Reihe nach:
+
+1. **JSON-Import legt jetzt immer einen neuen Charakter an** (überschrieb
+   vorher den aktiven) + klare Erfolgs-/Fehlermeldung. War bereits als
+   Code-Entwurf einer vorherigen (durch Kontingent-Limit unterbrochenen)
+   Session vorhanden, hier fertiggestellt (Erfolgsmeldung ergänzt, die
+   `result.ok`/`hasHomebrew`-Rückgabe vorher ignoriert wurde) und verifiziert.
+2. **Eingeklappte Bereiche zeigen Kernwerte** (TP/AP/RP, GAB+Rettungswürfe,
+   EAC/KAC, Volk+Klasse+Stufe, EP, Talente-Budget etc.) statt leerer
+   Überschrift - SF1e-Sektionsstruktur weicht von Pathfinder ab (GAB+RW in
+   einer Sektion statt zwei, Volk+Klasse in einer Sektion statt zwei),
+   Zusammenfassungen entsprechend angepasst statt 1:1 kopiert.
+3. **Mobile Kurzbezeichnungen** für die längsten Kampf-Überschriften
+   ("Trefferpunkte, Ausdauer & Reserve" → "TP/AP/RP", "Rüstungsklassen" →
+   "EAC/KAC") nur unter 600px Breite. Dabei einen echten Layout-Bug
+   gefunden: Kurzbezeichnung und Kollaps-Vorschau überlappten sich auf
+   schmalen Screens, weil die Überschrift per `flex:1` schrumpfte statt die
+   Vorschau - behoben, indem die Überschrift jetzt immer ihre volle Breite
+   behält und die Vorschau per Ellipsis kürzt.
+4. **Mobile Ressourcenansicht**: lange Ressourcennamen stehen jetzt oberhalb
+   der Bedienelemente statt sie auf schmalen Screens zu verdrängen.
+5. **Bewegungsrate NICHT blind von Pathfinder übernommen** - stattdessen
+   gegen das Regelwerk geprüft (Kapitel 7, Tabelle 7-14/7-15, S. 196f.).
+   Ergebnis: Pathfinders Regel ("nur Mittlere/Schwere Rüstung senkt Bewegung
+   um einen festen Wert") gilt in SF1e NICHT. SF1e hat stattdessen eine
+   **pro Rüstungsmodell individuelle** "Bewegungsrateanpassung"-Spalte:
+   alle 42 geprüften Leichten Rüstungen zeigen durchgehend "—" (kein
+   Effekt), Schwere Rüstungen variieren zwischen "—" (z.B. „Schillerrüstung,
+   Verbesserte", „Mechanikerpanzerung", „Vitrumplattenrüstung" - keine
+   Bewegungseinbuße trotz schwerer Rüstung), -1,50 m und -3 m - keine feste
+   Kategorie-Formel. Das Feld existierte bei Schweren Rüstungen bereits
+   (`bewegungsrateanpassung`, String wie "-3 m"), fehlte aber komplett bei
+   allen 42 Leichten Rüstungen (jetzt ergänzt, überall `null`, siehe
+   `armor.json` `_meta.note`). Zusätzlich: Servorüstungen nutzen laut
+   Regelwerk (S. 213) ihre **eigene absolute** Bewegungsrate statt einer
+   Anpassung der des Trägers - bereits als `bewegungsrate`-Feld vorhanden
+   (z.B. „Frachtheber": „4,50 m"). Neue `engine/movement.js`
+   (`computeGroundSpeed`) bildet alle drei Fälle korrekt ab (kein Rüstung →
+   Volksbasiswert; Leicht/Schwer mit Anpassung → Volksbasiswert + Anpassung;
+   Servorüstung → eigener Absolutwert), neue "Bewegung"-Sektion in
+   `CombatTab.jsx`. Live mit vier Fällen verifiziert (ohne Rüstung: 9 m;
+   Schwere Rüstung mit -3 m: 6 m; Schwere Rüstung ohne Anpassung: 9 m
+   unverändert trotz schwerer Rüstung; Servorüstung: 4,5 m absolut).
+6. Restliche Punkte (Deploy-Helfer, Buffs speichern/togglen, Ressourcen
+   +/-/↺) waren bereits vorhanden, keine Änderung nötig.
+
+**Absichtlich nicht übertragen** (siehe Aufgabe #80): das Pathfinder-Feature
+"einzelne vorbereitete Zauber markieren" (Vancian-Casting, mehrfach
+vorbereitete Zauber einzeln als verbraucht markierbar) setzt voraus, dass
+Zauber vorbereitet werden. SF1e-Zauberklassen (Aspirant, Technomagier) sind
+laut Kapitel 10 spontane Zauberwirker (Zauberplätze + bekannte Zauberliste,
+kein Vorbereiten einzelner Zauberinstanzen) - das Feature passt strukturell
+nicht auf SF1e und wurde nicht künstlich nachgebaut. Ebenso die
+"Zauber-Link-Ausnahmen" (manuell korrigierbare Links zu einer externen
+SRD-Website) - es gibt noch keine bekannte deutsche SF1e-SRD-Website, an die
+sich sowas anhängen ließe (offene Frage, siehe unten).
 
 ## Zweiter Code-Vergleich gegen pf1-bogen (Session 2026-08-01)
 Nach Abschluss des 13-Punkte-Backlogs (unten) wurde erneut gegen pf1-bogen

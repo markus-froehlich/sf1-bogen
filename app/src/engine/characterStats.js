@@ -13,6 +13,7 @@ import { armorClass } from './combat.js'
 import { computeBuffTotals } from './buffs.js'
 import { computeConditionTotals } from './conditions.js'
 import { getHBRaces, getHBClasses, getHBArmor } from './homebrew.js'
+import { computeGroundSpeed } from './movement.js'
 
 export const ABILITY_KEYS = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH']
 
@@ -120,6 +121,7 @@ export function computeCharacterStats(char) {
     maxDexBonus: armor?.max_ge_bonus ?? null,
     otherModifiers: buffTotals.kac + condTotals.kac,
   })
+  const speed = computeGroundSpeed({ raceSpeedM: race?.speed_m ?? 9, armor })
 
   // Buff- und Zustands-Quellen getrennt je Wert, damit die UI sie als zwei
   // optisch unterscheidbare Badges anzeigen kann (✦ Buff / ⚡ Zustand) statt
@@ -156,7 +158,7 @@ export function computeCharacterStats(char) {
     abilityMods, keyAbilityModifier,
     levelRow,
     tp, ap, rp,
-    armor, eac, kac,
+    armor, eac, kac, speed,
     bab: levelRow?.bab ?? 0,
     // S. 240f.: "Addiere deinen Geschicklichkeitsmodifikator auf deine
     // Reflexwürfe" / "...Weisheitsmodifikator auf deine Willenswürfe" /

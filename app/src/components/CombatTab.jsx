@@ -24,7 +24,7 @@ const WEAPON_CATEGORIES = [
   ['special_weapons', 'Spezialwaffen'],
 ]
 
-const COMBAT_SECTIONS_DEFAULT = ['tp', 'kampfwerte', 'ac', 'attack', 'conditions', 'buffs', 'resources']
+const COMBAT_SECTIONS_DEFAULT = ['tp', 'kampfwerte', 'speed', 'ac', 'attack', 'conditions', 'buffs', 'resources']
 
 function useCollapsed(storageKey) {
   const [collapsed, setCollapsed] = useState(() => {
@@ -64,7 +64,7 @@ function allWeapons() {
 export function CombatTab({ char, update, setConditions, setActiveBuffs, setResources, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, eac, kac, armor, buffTotals, buffTags, condTags } = stats
+  const { abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, eac, kac, armor, speed, buffTotals, buffTags, condTags } = stats
   const weapons = useMemo(allWeapons, [])
   const [weaponName, setWeaponName] = useState('')
 
@@ -110,6 +110,7 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
   const HEADINGS = {
     tp: L ? 'Trefferpunkte, Ausdauer & Reserve' : 'Hit Points, Stamina & Resolve',
     kampfwerte: L ? 'Kampfwerte' : 'Combat stats',
+    speed: L ? 'Bewegung' : 'Movement',
     ac: L ? 'Rüstungsklassen' : 'Armor Class',
     attack: L ? 'Angriffsrechner' : 'Attack calculator',
     conditions: L ? 'Zustände' : 'Conditions',
@@ -131,6 +132,7 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
   const SUMMARIES = {
     tp: `TP ${current.tp ?? tp}/${tp} · AP ${current.ap ?? ap}/${ap} · RP ${current.rp ?? rp}/${rp}`,
     kampfwerte: `${L ? 'GAB' : 'BAB'} ${bab >= 0 ? '+' : ''}${bab} · Ref ${saveRef >= 0 ? '+' : ''}${saveRef}/Wil ${saveWill >= 0 ? '+' : ''}${saveWill}/Zäh ${saveZah >= 0 ? '+' : ''}${saveZah}`,
+    speed: `${L ? 'Zu Fuß' : 'Walk'} ${speed} m`,
     ac: `EAC ${eac} · KAC ${kac}`,
     attack: weapon ? `${weapon.name}: ${attackBonus >= 0 ? '+' : ''}${attackBonus}` : '',
     conditions: activeConditions.size > 0 ? `${activeConditions.size} ${L ? 'aktiv' : 'active'}` : '',
@@ -153,6 +155,20 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
         <StatBox label={L ? 'Wille' : 'Will'} value={saveWill >= 0 ? `+${saveWill}` : saveWill} buffSources={buffTags.saveWill} condSources={condTags.saveWill} />
         <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={saveZah >= 0 ? `+${saveZah}` : saveZah} buffSources={buffTags.saveZah} condSources={condTags.saveZah} />
       </div>
+    ),
+    speed: () => (
+      <>
+        <div className="sf-stat-row">
+          <StatBox label={L ? 'Zu Fuß' : 'Walk'} value={`${speed} m`} />
+        </div>
+        <p className="char-hint">
+          {armor?.category === 'power'
+            ? (L ? 'Servorüstung: eigene Bewegungsrate der Rüstung statt der des Volkes.' : 'Powered armor: uses the suit\'s own speed instead of your race\'s.')
+            : armor?.bewegungsrateanpassung
+              ? (L ? `Rüstung passt die Bewegungsrate an (${armor.bewegungsrateanpassung}).` : `Armor adjusts movement speed (${armor.bewegungsrateanpassung}).`)
+              : (L ? 'Volksbewegungsrate, keine Rüstungsanpassung.' : 'Race speed, no armor adjustment.')}
+        </p>
+      </>
     ),
     ac: () => (
       <>
