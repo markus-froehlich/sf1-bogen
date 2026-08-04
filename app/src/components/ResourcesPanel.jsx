@@ -4,7 +4,7 @@ import './ResourcesPanel.css'
 
 function genId() { return 'res_' + Math.random().toString(36).slice(2, 9) }
 
-const EMPTY = { id: '', name: '', max: 1, current: 0, unit: '' }
+const EMPTY = { id: '', name: '', max: 1, current: 0, unit: '', notes: '' }
 
 export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) {
   const L = lang === 'de'
@@ -114,6 +114,12 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
               onChange={e => setDraft(d => ({ ...d, unit: e.target.value }))}
             />
           </div>
+          <input
+            className="res-form-notes"
+            placeholder={L ? 'Notiz (optional)' : 'Note (optional)'}
+            value={draft.notes ?? ''}
+            onChange={e => setDraft(d => ({ ...d, notes: e.target.value }))}
+          />
           <div className="res-form-actions">
             {editId !== '__new__' && (
               <button className="res-del-btn" onClick={() => del(editId)} title={L ? 'Löschen' : 'Delete'}>🗑</button>
@@ -139,7 +145,10 @@ export function ResourcesPanel({ char, setResources, lang, hideTitle = false }) 
           return (
             <div key={r.id} className={`res-row ${editId === r.id ? 'editing' : ''}`}>
               <div className="res-row-main">
-                <span className="res-name" onClick={() => editId !== r.id && openEdit(r)}>{r.name}</span>
+                <span className="res-name-wrap" onClick={() => editId !== r.id && openEdit(r)}>
+                  <span className="res-name">{r.name}</span>
+                  {r.notes && <span className="res-notes">{r.notes}</span>}
+                </span>
                 <div className="res-controls">
                   <button className="res-use-btn" onClick={() => use(r.id)} disabled={remaining <= 0}
                     title={L ? 'Verwenden' : 'Use'}>−</button>
