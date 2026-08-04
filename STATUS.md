@@ -2,6 +2,19 @@
 
 _Stand: 2026-08-04_
 
+## Nachtrag: Initiative (Session 2026-08-04)
+Beim Abgleich der letzten 5 Tage Pathfinder-Commits (Ergänzung zum
+Feature-Abgleich unten) fiel ein weiterer übertragbarer Punkt auf:
+Initiative-Wert mit automatischer Erkennung des Talents "Verbesserte
+Initiative" (+4, per Talentname statt manueller Eingabe). SF1e hat exakt
+dasselbe Talent mit demselben Effekt (Kapitel 6), Formel identisch zu
+Pathfinder (GE-Mod + Talent-/sonstige Boni, Kapitel 2 S. 29). Kampfwerte-
+Sektion zeigt jetzt 5 Boxen (GAB/Init/Ref/Wil/Zäh); auf schmalen Handys
+hochkant (< 400px) bricht die Zeile auf 3 Spalten um statt zu überlaufen -
+bei 375px, 320px und Desktop-Breite verifiziert. Boni/Mali laufen über das
+bestehende Buff-/Zustands-System (kein neues Misc-Eingabefeld, das es
+sonst nirgends im Bogen gibt).
+
 ## Pf1-bogen-Feature-Abgleich (Session 2026-08-04)
 Nutzer hat eine Liste kürzlich im Schwesterprojekt (pf1-bogen) gebauter
 Features geschickt mit der Bitte, zu prüfen was davon auf SF1e übertragbar
