@@ -3,7 +3,7 @@
 // einfließen. Inaktive Buffs (active === false) zählen nicht mit, bleiben
 // aber in der Liste erhalten (Toggle statt Löschen).
 
-export const BUFF_FIELDS = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH', 'attack', 'damage', 'eac', 'kac', 'saveRef', 'saveWill', 'saveZah', 'skills', 'perception']
+export const BUFF_FIELDS = ['ST', 'GE', 'KO', 'IN', 'WE', 'CH', 'attack', 'damage', 'eac', 'kac', 'saveRef', 'saveWill', 'saveZah', 'skills', 'perception', 'initiative']
 
 export function computeBuffTotals(activeBuffs = []) {
   const totals = Object.fromEntries(BUFF_FIELDS.map(f => [f, 0]))

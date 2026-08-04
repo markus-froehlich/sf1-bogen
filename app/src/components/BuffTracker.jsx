@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { NumberField } from './NumberField.jsx'
 import './BuffTracker.css'
 
-const EMPTY = { name: '', ST: 0, GE: 0, KO: 0, IN: 0, WE: 0, CH: 0, attack: 0, damage: 0, eac: 0, kac: 0, saveRef: 0, saveWill: 0, saveZah: 0, skills: 0, perception: 0 }
+const EMPTY = { name: '', ST: 0, GE: 0, KO: 0, IN: 0, WE: 0, CH: 0, attack: 0, damage: 0, eac: 0, kac: 0, saveRef: 0, saveWill: 0, saveZah: 0, skills: 0, perception: 0, initiative: 0 }
 
 const FIELD_LABELS = [
   ['ST', 'ST'], ['GE', 'GE'], ['KO', 'KO'], ['IN', 'IN'], ['WE', 'WE'], ['CH', 'CH'],
   ['attack', 'Angriff'], ['damage', 'Schaden'], ['eac', 'EAC'], ['kac', 'KAC'],
   ['saveRef', 'Reflex'], ['saveWill', 'Wille'], ['saveZah', 'Zähigkeit'],
-  ['skills', 'Fertigkeiten'], ['perception', 'Wahrnehmung'],
+  ['skills', 'Fertigkeiten'], ['perception', 'Wahrnehmung'], ['initiative', 'Initiative'],
 ]
 
 function genId() { return 'buff_' + Math.random().toString(36).slice(2, 9) }

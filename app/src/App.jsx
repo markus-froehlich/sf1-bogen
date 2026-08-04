@@ -63,7 +63,7 @@ export default function App() {
   const {
     char, index, activeId, setMeta, update, setAttr, setClass,
     setInventory, setConditions, setNotes, setBio, setFeats, setActiveBuffs,
-    setContacts, setSpecials, setXp, setResources,
+    setContacts, setSpecials, setXp, setResources, setCombatMisc,
     newChar, switchChar, deleteChar, importChar,
     getBackupData, reinitialize,
   } = useCharacters(profile)
@@ -335,7 +335,7 @@ export default function App() {
 
       <main className="main-scroll">
         {tab === 'char'   && <CharacterTab char={char} setMeta={setMeta} setClass={setClass} setAttr={setAttr} update={update} setBio={setBio} setFeats={setFeats} setXp={setXp} lang={lang} />}
-        {tab === 'combat' && <CombatTab char={char} update={update} setConditions={setConditions} setActiveBuffs={setActiveBuffs} setResources={setResources} lang={lang} />}
+        {tab === 'combat' && <CombatTab char={char} update={update} setConditions={setConditions} setActiveBuffs={setActiveBuffs} setResources={setResources} setCombatMisc={setCombatMisc} lang={lang} />}
         {tab === 'skills' && <SkillsTab char={char} update={update} lang={lang} />}
         {tab === 'gear'   && <GearTab char={char} update={update} setInventory={setInventory} lang={lang} />}
         {tab === 'spells' && <SpellsTab char={char} update={update} lang={lang} />}

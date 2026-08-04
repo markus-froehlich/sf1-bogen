@@ -61,10 +61,10 @@ function allWeapons() {
   return [...core, ...homebrew]
 }
 
-export function CombatTab({ char, update, setConditions, setActiveBuffs, setResources, lang }) {
+export function CombatTab({ char, update, setConditions, setActiveBuffs, setResources, setCombatMisc, lang }) {
   const L = lang === 'de'
   const stats = useMemo(() => computeCharacterStats(char), [char])
-  const { abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, eac, kac, armor, speed, buffTotals, buffTags, condTags } = stats
+  const { abilityMods, tp, ap, rp, bab, saveRef, saveWill, saveZah, eac, kac, armor, speed, initiative, hasImprovedInitiative, initiativeFeatBonus, initiativeMisc, buffTotals, buffTags, condTags } = stats
   const weapons = useMemo(allWeapons, [])
   const [weaponName, setWeaponName] = useState('')
 
@@ -131,7 +131,7 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
   const activeBuffCount = (char.active_buffs ?? []).filter(b => b.active !== false).length
   const SUMMARIES = {
     tp: `TP ${current.tp ?? tp}/${tp} · AP ${current.ap ?? ap}/${ap} · RP ${current.rp ?? rp}/${rp}`,
-    kampfwerte: `${L ? 'GAB' : 'BAB'} ${bab >= 0 ? '+' : ''}${bab} · Ref ${saveRef >= 0 ? '+' : ''}${saveRef}/Wil ${saveWill >= 0 ? '+' : ''}${saveWill}/Zäh ${saveZah >= 0 ? '+' : ''}${saveZah}`,
+    kampfwerte: `${L ? 'GAB' : 'BAB'} ${bab >= 0 ? '+' : ''}${bab} · Init ${initiative >= 0 ? '+' : ''}${initiative} · Ref ${saveRef >= 0 ? '+' : ''}${saveRef}/Wil ${saveWill >= 0 ? '+' : ''}${saveWill}/Zäh ${saveZah >= 0 ? '+' : ''}${saveZah}`,
     speed: `${L ? 'Zu Fuß' : 'Walk'} ${speed} m`,
     ac: `EAC ${eac} · KAC ${kac}`,
     attack: weapon ? `${weapon.name}: ${attackBonus >= 0 ? '+' : ''}${attackBonus}` : '',
@@ -149,8 +149,9 @@ export function CombatTab({ char, update, setConditions, setActiveBuffs, setReso
       </div>
     ),
     kampfwerte: () => (
-      <div className="sf-stat-row">
+      <div className="sf-stat-row five">
         <StatBox label={L ? 'GAB' : 'BAB'} value={bab >= 0 ? `+${bab}` : bab} />
+        <StatBox label={L ? 'Init' : 'Init'} value={initiative >= 0 ? `+${initiative}` : initiative} buffSources={buffTags.initiative} condSources={condTags.initiative} />
         <StatBox label={L ? 'Reflex' : 'Reflex'} value={saveRef >= 0 ? `+${saveRef}` : saveRef} buffSources={buffTags.saveRef} condSources={condTags.saveRef} />
         <StatBox label={L ? 'Wille' : 'Will'} value={saveWill >= 0 ? `+${saveWill}` : saveWill} buffSources={buffTags.saveWill} condSources={condTags.saveWill} />
         <StatBox label={L ? 'Zähigkeit' : 'Fortitude'} value={saveZah >= 0 ? `+${saveZah}` : saveZah} buffSources={buffTags.saveZah} condSources={condTags.saveZah} />

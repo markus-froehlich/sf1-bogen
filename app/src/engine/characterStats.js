@@ -108,6 +108,16 @@ export function computeCharacterStats(char) {
   })
   const rp = totalResolvePoints({ level, keyAbilityModifier })
 
+  // S. 29 (Kapitel 2): "Der Modifikator entspricht seinem Geschicklichkeits-
+  // bonus plus Modifikatoren durch Talente und andere Fähigkeiten." Talent
+  // "Verbesserte Initiative" (Kapitel 6): "+4 auf Initiativewürfe" - per
+  // Talentname erkannt statt manuell einzutragen. Sonstige Boni/Mali laufen
+  // wie bei allen anderen Werten über Buffs/Zustände, kein eigenes
+  // Misc-Eingabefeld (dieses Muster gibt es sonst nirgends im Bogen).
+  const hasImprovedInitiative = (char.feats ?? []).includes('Verbesserte Initiative')
+  const initiativeFeatBonus = hasImprovedInitiative ? 4 : 0
+  const initiative = abilityMods.GE + initiativeFeatBonus + buffTotals.initiative + condTotals.initiative
+
   const armor = getArmor(char.equipped?.armor_id)
   const eac = armorClass({
     armorBonus: armor?.erk_bonus || 0,
@@ -126,7 +136,7 @@ export function computeCharacterStats(char) {
   // Buff- und Zustands-Quellen getrennt je Wert, damit die UI sie als zwei
   // optisch unterscheidbare Badges anzeigen kann (✦ Buff / ⚡ Zustand) statt
   // einer einzigen vermischten Liste.
-  const TAG_FIELDS = ['eac', 'kac', 'attack', 'damage', 'saveRef', 'saveWill', 'saveZah', 'skills', 'perception']
+  const TAG_FIELDS = ['eac', 'kac', 'attack', 'damage', 'saveRef', 'saveWill', 'saveZah', 'skills', 'perception', 'initiative']
   const buffTags = Object.fromEntries(TAG_FIELDS.map(f => [f, buffSources[f] ?? []]))
   const condTags = Object.fromEntries(TAG_FIELDS.map(f => [f, condSources[f] ?? []]))
   for (const k of ABILITY_KEYS) {
@@ -147,18 +157,24 @@ export function computeCharacterStats(char) {
   buffTags.saveRef = [...buffTags.saveRef, ...buffTags.GE]
   buffTags.saveWill = [...buffTags.saveWill, ...buffTags.WE]
   buffTags.saveZah = [...buffTags.saveZah, ...buffTags.KO]
+  buffTags.initiative = [
+    ...buffTags.initiative,
+    ...buffTags.GE,
+    ...(initiativeFeatBonus !== 0 ? [{ name: 'Verbesserte Initiative', value: initiativeFeatBonus }] : []),
+  ]
   condTags.eac = [...condTags.eac, ...condTags.GE]
   condTags.kac = [...condTags.kac, ...condTags.GE]
   condTags.saveRef = [...condTags.saveRef, ...condTags.GE]
   condTags.saveWill = [...condTags.saveWill, ...condTags.WE]
   condTags.saveZah = [...condTags.saveZah, ...condTags.KO]
+  condTags.initiative = [...condTags.initiative, ...condTags.GE]
 
   return {
     race, klass, level, classEntry,
     abilityMods, keyAbilityModifier,
     levelRow,
     tp, ap, rp,
-    armor, eac, kac, speed,
+    armor, eac, kac, speed, initiative, hasImprovedInitiative, initiativeFeatBonus,
     bab: levelRow?.bab ?? 0,
     // S. 240f.: "Addiere deinen Geschicklichkeitsmodifikator auf deine
     // Reflexwürfe" / "...Weisheitsmodifikator auf deine Willenswürfe" /

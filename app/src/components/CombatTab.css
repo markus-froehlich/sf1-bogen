@@ -12,6 +12,13 @@
 .sf-stat-box.big { padding: 14px 4px; }
 .sf-stat-box.big .sf-stat-value { font-size: 1.8rem; }
 
+/* GAB/Init/Ref/Wil/Zäh: 5 Boxen passen auf schmalen Handys hochkant nicht
+   mehr nebeneinander - unter 400px auf 3 Spalten (3+2) statt 5 umbrechen. */
+.sf-stat-row.five { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 400px) {
+  .sf-stat-row.five { grid-template-columns: repeat(3, 1fr); }
+}
+
 .combat-weapon-card {
   display: flex;
   flex-direction: column;

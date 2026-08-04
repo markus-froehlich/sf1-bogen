@@ -8,7 +8,7 @@
 // siehe conditions.json für die Begründung pro Zustand.
 
 export const CONDITION_MOD_FIELDS = [
-  'attack', 'damage', 'eac', 'kac', 'saveRef', 'saveWill', 'saveZah', 'skills', 'perception',
+  'attack', 'damage', 'eac', 'kac', 'saveRef', 'saveWill', 'saveZah', 'skills', 'perception', 'initiative',
   'stMod', 'geMod', 'koMod', 'inMod', 'weMod', 'chMod',
 ]
 
